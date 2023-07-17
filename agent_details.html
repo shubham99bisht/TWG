@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TheWorldGrad | Commissions Portal</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="./assets/img/favicon.png">
+  <meta name="theme-color" content="#ffffff">
+  <script src="./assets/js/config.js"></script>
+  <script src="./vendors/simplebar/simplebar.min.js"></script>
+  <!-- Stylesheets-->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+  <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
+  <link href="./assets/css/theme.min.css" rel="stylesheet">
+  <link href="./assets/css/user.css" rel="stylesheet">
+</head>
+
+<body>
+  <main class="main" id="top">
+    <div class="container" data-layout="container">
+      <script>
+        var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+        if (isFluid) {
+          var container = document.querySelector('[data-layout]');
+          container.classList.remove('container');
+          container.classList.add('container-fluid');
+        }
+      </script>
+
+      <nav class="navbar navbar-light navbar-vertical navbar-expand-xl">
+        <script>
+          var navbarStyle = localStorage.getItem("navbarStyle");
+          if (navbarStyle && navbarStyle !== 'transparent') {
+            document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);
+          }
+        </script>
+        <div class="d-flex align-items-center">
+          <div class="toggle-icon-wrapper">
+
+            <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+
+          </div><a class="navbar-brand" href="index.html">
+            <div class="d-flex align-items-center py-3"><img class="me-2" src="assets/img/logo.png" alt="" width="150" />
+            </div>
+          </a>
+        </div>        
+        <!-- Navbar -->
+        <div id="navbarPlaceholder"></div>
+        <!-- Navbar -->
+      </nav>
+
+      <div class="content">
+        <!-- TopBar -->
+        <div id="topbarPlaceholder"></div>
+        <!-- TopBar -->     
+
+        <div class="card mb-3">
+          <div class="card-header">
+            <div class="row">
+              <div class="col">
+                <h5 class="mb-2">Tony Robbins (<a href="mailto:tony@gmail.com">tony@gmail.com</a>)</h5><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-plus fs--2 me-1"></span>Add note</a>
+                <button class="btn btn-falcon-default btn-sm dropdown-toggle ms-2 dropdown-caret-none" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h"></span></button>
+                <div class="dropdown-menu"><a class="dropdown-item" href="#">Edit</a><a class="dropdown-item" href="#">Report</a><a class="dropdown-item" href="#">Archive</a>
+                  <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#">Delete user</a>
+                </div>
+              </div>
+              <div class="col-auto d-none d-sm-block">
+                <h6 class="text-uppercase text-600">Customer<span class="fas fa-user ms-2"></span></h6>
+              </div>
+            </div>
+          </div>
+          <div class="card-body border-top">
+            <div class="d-flex"><span class="fas fa-user text-success me-2" data-fa-transform="down-5"></span>
+              <div class="flex-1">
+                <p class="mb-0">Customer was created</p>
+                <p class="fs--1 mb-0 text-600">Jan 12, 11:13 PM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <h5 class="mb-0">Details</h5>
+              </div>
+              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
+            </div>
+          </div>
+          <div class="card-body bg-light border-top">
+            <div class="row">
+              <div class="col-lg col-xxl-5">
+                <h6 class="fw-semi-bold ls mb-3 text-uppercase">Account Information</h6>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-1">ID</p>
+                  </div>
+                  <div class="col">dcfasyo_Dfdjl</div>
+                </div>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-1">Created</p>
+                  </div>
+                  <div class="col">2019/01/12 23:13</div>
+                </div>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-1">Email</p>
+                  </div>
+                  <div class="col"><a href="mailto:tony@gmail.com">tony@gmail.com</a></div>
+                </div>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-1">Description</p>
+                  </div>
+                  <div class="col">
+                    <p class="fst-italic text-400 mb-1">No Description</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-0">VAT number</p>
+                  </div>
+                  <div class="col">
+                    <p class="fst-italic text-400 mb-0">No VAT number</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1">
+                <h6 class="fw-semi-bold ls mb-3 text-uppercase">Billing Information</h6>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-1">Send email to</p>
+                  </div>
+                  <div class="col"><a href="mailto:tony@gmail.com">tony@gmail.com</a></div>
+                </div>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-1">Address</p>
+                  </div>
+                  <div class="col">
+                    <p class="mb-1">8962 Lafayette St. <br />Oswego, NY 13126</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-1">Phone number</p>
+                  </div>
+                  <div class="col"><a href="tel:+12025550110">+1-202-555-0110</a></div>
+                </div>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-0">Invoice prefix</p>
+                  </div>
+                  <div class="col">
+                    <p class="fw-semi-bold mb-0">7C23435</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer border-top text-end"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-dollar-sign fs--2 me-1"></span>Refund</a><a class="btn btn-falcon-default btn-sm ms-2" href="#!"><span class="fas fa-check fs--2 me-1"></span>Save changes</a></div>
+        </div>
+        <div class="card h-100" id="paymentHistoryTable" data-list='{"valueNames":["course","invoice","date","amount","status"],"page":5}'>
+          <div class="card-header d-flex flex-between-center">
+            <h5 class="mb-0 text-nowrap py-2 py-xl-0">Payment History</h5>
+            <div>
+              <button class="btn btn-falcon-default btn-sm me-2" type="button"><span class="fas fa-filter fs--2"></span><span class="d-none d-sm-inline-block ms-1 align-middle">Filter</span></button>
+              <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt fs--2"></span><span class="d-none d-sm-inline-block ms-1 align-middle">Export</span></button>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive scrollbar">
+              <table class="table mb-0 fs--1 border-200 overflow-hidden">
+                <thead class="bg-light text-900 font-sans-serif">
+                  <tr>
+                    <th class="sort align-middle fw-medium" data-sort="course">Course</th>
+                    <th class="sort align-middle fw-medium" data-sort="invoice">Invoice no.</th>
+                    <th class="sort align-middle fw-medium" data-sort="date">Date</th>
+                    <th class="sort align-middle fw-medium text-end" data-sort="amount">Amount</th>
+                    <th class="sort align-middle fw-medium text-end" data-sort="status">Payment Status</th>
+                  </tr>
+                </thead>
+                <tbody class="list">
+                  <tr class="fw-semi-bold">
+                    <td class="align-middle pe-5 py-3 course"><a href="../../app/e-learning/course/course-details.html">Course#123232</a></td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 invoice">#FA613145</td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 date">01/10/21</td>
+                    <td class="align-middle white-space-nowrap py-3 text-end amount">$39.99</td>
+                    <td class="align-middle text-end fw-medium font-sans-serif py-3 status text-warning">Pending</td>
+                  </tr>
+                  <tr class="fw-semi-bold">
+                    <td class="align-middle pe-5 py-3 course"><a href="../../app/e-learning/course/course-details.html">Course#147832</a></td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 invoice">#LC014357</td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 date">12/12/21</td>
+                    <td class="align-middle white-space-nowrap py-3 text-end amount">$19.99</td>
+                    <td class="align-middle text-end fw-medium font-sans-serif py-3 status text-success">Successful</td>
+                  </tr>
+                  <tr class="fw-semi-bold">
+                    <td class="align-middle pe-5 py-3 course"><a href="../../app/e-learning/course/course-details.html">Course#965473</a></td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 invoice">#FC657916</td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 date">23/08/21</td>
+                    <td class="align-middle white-space-nowrap py-3 text-end amount">$35.99</td>
+                    <td class="align-middle text-end fw-medium font-sans-serif py-3 status text-warning">Pending</td>
+                  </tr>
+                  <tr class="fw-semi-bold">
+                    <td class="align-middle pe-5 py-3 course"><a href="../../app/e-learning/course/course-details.html">Course#854763</a></td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 invoice">#TN654236</td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 date">09/04/21</td>
+                    <td class="align-middle white-space-nowrap py-3 text-end amount">$20.99</td>
+                    <td class="align-middle text-end fw-medium font-sans-serif py-3 status text-danger">Denied</td>
+                  </tr>
+                  <tr class="fw-semi-bold">
+                    <td class="align-middle pe-5 py-3 course"><a href="../../app/e-learning/course/course-details.html">Course#232645</a></td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 invoice">#ON820965</td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 date">03/09/21</td>
+                    <td class="align-middle white-space-nowrap py-3 text-end amount">$45.49</td>
+                    <td class="align-middle text-end fw-medium font-sans-serif py-3 status text-success">Successful</td>
+                  </tr>
+                  <tr class="fw-semi-bold">
+                    <td class="align-middle pe-5 py-3 course"><a href="../../app/e-learning/course/course-details.html">Course#232471</a></td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 invoice">#TN755429</td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 date">31/12/21</td>
+                    <td class="align-middle white-space-nowrap py-3 text-end amount">$99.95</td>
+                    <td class="align-middle text-end fw-medium font-sans-serif py-3 status text-danger">Denied</td>
+                  </tr>
+                  <tr class="fw-semi-bold">
+                    <td class="align-middle pe-5 py-3 course"><a href="../../app/e-learning/course/course-details.html">Course#232558</a></td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 invoice">#TN789426</td>
+                    <td class="align-middle white-space-nowrap pe-6 py-3 date">31/12/21</td>
+                    <td class="align-middle white-space-nowrap py-3 text-end amount">$55.95</td>
+                    <td class="align-middle text-end fw-medium font-sans-serif py-3 status text-warning">Pending</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer text-end bg-light">
+            <p class="mb-0 fs--1"><span class="d-none d-sm-inline-block me-2" data-list-info="data-list-info"> </span><span class="d-none d-sm-inline-block me-2">&mdash;  </span><a class="fw-semi-bold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a><a class="fw-semi-bold d-none" href="#!" data-list-view="less">View less<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+            </p>
+          </div>
+        </div>        
+      </div>
+    </div>
+  </main>
+  <!-- ===============================================-->
+  <!--    End of Main Content-->
+  <!-- ===============================================-->
+
+  <!-- Preloader -->
+  <div id="preloader" class="d-none">
+    <div></div><div></div><div></div><div></div>
+    <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
+  </div>
+
+
+  <!--    JavaScripts-->
+  <script src="./vendors/popper/popper.min.js"></script>
+  <script src="./vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="./vendors/anchorjs/anchor.min.js"></script>
+  <script src="./vendors/is/is.min.js"></script>
+  <script src="./vendors/chart/chart.min.js"></script>
+  <script src="./vendors/countup/countUp.umd.js"></script>
+  <script src="./vendors/echarts/echarts.min.js"></script>
+  <script src="./vendors/dayjs/dayjs.min.js"></script>
+  <script src="./vendors/fontawesome/all.min.js"></script>
+  <script src="./vendors/lodash/lodash.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+  <script src="./vendors/list.js/list.min.js"></script>
+  <script src="./assets/js/theme.js"></script>
+  
+  <!-- Firebase -->
+  <!-- <script src="./firebase/index.js" type="module"></script> -->
+</body>
+
+</html>

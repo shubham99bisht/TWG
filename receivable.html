@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TheWorldGrad | Commissions Portal</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="./assets/img/favicon.png">
+  <meta name="theme-color" content="#ffffff">
+  <script src="./assets/js/config.js"></script>
+  <script src="./vendors/simplebar/simplebar.min.js"></script>
+  <!-- Stylesheets-->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+  <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
+  <link href="./assets/css/theme.min.css" rel="stylesheet">
+  <link href="./assets/css/user.css" rel="stylesheet">
+</head>
+
+<body>
+  <main class="main" id="top">
+    <div class="container" data-layout="container">
+      <script>
+        var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+        if (isFluid) {
+          var container = document.querySelector('[data-layout]');
+          container.classList.remove('container');
+          container.classList.add('container-fluid');
+        }
+      </script>
+
+      <nav class="navbar navbar-light navbar-vertical navbar-expand-xl">
+        <script>
+          var navbarStyle = localStorage.getItem("navbarStyle");
+          if (navbarStyle && navbarStyle !== 'transparent') {
+            document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);
+          }
+        </script>
+        <div class="d-flex align-items-center">
+          <div class="toggle-icon-wrapper">
+
+            <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+
+          </div><a class="navbar-brand" href="index.html">
+            <div class="d-flex align-items-center py-3"><img class="me-2" src="assets/img/logo.png" alt="" width="150" />
+            </div>
+          </a>
+        </div>        
+        <!-- Navbar -->
+        <div id="navbarPlaceholder"></div>
+        <!-- Navbar -->
+      </nav>
+
+      <div class="content">
+        <!-- TopBar -->
+        <div id="topbarPlaceholder"></div>
+        <!-- TopBar -->     
+
+        <div class="row g-3 mb-3">
+          <div class="col-sm-6">
+            <div class="card overflow-hidden" style="min-width: 12rem">
+              <div class="bg-holder bg-card" style="background-image:url(../assets/img/icons/spot-illustrations/corner-1.png);">
+              </div>
+              <!--/.bg-holder-->
+
+              <div class="card-body position-relative">
+                <h6>Customers<span class="badge badge-soft-warning rounded-pill ms-2">-0.23%</span></h6>
+                <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-warning" data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>0</div><a class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/customers.html">See all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card overflow-hidden" style="min-width: 12rem">
+              <div class="bg-holder bg-card" style="background-image:url(../assets/img/icons/spot-illustrations/corner-2.png);">
+              </div>
+              <!--/.bg-holder-->
+
+              <div class="card-body position-relative">
+                <h6>Orders<span class="badge badge-soft-info rounded-pill ms-2">0.0%</span></h6>
+                <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-info" data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>0</div><a class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/orders/order-list.html">All orders<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card overflow-hidden">
+          <div class="card-header">
+            <h6 class="mb-0">Deal Forecast by Owner</h6>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive scrollbar">
+              <table class="table mb-0 fs--1 border-200 table-borderless">
+                <thead class="bg-light">
+                  <tr class="text-800 bg-200">
+                    <th class="text-nowrap">Owner</th>
+                    <th class="text-center text-nowrap">Qualified to buy</th>
+                    <th class="text-center text-nowrap">Appointment </th>
+                    <th class="text-end text-nowrap">Contact sent</th>
+                    <th class="pe-x1 text-end text-nowrap">Closed won</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-bottom border-200">
+                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">John oliver</a></td>
+                    <td class="align-middle text-center">1000</td>
+                    <td class="align-middle text-center">$2600</td>
+                    <td class="align-middle text-center">$3523</td>
+                    <td class="align-middle text-end">$1311</td>
+                  </tr>
+                  <tr class="border-bottom border-200">
+                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Sean Paul</a></td>
+                    <td class="align-middle text-center">1500</td>
+                    <td class="align-middle text-center">$1600</td>
+                    <td class="align-middle text-center">$3523</td>
+                    <td class="align-middle text-end">$2311</td>
+                  </tr>
+                  <tr class="border-bottom border-200">
+                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Brad Shaw</a></td>
+                    <td class="align-middle text-center">1400</td>
+                    <td class="align-middle text-center">$2200</td>
+                    <td class="align-middle text-center">$3523</td>
+                    <td class="align-middle text-end">$3311</td>
+                  </tr>
+                  <tr>
+                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Max Payne</a></td>
+                    <td class="align-middle text-center">6600</td>
+                    <td class="align-middle text-center">$2220</td>
+                    <td class="align-middle text-center">$3523</td>
+                    <td class="align-middle text-end">$1511</td>
+                  </tr>
+                </tbody>
+                <tfoot class="bg-light">
+                  <tr class="text-700 fw-bold">
+                    <td>Total</td>
+                    <td class="text-center">$6359</td>
+                    <td class="text-center"> $8151</td>
+                    <td class="text-center"> $9174</td>
+                    <td class="pe-x1 text-end"> $12587</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- ===============================================-->
+  <!--    End of Main Content-->
+  <!-- ===============================================-->
+
+  <!-- Preloader -->
+  <div id="preloader" class="d-none">
+    <div></div><div></div><div></div><div></div>
+    <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
+  </div>
+
+
+  <!--    JavaScripts-->
+  <script src="./vendors/popper/popper.min.js"></script>
+  <script src="./vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="./vendors/anchorjs/anchor.min.js"></script>
+  <script src="./vendors/is/is.min.js"></script>
+  <script src="./vendors/chart/chart.min.js"></script>
+  <script src="./vendors/countup/countUp.umd.js"></script>
+  <script src="./vendors/echarts/echarts.min.js"></script>
+  <script src="./vendors/dayjs/dayjs.min.js"></script>
+  <script src="./vendors/fontawesome/all.min.js"></script>
+  <script src="./vendors/lodash/lodash.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+  <script src="./vendors/list.js/list.min.js"></script>
+  <script src="./assets/js/theme.js"></script>
+  
+  <!-- Firebase -->
+  <!-- <script src="./firebase/index.js" type="module"></script> -->
+</body>
+
+</html>

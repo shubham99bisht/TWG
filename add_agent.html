@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TheWorldGrad | Commissions Portal</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="./assets/img/favicon.png">
+  <meta name="theme-color" content="#ffffff">
+  <script src="./assets/js/config.js"></script>
+  <script src="./vendors/simplebar/simplebar.min.js"></script>
+  <!-- Stylesheets-->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+  <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
+  <link href="./assets/css/theme.min.css" rel="stylesheet">
+  <link href="./assets/css/user.css" rel="stylesheet">
+</head>
+
+<body>
+  <main class="main" id="top">
+    <div class="container" data-layout="container">
+      <script>
+        var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+        if (isFluid) {
+          var container = document.querySelector('[data-layout]');
+          container.classList.remove('container');
+          container.classList.add('container-fluid');
+        }
+      </script>
+
+      <nav class="navbar navbar-light navbar-vertical navbar-expand-xl">
+        <script>
+          var navbarStyle = localStorage.getItem("navbarStyle");
+          if (navbarStyle && navbarStyle !== 'transparent') {
+            document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);
+          }
+        </script>
+        <div class="d-flex align-items-center">
+          <div class="toggle-icon-wrapper">
+
+            <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+
+          </div><a class="navbar-brand" href="index.html">
+            <div class="d-flex align-items-center py-3"><img class="me-2" src="assets/img/logo.png" alt="" width="150" />
+            </div>
+          </a>
+        </div>        
+        <!-- Navbar -->
+        <div id="navbarPlaceholder"></div>
+        <!-- Navbar -->
+      </nav>
+
+      <div class="content">
+        <!-- TopBar -->
+        <div id="topbarPlaceholder"></div>
+        <!-- TopBar -->     
+
+        <div class="card mb-3">
+          <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../../../assets/img/icons/spot-illustrations/corner-4.png);">
+          </div>
+          <!--/.bg-holder-->
+
+          <div class="card-body z-index-1">
+            <h3>Create A New Course</h3>
+            <p class="mb-0">Enlighten the world with your knowledge. Use our Course Creator to design a well-structured course; set whatever price you feel worthy of, and publish at our platform. <br />or, <br class="d-lg-none" />Want to edit your existing course? Jump to <a href="../../../app/e-learning/course/course-grid.html">Your courses</a></p>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">Course Information</h5>
+          </div>
+          <div class="card-body bg-light">
+            <form class="row gx-2">
+              <div class="col-12 mb-3">
+                <label class="form-label" for="course-name">Course Title<span class="text-danger">*</span></label>
+                <input class="form-control" id="course-name" type="text" placeholder="Course Title" required="required" />
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="course-category">Category<span class="text-danger">*</span></label>
+                <select class="form-select" id="course-category" name="course-category">
+                  <option>Select a category</option>
+                  <option>Academia</option>
+                  <option>Arts & Crafts</option>
+                  <option>Design</option>
+                  <option>Development</option>
+                  <option>Finance</option>
+                  <option>Marketing</option>
+                  <option>Music</option>
+                  <option>Lifestyle</option>
+                  <option>Photography</option>
+                  <option>Miscellaneous</option>
+                </select>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="course-subcategory">Sub-category<span class="text-danger">*</span></label>
+                <select class="form-select" id="course-subcategory" name="course-sub-category">
+                  <option>Select a sub-category</option>
+                  <option>3D & Animation</option>
+                  <option>Architectural Design</option>
+                  <option>Graphics Design</option>
+                  <option>Game Design</option>
+                  <option>Fashion Design</option>
+                  <option>Illustration</option>
+                  <option>User Interface Design</option>
+                  <option>UX Design</option>
+                  <option>Web Design</option>
+                  <option>Others…</option>
+                </select>
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="course-tags">Tags<span class="text-danger">*</span></label>
+                <input class="form-control js-choice" id="course-tags" type="text" name="tags" required="required" size="1" data-placeholder="Select upto 4 tags" data-options='{"removeItemButton":true,"placeholder":true}' />
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="course-description">Course Description<span class="text-danger">*</span></label>
+                <div class="create-course-description-textarea">
+                  <textarea class="form-control" name="course-description" id="course-description" required="required"></textarea>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- ===============================================-->
+  <!--    End of Main Content-->
+  <!-- ===============================================-->
+
+  <!-- Preloader -->
+  <div id="preloader" class="d-none">
+    <div></div><div></div><div></div><div></div>
+    <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
+  </div>
+
+
+  <!--    JavaScripts-->
+  <script src="./vendors/popper/popper.min.js"></script>
+  <script src="./vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="./vendors/anchorjs/anchor.min.js"></script>
+  <script src="./vendors/is/is.min.js"></script>
+  <script src="./vendors/chart/chart.min.js"></script>
+  <script src="./vendors/countup/countUp.umd.js"></script>
+  <script src="./vendors/echarts/echarts.min.js"></script>
+  <script src="./vendors/dayjs/dayjs.min.js"></script>
+  <script src="./vendors/fontawesome/all.min.js"></script>
+  <script src="./vendors/lodash/lodash.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+  <script src="./vendors/list.js/list.min.js"></script>
+  <script src="./assets/js/theme.js"></script>
+  
+  <!-- Firebase -->
+  <!-- <script src="./firebase/index.js" type="module"></script> -->
+</body>
+
+</html>
