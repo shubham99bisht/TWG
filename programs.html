@@ -59,14 +59,14 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <div class="card mb-3" id="universityTable" data-list='{"valueNames":["name","program-type"],"page":10,"pagination":true}'>
+        <div class="card mb-3" id="programTable" data-list='{"valueNames":["name","commission"],"page":10,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
-                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Universities</h5>
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Program Types</h5>
               </div>
               <div class="col-8 col-sm-auto text-end ps-2">
-                <div id="table-university-replace-element">
+                <div id="table-program-replace-element">
                   <button class="btn btn-falcon-default btn-sm me-2" type="button" data-bs-toggle="modal" data-bs-target="#add-new-modal">
                     <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span>
                   </button>
@@ -81,14 +81,16 @@
                 <thead class="bg-200 text-900">
                   <tr>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Name</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Program Type</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="commission">Commission Rate</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="duedate">First Installment Days</th>
                     <th class="align-middle no-sort"></th>
                   </tr>
                 </thead>
-                <tbody class="list" id="table-university-body">
+                <tbody class="list" id="table-program-body">
                   <tr id="ucb">
-                    <td class="name">University of California, Berkeley</td>
-                    <td class="program-type">Undergraduate <br> Postgraduate,...</td>
+                    <td class="program-name">Undergraduate 3 + 1 Program</td>
+                    <td class="commission"> 10% </td>
+                    <td class="duedate"> 90 </td>
                     <td class="align-middle white-space-nowrap py-2 text-end">
                       <div class="dropdown font-sans-serif position-static">
                         <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
@@ -123,7 +125,7 @@
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
 
-  <!-- New University Modal -->
+  <!-- New Program Modal -->
   <div class="modal fade" id="add-new-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
       <div class="modal-content position-relative">
@@ -132,23 +134,21 @@
         </div>
         <div class="modal-body p-0">
           <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
-            <h5 class="mb-1 modal-title">Add New University </h5>
+            <h5 class="mb-1 modal-title">Add New Program </h5>
           </div>
           <div class="p-4 pb-0">
             <form>
               <div class="col-12 mb-3">
-                <label class="form-label" for="university-name">University Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="university-name" type="text" placeholder="University Name" required="required" />
+                <label class="form-label" for="program-name">Program Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="program-name" type="text" placeholder="Program Name" required="required" />
               </div>
               <div class="col-12 mb-3">
-                <label for="program-type">Program Type</label>
-                <select class="form-select js-choice" id="program-type" multiple="multiple" size="1" name="program-type" data-options='{"removeItemButton":true,"placeholder":true}'>
-                  <option value="">Select Program Types...</option>
-                  <option>Undergraduate</option>
-                  <option>Postgraduate</option>
-                  <option>Some other options</option>
-                  <option>More program types</option>
-                </select>
+                <label class="form-label" for="commission">Commission Rate (%)<span class="text-danger">*</span></label>
+                <input class="form-control" id="commission" type="text" placeholder="10" required="required" />
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="duedate">First Installment Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="duedate" type="text" placeholder="10" required="required" />
               </div>
             </form>
           </div>
@@ -160,7 +160,7 @@
       </div>
     </div>
   </div>
-  <!-- Add New University Ends -->
+  <!-- Add New Program Ends -->
 
 
   <!--    JavaScripts-->
@@ -178,7 +178,7 @@
   <script src="./vendors/list.js/list.min.js"></script>
   <script src="./vendors/choices/choices.min.js"></script>
   <script src="./assets/js/theme.js"></script>
-  <script src="./assets/custom/university.js"></script>
+  <script src="./assets/custom/programs.js"></script>
   
   <!-- Firebase -->
   <!-- <script src="./firebase/index.js" type="module"></script> -->

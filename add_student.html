@@ -58,28 +58,54 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->     
 
-        <div class="card mb-3">
-          <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url(../../../assets/img/icons/spot-illustrations/corner-4.png);">
-          </div>
-          <!--/.bg-holder-->
-
-          <div class="card-body z-index-1">
-            <h3>Create A New Course</h3>
-            <p class="mb-0">Enlighten the world with your knowledge. Use our Course Creator to design a well-structured course; set whatever price you feel worthy of, and publish at our platform. <br />or, <br class="d-lg-none" />Want to edit your existing course? Jump to <a href="../../../app/e-learning/course/course-grid.html">Your courses</a></p>
-          </div>
-        </div>
+        <!-- Basic Information -->
         <div class="card mb-3">
           <div class="card-header">
-            <h5 class="mb-0">Course Information</h5>
+            <h5 class="mb-0">Student Basic Information</h5>
           </div>
           <div class="card-body bg-light">
             <form class="row gx-2">
-              <div class="col-12 mb-3">
-                <label class="form-label" for="course-name">Course Title<span class="text-danger">*</span></label>
-                <input class="form-control" id="course-name" type="text" placeholder="Course Title" required="required" />
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="student-id">Lead Id (LSQ)<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-id" type="text" placeholder="Lead Id" required="required" />
               </div>
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="student-id">Joining Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-id" type="text" placeholder="18/05/2023" required="required" />
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="student-name">Student Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-name" type="text" placeholder="Student Name" required="required" />
+              </div>              
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="email">Email<span class="text-danger">*</span></label>
+                <input class="form-control" id="email" type="email" name="email" placeholder="email@email.com" required="required" />
+              </div>
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="phone">Phone<span class="text-danger">*</span></label>
+                <input class="form-control" id="phone" type="text" placeholder="+91 XXXX XXXX" required="required" />
+              </div>  
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="address">Address<span class="text-danger">*</span></label>
+                <input class="form-control" id="address" type="text" placeholder="Agent's Location" required="required" />
+              </div>
+            </form>
+          </div>
+        </div>              
+
+        <!-- Enrollment Details -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">Enrollment Details</h5>
+          </div>
+          <div class="card-body bg-light">
+            <form class="row gx-2">
+
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-category">Category<span class="text-danger">*</span></label>
+                <label class="form-label" for="course-category">Program Type<span class="text-danger">*</span></label>
                 <select class="form-select" id="course-category" name="course-category">
                   <option>Select a category</option>
                   <option>Academia</option>
@@ -95,7 +121,7 @@
                 </select>
               </div>
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-subcategory">Sub-category<span class="text-danger">*</span></label>
+                <label class="form-label" for="course-subcategory">University<span class="text-danger">*</span></label>
                 <select class="form-select" id="course-subcategory" name="course-sub-category">
                   <option>Select a sub-category</option>
                   <option>3D & Animation</option>
@@ -109,19 +135,129 @@
                   <option>Web Design</option>
                   <option>Others…</option>
                 </select>
+              </div>        
+              
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="course-category">Enrollment Type<span class="text-danger">*</span></label>
+                <select class="form-select" id="course-category" name="course-category">
+                  <option>Direct</option>
+                  <option>Agent</option>
+                </select>
               </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="course-subcategory">Agent<span class="text-danger">*</span></label>
+                <select class="form-select" id="course-subcategory" name="course-sub-category" disabled>
+                  <option>Select a sub-category</option>
+                  <option>3D & Animation</option>
+                  <option>Architectural Design</option>
+                  <option>Graphics Design</option>
+                  <option>Game Design</option>
+                  <option>Fashion Design</option>
+                  <option>Illustration</option>
+                  <option>User Interface Design</option>
+                  <option>UX Design</option>
+                  <option>Web Design</option>
+                  <option>Others…</option>
+                </select>
+              </div>   
+              
               <div class="col-12 mb-3">
-                <label class="form-label" for="course-tags">Tags<span class="text-danger">*</span></label>
-                <input class="form-control js-choice" id="course-tags" type="text" name="tags" required="required" size="1" data-placeholder="Select upto 4 tags" data-options='{"removeItemButton":true,"placeholder":true}' />
-              </div>
-              <div class="col-12">
-                <label class="form-label" for="course-description">Course Description<span class="text-danger">*</span></label>
-                <div class="create-course-description-textarea">
-                  <textarea class="form-control" name="course-description" id="course-description" required="required"></textarea>
-                </div>
-              </div>
+                <label class="form-label" for="student-name">Fees Paid<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-name" type="number" placeholder="10000" required="required" />
+              </div> 
             </form>
           </div>
+        </div>
+        <!-- Enrollment Details Ends -->
+
+        <!-- Commission Receivable Details -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <h5 class="mb-0">Commission Receivable Details</h5>
+              </div>
+              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
+            </div>            
+          </div>
+          <div class="card-body bg-light">
+            <form class="row gx-2">     
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="course-category">Payment stage<span class="text-danger">*</span></label>
+                <select class="form-select" id="course-category" name="course-category">
+                  <option>Direct</option>
+                  <option>Agent</option>
+                </select>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="course-subcategory">Status<span class="text-danger">*</span></label>
+                <select class="form-select" id="course-subcategory" name="course-sub-category">
+                  <option selected>Pending</option>
+                  <option>Confirmed</option>
+                  <option>Invoiced</option>
+                  <option>Paid</option>
+                  <option>Not Applicable</option>
+                </select>
+              </div> 
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="student-name">Commission Receivable<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-name" type="number" placeholder="10000" required="required" />
+              </div> 
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="student-name">Due Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-name" type="text" placeholder="18/08/2023" required="required" />
+              </div>                            
+            </form>
+          </div>
+        </div>
+        <!-- Commission Receivable Details Ends -->    
+        
+        <!-- Commission Payable Details -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <h5 class="mb-0">Commission Payable Details</h5>
+              </div>
+              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
+            </div>            
+          </div>
+          <div class="card-body bg-light">
+            <form class="row gx-2">     
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="course-category">Payment stage<span class="text-danger">*</span></label>
+                <select class="form-select" id="course-category" name="course-category">
+                  <option>Direct</option>
+                  <option>Agent</option>
+                </select>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="course-subcategory">Status<span class="text-danger">*</span></label>
+                <select class="form-select" id="course-subcategory" name="course-sub-category" disabled>
+                  <option selected>Pending</option>
+                  <option>Confirmed</option>
+                  <option>Invoiced</option>
+                  <option>Paid</option>
+                  <option>Not Applicable</option>
+                </select>
+              </div> 
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="student-name">Commission Payable<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-name" type="number" placeholder="10000" required="required" />
+              </div> 
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="student-name">Due Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-name" type="text" placeholder="18/08/2023" required="required" />
+              </div>                             
+            </form>
+          </div>
+        </div>
+        <!-- Commission Payable Details Ends -->            
+
+        <div class="d-grid">
+          <button class="btn btn-primary">Enroll Student</button>
         </div>
       </div>
     </div>

@@ -66,7 +66,7 @@
               <!--/.bg-holder-->
 
               <div class="card-body position-relative">
-                <h6>Customers<span class="badge badge-soft-warning rounded-pill ms-2">-0.23%</span></h6>
+                <h6>Total Payable<span class="badge badge-soft-warning rounded-pill ms-2">-0.23%</span></h6>
                 <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-warning" data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>0</div><a class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/customers.html">See all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
               </div>
             </div>
@@ -78,70 +78,70 @@
               <!--/.bg-holder-->
 
               <div class="card-body position-relative">
-                <h6>Orders<span class="badge badge-soft-info rounded-pill ms-2">0.0%</span></h6>
+                <h6>Total Receivable<span class="badge badge-soft-info rounded-pill ms-2">0.0%</span></h6>
                 <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-info" data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>0</div><a class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/orders/order-list.html">All orders<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="card overflow-hidden">
+        <div class="card mb-3" id="universityTable" data-list='{"valueNames":["name","program-type"],"page":10,"pagination":true}'>
           <div class="card-header">
-            <h6 class="mb-0">Deal Forecast by Owner</h6>
+            <div class="row flex-between-center">
+              <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Total Receivable</h5>
+              </div>
+              <div class="col-8 col-sm-auto text-end ps-2">
+                <div id="table-university-replace-element">
+                  <button class="btn btn-falcon-default btn-sm me-2" type="button" data-bs-toggle="modal" data-bs-target="#add-new-modal">
+                    <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span>
+                  </button>
+                  <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">Export</span></button>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="card-body p-0">
             <div class="table-responsive scrollbar">
-              <table class="table mb-0 fs--1 border-200 table-borderless">
-                <thead class="bg-light">
-                  <tr class="text-800 bg-200">
-                    <th class="text-nowrap">Owner</th>
-                    <th class="text-center text-nowrap">Qualified to buy</th>
-                    <th class="text-center text-nowrap">Appointment </th>
-                    <th class="text-end text-nowrap">Contact sent</th>
-                    <th class="pe-x1 text-end text-nowrap">Closed won</th>
+              <table class="table table-striped fs--1 mb-0 overflow-hidden">
+                <thead class="bg-200 text-900">
+                  <tr>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Student</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">University</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Program Type</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Amount</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Due Date</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Status</th>
+                    <th class="align-middle no-sort"></th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr class="border-bottom border-200">
-                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">John oliver</a></td>
-                    <td class="align-middle text-center">1000</td>
-                    <td class="align-middle text-center">$2600</td>
-                    <td class="align-middle text-center">$3523</td>
-                    <td class="align-middle text-end">$1311</td>
-                  </tr>
-                  <tr class="border-bottom border-200">
-                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Sean Paul</a></td>
-                    <td class="align-middle text-center">1500</td>
-                    <td class="align-middle text-center">$1600</td>
-                    <td class="align-middle text-center">$3523</td>
-                    <td class="align-middle text-end">$2311</td>
-                  </tr>
-                  <tr class="border-bottom border-200">
-                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Brad Shaw</a></td>
-                    <td class="align-middle text-center">1400</td>
-                    <td class="align-middle text-center">$2200</td>
-                    <td class="align-middle text-center">$3523</td>
-                    <td class="align-middle text-end">$3311</td>
-                  </tr>
-                  <tr>
-                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Max Payne</a></td>
-                    <td class="align-middle text-center">6600</td>
-                    <td class="align-middle text-center">$2220</td>
-                    <td class="align-middle text-center">$3523</td>
-                    <td class="align-middle text-end">$1511</td>
+                <tbody class="list" id="table-university-body">
+                  <tr id="ucb">
+                    <td class="name">Akshay Kumar</td>
+                    <td class="name">University of California, Berkeley</td>
+                    <td class="program-type">Undergraduate <br> Postgraduate,...</td>
+                    <td class="program-type">50,000</td>
+                    <td class="program-type">18/07/2023</td>
+                    <td class="program-type">Pending</td>
+                    <td class="align-middle white-space-nowrap py-2 text-end">
+                      <div class="dropdown font-sans-serif position-static">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="customer-dropdown-1">
+                          <div class="py-2">
+                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#add-new-modal">Edit</a>
+                            <a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#add-new-modal">Delete</a></div>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
                 </tbody>
-                <tfoot class="bg-light">
-                  <tr class="text-700 fw-bold">
-                    <td>Total</td>
-                    <td class="text-center">$6359</td>
-                    <td class="text-center"> $8151</td>
-                    <td class="text-center"> $9174</td>
-                    <td class="pe-x1 text-end"> $12587</td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
+          </div>
+          <div class="card-footer d-flex align-items-center justify-content-center">
+            <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+            <ul class="pagination mb-0"></ul>
+            <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
           </div>
         </div>
       </div>
