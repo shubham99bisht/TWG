@@ -58,92 +58,274 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->     
 
-        <div class="row g-3 mb-3">
-          <div class="col-sm-6">
-            <div class="card overflow-hidden" style="min-width: 12rem">
-              <div class="bg-holder bg-card" style="background-image:url(../assets/img/icons/spot-illustrations/corner-1.png);">
-              </div>
-              <!--/.bg-holder-->
-
-              <div class="card-body position-relative">
-                <h6>Customers<span class="badge badge-soft-warning rounded-pill ms-2">-0.23%</span></h6>
-                <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-warning" data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>0</div><a class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/customers.html">See all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card overflow-hidden" style="min-width: 12rem">
-              <div class="bg-holder bg-card" style="background-image:url(../assets/img/icons/spot-illustrations/corner-2.png);">
-              </div>
-              <!--/.bg-holder-->
-
-              <div class="card-body position-relative">
-                <h6>Orders<span class="badge badge-soft-info rounded-pill ms-2">0.0%</span></h6>
-                <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-info" data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>0</div><a class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/orders/order-list.html">All orders<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card overflow-hidden">
+        <div class="card z-index-1" id="payableCommissions" data-list='{"valueNames":["agent","student","university","amount","duedate","status"],"page":5,"pagination":true}'>
           <div class="card-header">
-            <h6 class="mb-0">Deal Forecast by Owner</h6>
+            <div class="row flex-between-center">
+              <div class="col-6 col-sm-auto d-flex align-items-center pe-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Payable Commissions</h5>
+              </div>
+              <div class="col-6 col-sm-auto ms-auto text-end ps-0">
+                <div id="table-purchases-replace-element">
+                  <form>
+                    <div class="input-group">
+                      <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for a page" aria-label="search" />
+                      <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                    </div>
+                  </form>
+                  <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">Export</span></button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-body p-0">
+          <div class="card-body px-0 py-0">
             <div class="table-responsive scrollbar">
-              <table class="table mb-0 fs--1 border-200 table-borderless">
-                <thead class="bg-light">
-                  <tr class="text-800 bg-200">
-                    <th class="text-nowrap">Owner</th>
-                    <th class="text-center text-nowrap">Qualified to buy</th>
-                    <th class="text-center text-nowrap">Appointment </th>
-                    <th class="text-end text-nowrap">Contact sent</th>
-                    <th class="pe-x1 text-end text-nowrap">Closed won</th>
+              <table class="table table-sm fs--1 mb-0 overflow-hidden">
+                <thead class="bg-200 text-900">
+                  <tr>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="agent">Customer</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="student">Email</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="university">Product</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="amount">Payment</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap text-end" data-sort="duedate">Amount</th>
+                    <th class="no-sort pe-1 align-middle data-table-row-action"></th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr class="border-bottom border-200">
-                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">John oliver</a></td>
-                    <td class="align-middle text-center">1000</td>
-                    <td class="align-middle text-center">$2600</td>
-                    <td class="align-middle text-center">$3523</td>
-                    <td class="align-middle text-end">$1311</td>
+                <tbody class="list" id="table-purchase-body">
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Sylvia Plath</a></th>
+                    <td class="align-middle white-space-nowrap student">john@gmail.com</td>
+                    <td class="align-middle white-space-nowrap university">Slick - Drag &amp; Drop Bootstrap Generator</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$99</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-0" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-0"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
-                  <tr class="border-bottom border-200">
-                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Sean Paul</a></td>
-                    <td class="align-middle text-center">1500</td>
-                    <td class="align-middle text-center">$1600</td>
-                    <td class="align-middle text-center">$3523</td>
-                    <td class="align-middle text-end">$2311</td>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Homer</a></th>
+                    <td class="align-middle white-space-nowrap student">sylvia@mail.ru</td>
+                    <td class="align-middle white-space-nowrap university">Bose SoundSport Wireless Headphones</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$634</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-1"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
-                  <tr class="border-bottom border-200">
-                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Brad Shaw</a></td>
-                    <td class="align-middle text-center">1400</td>
-                    <td class="align-middle text-center">$2200</td>
-                    <td class="align-middle text-center">$3523</td>
-                    <td class="align-middle text-end">$3311</td>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Edgar Allan Poe</a></th>
+                    <td class="align-middle white-space-nowrap student">edgar@yahoo.com</td>
+                    <td class="align-middle white-space-nowrap university">All-New Fire HD 8 Kids Edition Tablet</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$199</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-2" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-2"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
-                  <tr>
-                    <td class="align-middle font-sans-serif fw-medium text-nowrap"><a href="../app/e-commerce/customer-details.html">Max Payne</a></td>
-                    <td class="align-middle text-center">6600</td>
-                    <td class="align-middle text-center">$2220</td>
-                    <td class="align-middle text-center">$3523</td>
-                    <td class="align-middle text-end">$1511</td>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">William Butler Yeats</a></th>
+                    <td class="align-middle white-space-nowrap student">william@gmail.com</td>
+                    <td class="align-middle white-space-nowrap university">Apple iPhone XR (64GB)</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$798</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-3" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-3"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Rabindranath Tagore</a></th>
+                    <td class="align-middle white-space-nowrap student">tagore@twitter.com</td>
+                    <td class="align-middle white-space-nowrap university">ASUS Chromebook C202SA-YS02 11.6&quot;</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$318</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-4" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-4"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Emily Dickinson</a></th>
+                    <td class="align-middle white-space-nowrap student">emily@gmail.com</td>
+                    <td class="align-middle white-space-nowrap university">Mirari OK to Wake! Alarm Clock &amp; Night-Light</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$11</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-5" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-5"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Giovanni Boccaccio</a></th>
+                    <td class="align-middle white-space-nowrap student">giovanni@outlook.com</td>
+                    <td class="align-middle white-space-nowrap university">Summer Infant Contoured Changing Pad</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$31</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-6" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-6"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Oscar Wilde</a></th>
+                    <td class="align-middle white-space-nowrap student">oscar@hotmail.com</td>
+                    <td class="align-middle white-space-nowrap university">Munchkin 6 Piece Fork and Spoon Set</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$43</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-7" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-7"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">John Doe</a></th>
+                    <td class="align-middle white-space-nowrap student">doe@gmail.com</td>
+                    <td class="align-middle white-space-nowrap university">Falcon - Responsive Dashboard Template</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$57</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-8" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-8"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Emma Watson</a></th>
+                    <td class="align-middle white-space-nowrap student">emma@gmail.com</td>
+                    <td class="align-middle white-space-nowrap university">Apple iPhone XR (64GB)</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$999</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-9" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-9"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Sylvia Plath</a></th>
+                    <td class="align-middle white-space-nowrap student">plath@yahoo.com</td>
+                    <td class="align-middle white-space-nowrap university">All-New Fire HD 8 Kids Edition Tablet</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$199</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-10" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-10"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Rabindranath Tagore</a></th>
+                    <td class="align-middle white-space-nowrap student">Rabindra@gmail.com</td>
+                    <td class="align-middle white-space-nowrap university">Apple iPhone XR (64GB)</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$999</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-11" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-11"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Anila Wilde</a></th>
+                    <td class="align-middle white-space-nowrap student">anila@yahoo.com</td>
+                    <td class="align-middle white-space-nowrap university">All-New Fire HD 8 Kids Edition Tablet</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$199</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-12" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-12"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="../app/e-commerce/customer-details.html">Jack Watson </a></th>
+                    <td class="align-middle white-space-nowrap student">Jack@gmail.com</td>
+                    <td class="align-middle white-space-nowrap university">Apple iPhone XR (64GB)</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap amount"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle text-end amount">$999</td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-13" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-13"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Edit</a><a class="dropdown-item" href="#!">Refund</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
                 </tbody>
-                <tfoot class="bg-light">
-                  <tr class="text-700 fw-bold">
-                    <td>Total</td>
-                    <td class="text-center">$6359</td>
-                    <td class="text-center"> $8151</td>
-                    <td class="text-center"> $9174</td>
-                    <td class="pe-x1 text-end"> $12587</td>
-                  </tr>
-                </tfoot>
               </table>
             </div>
+
           </div>
-        </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-center mt-3"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+              <ul class="pagination mb-0"></ul><button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"> </span></button>
+            </div>
+          </div>
+        </div>        
       </div>
     </div>
   </main>
