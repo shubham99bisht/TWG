@@ -58,78 +58,276 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->     
 
-        <div class="row g-3 mb-3">
-          <div class="col-sm-6">
-            <div class="card overflow-hidden" style="min-width: 12rem">
-              <div class="bg-holder bg-card" style="background-image:url(../assets/img/icons/spot-illustrations/corner-1.png);">
-              </div>
-              <!--/.bg-holder-->
-
-              <div class="card-body position-relative">
-                <h6>Total Payable<span class="badge badge-soft-warning rounded-pill ms-2">-0.23%</span></h6>
-                <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-warning" data-countup='{"endValue":58.386,"decimalPlaces":2,"suffix":"k"}'>0</div><a class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/customers.html">See all<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card overflow-hidden" style="min-width: 12rem">
-              <div class="bg-holder bg-card" style="background-image:url(../assets/img/icons/spot-illustrations/corner-2.png);">
-              </div>
-              <!--/.bg-holder-->
-
-              <div class="card-body position-relative">
-                <h6>Total Receivable<span class="badge badge-soft-info rounded-pill ms-2">0.0%</span></h6>
-                <div class="display-4 fs-4 mb-2 fw-normal font-sans-serif text-info" data-countup='{"endValue":23.434,"decimalPlaces":2,"suffix":"k"}'>0</div><a class="fw-semi-bold fs--1 text-nowrap" href="../app/e-commerce/orders/order-list.html">All orders<span class="fas fa-angle-right ms-1" data-fa-transform="down-1"></span></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card mb-3" id="universityTable" data-list='{"valueNames":["name","program-type"],"page":10,"pagination":true}'>
+        <div class="card z-index-1" id="payableCommissions" data-list='{"valueNames":["agent","student","university","duedate","amount","status"],"page":5,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center">
-              <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
-                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Total Receivable</h5>
+              <div class="col-6 d-flex align-items-center">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Commissions Receivable</h5>
               </div>
-              <div class="col-8 col-sm-auto text-end ps-2">
-                <div id="table-university-replace-element">
-                  <button class="btn btn-falcon-default btn-sm me-2" type="button" data-bs-toggle="modal" data-bs-target="#add-new-modal">
-                    <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span>
-                  </button>
+              <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
+                <div id="table-purchases-replace-element">                  
                   <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">Export</span></button>
                 </div>
               </div>
+              <div class="col-12 col-md-4 mt-1 mt-md-0 ms-auto text-end">
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for a page" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                  </div>
+                </form>
+              </div>              
             </div>
           </div>
-          <div class="card-body p-0">
+          <div class="card-body px-0 py-0">
             <div class="table-responsive scrollbar">
-              <table class="table table-striped fs--1 mb-0 overflow-hidden">
+              <table class="table table-sm fs--1 mb-0 overflow-hidden">
                 <thead class="bg-200 text-900">
                   <tr>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Student</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">University</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Program Type</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Amount</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Due Date</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program-type">Status</th>
-                    <th class="align-middle no-sort"></th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="agent">Agent</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="student">Student</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="university">University</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap text-end" data-sort="duedate">Due Date</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="amount">Amount</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap text-end" data-sort="status">Status</th>
+                    <th class="no-sort pe-1 align-middle data-table-row-action"></th>
                   </tr>
                 </thead>
-                <tbody class="list" id="table-university-body">
-                  <tr id="ucb">
-                    <td class="name">Akshay Kumar</td>
-                    <td class="name">University of California, Berkeley</td>
-                    <td class="program-type">Undergraduate <br> Postgraduate,...</td>
-                    <td class="program-type">50,000</td>
-                    <td class="program-type">18/07/2023</td>
-                    <td class="program-type">Pending</td>
-                    <td class="align-middle white-space-nowrap py-2 text-end">
-                      <div class="dropdown font-sans-serif position-static">
-                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
-                        <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="customer-dropdown-1">
-                          <div class="py-2">
-                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#add-new-modal">Edit</a>
-                            <a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#add-new-modal">Delete</a></div>
+                <tbody class="list" id="table-purchase-body">
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Sylvia Plath</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">john</a></td>
+                    <td class="align-middle white-space-nowrap university">Slick - Drag &amp; Drop Bootstrap Generator</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$99</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-0" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-0"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Homer</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">sylvia</a></td>
+                    <td class="align-middle white-space-nowrap university">Bose SoundSport Wireless Headphones</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$634</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-1"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Edgar Allan Poe</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">edgar</a></td>
+                    <td class="align-middle white-space-nowrap university">All-New Fire HD 8 Kids Edition Tablet</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$199</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-2" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-2"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">William Butler Yeats</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">william</a></td>
+                    <td class="align-middle white-space-nowrap university">Apple iPhone XR (64GB)</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$798</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-3" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-3"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Rabindranath Tagore</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">tagore</a></td>
+                    <td class="align-middle white-space-nowrap university">ASUS Chromebook C202SA-YS02 11.6&quot;</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$318</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-4" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-4"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Emily Dickinson</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">emily</a></td>
+                    <td class="align-middle white-space-nowrap university">Mirari OK to Wake! Alarm Clock</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$11</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-5" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-5"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Giovanni Boccaccio</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">giovanni</a></td>
+                    <td class="align-middle white-space-nowrap university">Summer Infant Contoured Changing Pad</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$31</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-6" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-6"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Oscar Wilde</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">oscar</a></td>
+                    <td class="align-middle white-space-nowrap university">Munchkin 6 Piece Fork and Spoon Set</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$43</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-7" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-7"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">John Doe</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">doe</a></td>
+                    <td class="align-middle white-space-nowrap university">Falcon - Responsive Dashboard Template</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$57</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-success">Success<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-8" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-8"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Emma Watson</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">emma</a></td>
+                    <td class="align-middle white-space-nowrap university">Apple iPhone XR (64GB)</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$999</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-9" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-9"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Sylvia Plath</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">plath</a></td>
+                    <td class="align-middle white-space-nowrap university">All-New Fire HD 8 Kids Edition Tablet</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$199</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-10" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-10"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Rabindranath Tagore</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">Rabindra</a></td>
+                    <td class="align-middle white-space-nowrap university">Apple iPhone XR (64GB)</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$999</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-11" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-11"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Anila Wilde</a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">anila</a></td>
+                    <td class="align-middle white-space-nowrap university">All-New Fire HD 8 Kids Edition Tablet</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$199</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-12" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-12"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr class="btn-reveal-trigger">
+                    <th class="align-middle white-space-nowrap agent"><a href="add_agent.html">Jack Watson </a></th>
+                    <td class="align-middle white-space-nowrap student"><a href="student_details.html">Jack</a></td>
+                    <td class="align-middle white-space-nowrap university">Apple iPhone XR (64GB)</td>
+                    <td class="align-middle text-nowrap duedate">22-05-2023</td>
+                    <td class="align-middle text-end amount">$999</td>
+                    <td class="align-middle text-center fs-0 white-space-nowrap status"><span class="badge badge rounded-pill badge-soft-secondary">Blocked<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>
+                    </td>
+                    <td class="align-middle white-space-nowrap text-end">
+                      <div class="dropstart font-sans-serif position-static d-inline-block">
+                        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-13" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+                        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-13"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
+                          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
                         </div>
                       </div>
                     </td>
@@ -137,13 +335,14 @@
                 </tbody>
               </table>
             </div>
+
           </div>
-          <div class="card-footer d-flex align-items-center justify-content-center">
-            <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
-            <ul class="pagination mb-0"></ul>
-            <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
+          <div class="card-footer">
+            <div class="d-flex justify-content-center mt-3"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+              <ul class="pagination mb-0"></ul><button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"> </span></button>
+            </div>
           </div>
-        </div>
+        </div>        
       </div>
     </div>
   </main>
@@ -156,6 +355,124 @@
     <div></div><div></div><div></div><div></div>
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
+
+  <!-- View Details Modal -->
+  <div class="modal fade" id="view-details" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Edit/View Details </h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="agent-name">Agent Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="agent-name" type="text" placeholder="Agent Name" disabled />
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="student-name">Student Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="student-name" type="text" placeholder="student Name" disabled />
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="university-name">University Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="university-name" type="text" placeholder="University Name" disabled />
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="duedate">Due Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="duedate" type="text" placeholder="DD-MM-YYYY" />
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="amount">Amount<span class="text-danger">*</span></label>
+                <input class="form-control" id="amount" type="text" placeholder="$1000" />
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
+                <select class="form-select" aria-label="Default select example">
+                  <option selected="">Pending</option>
+                  <option value="1">Invoiced</option>
+                  <option value="2">Confirmed</option>
+                  <option value="3">Paid</option>
+                  <option value="4">Not Applicable</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- View Details Ends -->
+
+  <!-- Update Status Modal -->
+  <div class="modal fade" id="update-status" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Update Status </h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="agent-name">Status<span class="text-danger">*</span></label>
+                <select class="form-select" aria-label="Default select example">
+                  <option selected="">Pending</option>
+                  <option value="1">Invoiced</option>
+                  <option value="2">Confirmed</option>
+                  <option value="3">Paid</option>
+                  <option value="4">Not Applicable</option>
+                </select>
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="notes">Notes<span class="text-danger">*</span></label>
+                <textarea class="form-control" id="notes" placeholder="Notes/Comments" rows="3"></textarea>
+              </div>
+              <hr>
+              <p class="text-center mb-1">Next Payment details</p>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="duedate">Due Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="duedate" type="text" placeholder="DD-MM-YYYY" />
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="amount">Amount<span class="text-danger">*</span></label>
+                <input class="form-control" id="amount" type="text" placeholder="$1000" />
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
+                <select class="form-select" aria-label="Default select example">
+                  <option selected="">Pending</option>
+                  <option value="1">Invoiced</option>
+                  <option value="2">Confirmed</option>
+                  <option value="3">Paid</option>
+                  <option value="4">Not Applicable</option>
+                  <option value="5">No further commissions</option>
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary">Confirm Updates</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Update Status Ends -->  
 
 
   <!--    JavaScripts-->

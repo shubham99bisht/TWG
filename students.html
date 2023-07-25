@@ -60,7 +60,7 @@
 
         <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","email","phone","program"],"page":10,"pagination":true}'>
           <div class="card-header">
-            <div class="row flex-between-center">
+            <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Students</h5>
               </div>
@@ -71,6 +71,16 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-12">
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Students" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                  </div>
+                </form>
+              </div>                
+            </div>            
           </div>
           <div class="card-body p-0">
             <div class="table-responsive scrollbar">

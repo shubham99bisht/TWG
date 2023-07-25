@@ -60,7 +60,7 @@
 
         <div class="card mb-3" id="agentsTable" data-list='{"valueNames":["id","name","email","phone","address"],"page":10,"pagination":true}'>
           <div class="card-header">
-            <div class="row flex-between-center">
+            <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Agents</h5>
               </div>
@@ -70,6 +70,16 @@
                   <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">Export</span></button>
                 </div>
               </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Agent" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                  </div>
+                </form>
+              </div>                
             </div>
           </div>
           <div class="card-body p-0">
