@@ -1,15 +1,18 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
-import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+import { getAuth, signOut, signInWithPopup, onAuthStateChanged, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCAfeYDV4O4mCtRYWuLhO0aIofDt7GMSV4",
-  authDomain: "defipatrol-c0d11.firebaseapp.com",
-  databaseURL: "https://defipatrol-c0d11-default-rtdb.firebaseio.com",
-  projectId: "defipatrol-c0d11",
-  storageBucket: "defipatrol-c0d11.appspot.com",
-  messagingSenderId: "1021045641034",
-  appId: "1:1021045641034:web:8ba3dbbd92aa8c86e63bb3"
+  apiKey: "AIzaSyA-7KJ7TpHuBUiTlZEhZfW2eE4SOaSornA",
+  authDomain: "commissions-management-tool.firebaseapp.com",
+  // databaseURL: "https://defipatrol-c0d11-default-rtdb.firebaseio.com",
+  // https://commissions-management-tool-default-rtdb.asia-southeast1.firebasedatabase.app/
+  projectId: "commissions-management-tool",
+  storageBucket: "commissions-management-tool.appspot.com",
+  messagingSenderId: "1012488519856",
+  appId: "1:1012488519856:web:b9f47b4a3ed5b9f5167b75",
+  measurementId: "G-PEWRNYQZZ2"
 };
+
 export const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 window.auth = auth;
@@ -20,7 +23,6 @@ export const PAGES = {
   CONFIRM_PAGE: '../auth/confirm-mail.html',
   AUTH_PAGES_PREFIX: '/auth',
 }
-
 
 // ------------------------
 // OnAuthStateChange
@@ -51,6 +53,32 @@ onAuthStateChanged(auth, async (user) => {
   else { location.pathname = PAGES.LOGIN_PAGE; }
   if (preloader) preloader.remove();
 });
+
+
+// ------------------------
+// Log In function
+// ------------------------
+
+theworldgrad.addEventListener('click', () => googleSignIn('theworldgrad'))
+linkeducation.addEventListener('click', () => googleSignIn('linkeducation'))
+
+function googleSignIn(allowedDomains) {
+  // Replace 'YOUR_WEB_CLIENT_ID' with your actual Web client ID
+  var googleAuthProvider = new GoogleAuthProvider();
+  googleAuthProvider.setCustomParameters({ hd: allowedDomains });
+
+  signInWithPopup(auth, googleAuthProvider)
+    .then((userCredential) => {
+      // Handle successful sign-in
+      var user = userCredential.user;
+      console.log('User signed in:', user);
+    })
+    .catch((error) => {
+      // Handle sign-in errors
+      console.error('Error signing in:', error);
+    });
+}
+
 
 // ------------------------
 // Log out function
