@@ -1,11 +1,11 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
 import { getAuth, signOut, signInWithPopup, onAuthStateChanged, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA-7KJ7TpHuBUiTlZEhZfW2eE4SOaSornA",
   authDomain: "commissions-management-tool.firebaseapp.com",
-  // databaseURL: "https://defipatrol-c0d11-default-rtdb.firebaseio.com",
-  // https://commissions-management-tool-default-rtdb.asia-southeast1.firebasedatabase.app/
+  databaseURL: "https://commissions-management-tool-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "commissions-management-tool",
   storageBucket: "commissions-management-tool.appspot.com",
   messagingSenderId: "1012488519856",
@@ -13,9 +13,9 @@ const firebaseConfig = {
   measurementId: "G-PEWRNYQZZ2"
 };
 
-export const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-window.auth = auth;
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth();
+export const db = getDatabase();
 
 export const PAGES = {
   HOME_PAGE: 'index.html',
@@ -28,6 +28,7 @@ export const PAGES = {
 // OnAuthStateChange
 // ------------------------
 onAuthStateChanged(auth, async (user) => {
+  return
   const currentPage = location.pathname;
   const isAuthPage = currentPage.includes(PAGES.AUTH_PAGES_PREFIX)
   const isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));
@@ -59,8 +60,11 @@ onAuthStateChanged(auth, async (user) => {
 // Log In function
 // ------------------------
 
-theworldgrad.addEventListener('click', () => googleSignIn('theworldgrad'))
-linkeducation.addEventListener('click', () => googleSignIn('linkeducation'))
+const theworldgrad = document.getElementById("theworldgrad")
+if (theworldgrad) theworldgrad.addEventListener('click', () => googleSignIn('theworldgrad'))
+
+const linkeducation = document.getElementById("linkeducation")
+if (linkeducation) linkeducation.addEventListener('click', () => googleSignIn('linkeducation'))
 
 function googleSignIn(allowedDomains) {
   // Replace 'YOUR_WEB_CLIENT_ID' with your actual Web client ID
