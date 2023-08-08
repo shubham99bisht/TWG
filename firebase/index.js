@@ -28,7 +28,6 @@ export const PAGES = {
 // OnAuthStateChange
 // ------------------------
 onAuthStateChanged(auth, async (user) => {
-  return
   const currentPage = location.pathname;
   const isAuthPage = currentPage.includes(PAGES.AUTH_PAGES_PREFIX)
   const isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));

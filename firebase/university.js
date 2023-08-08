@@ -9,45 +9,41 @@ const nameInput = addNewProgramModel.querySelector('.modal-body #program-name')
 const commissionInput = addNewProgramModel.querySelector('.modal-body #commission')
 const duedateInput = addNewProgramModel.querySelector('.modal-body #duedate')
 
-if (addNewProgramModel) {
-  addNewProgramModel.addEventListener('show.bs.modal', event => {
+const addNewUniversityModel = document.getElementById('add-new-modal')
+if (addNewUniversityModel) {
+  addNewUniversityModel.addEventListener('show.bs.modal', event => {
     // Button that triggered the modal
     const button = event.relatedTarget
     const row = button.closest('tr')
     // Extract info from data-bs-* attributes
     const name = row?.querySelector('.name')
-    const commission = row?.querySelector('.commission')
-    const duedate = row?.querySelector('.duedate')
+    const program = row?.querySelector('.program-type')
 
     // Update the modal's content.
-    if (name) {
-        modalTitle.textContent = `Update Program`
-        nameInput.value = name.innerHTML.trim()
-        commissionInput.value = commission.innerHTML.split("%")[0].trim()
-        duedateInput.value = duedate.innerHTML.trim()
-    } else {
-        modalTitle.textContent = 'Add New Program'
-        nameInput.value = ''
-        commissionInput.value = ''
-        duedateInput.value = ''
-    }
+    const modalTitle = addNewUniversityModel.querySelector('.modal-title')
+    const modalFooter = addNewUniversityModel.querySelector('.modal-footer')
+    const nameInput = addNewUniversityModel.querySelector('.modal-body #university-name')
+    
 
     if (button.innerHTML == "Delete") {
-      modalFooter.innerHTML = `
+        modalFooter.innerHTML = `
         <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-danger" onclick="deleteProgram('${row?.id}')">Confirm Delete</button>`
-    } else if (!row?.id) {
-      modalFooter.innerHTML = `
-        <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" onclick="createProgram()">Save</button>`
+        <button class="btn btn-danger" onclick="deleteUniv(${row?.id})">Confirm Delete</button>`
     } else {
-      modalFooter.innerHTML = `
+        modalFooter.innerHTML = `
         <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" onclick="updateProgram('${row?.id}')">Save</button>`
-    }      
+        <button class="btn btn-primary" onclick="saveUniv(${row?.id})">Save</button>`
+    }
+
+    if (name) {
+        modalTitle.textContent = `Update University`
+        nameInput.value = name.innerHTML
+    } else {
+        modalTitle.textContent = 'Add New University'
+        nameInput.value = ''
+    }
   })
 }
-
 window.onload = function() {
   listAllProgramTypes();
 };

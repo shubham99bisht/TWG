@@ -55,6 +55,20 @@ export async function writeData(dbPath, data) {
   }
 }
 
+export async function writeDataWithNewId(dbPath, data) {
+  const baseRef = ref(db, dbPath);
+  const dbRef = push(baseRef);
+  try {
+    await set(dbRef, data);
+    await logChange(dbPath, "created", data); // Logging the creation
+    console.log("Data written successfully!");
+    return true;
+  } catch (error) {
+    console.error("Error writing data:", error);
+    return false;
+  }
+}
+
 // Function to update data in the database
 export async function updateData(dbPath, data) {
   const dbRef = ref(db, dbPath);
