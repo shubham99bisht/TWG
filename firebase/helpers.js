@@ -1,4 +1,4 @@
-import { ref, get, set, update, push } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
+import { ref, get, set, update, push, remove } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
 import { auth, db } from "./index.js";
 
 const logsRef = ref(db, "logs");
@@ -85,7 +85,7 @@ export async function updateData(dbPath, data) {
 
 // Function to delete data from the database
 export async function deleteData(dbPath) {
-  const dbRef = ref(getDatabase(), dbPath);
+  const dbRef = ref(db, dbPath);
   try {
     await remove(dbRef);
     await logChange(dbPath, "deleted", null); // Logging the deletion

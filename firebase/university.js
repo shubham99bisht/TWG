@@ -1,51 +1,106 @@
 import { readData, writeDataWithNewId, updateData, deleteData } from "./helpers.js";
 
-const addNewProgramModel = document.getElementById('add-new-modal')
-const modalTitle = addNewProgramModel.querySelector('.modal-title')
-const modalFooter = addNewProgramModel.querySelector('.modal-footer')
+let program_types = {}
+
+const optionSchema = `
+  <div class="form-check">
+    <input class="form-check-input" id="{}" type="checkbox" {}/>
+    <label class="form-check-label" for="{}">{}</label>
+  </div>`
+
+/**
+ * --------------------------------------------------
+ * Common Actions Modal
+ * --------------------------------------------------
+ */
+
+const addNewModel = document.getElementById('add-new-modal')
+const modalTitle = addNewModel.querySelector('.modal-title')
+const modalFooter = addNewModel.querySelector('.modal-footer')
 
 // Modal's form inputs
-const nameInput = addNewProgramModel.querySelector('.modal-body #program-name')
-const commissionInput = addNewProgramModel.querySelector('.modal-body #commission')
-const duedateInput = addNewProgramModel.querySelector('.modal-body #duedate')
+const nameInput = addNewModel.querySelector('.modal-body #university-name')
+const programTypeInput = addNewModel.querySelector('.modal-body #program-type')
 
-const addNewUniversityModel = document.getElementById('add-new-modal')
-if (addNewUniversityModel) {
-  addNewUniversityModel.addEventListener('show.bs.modal', event => {
+if (addNewModel) {
+  addNewModel.addEventListener('show.bs.modal', event => {
     // Button that triggered the modal
     const button = event.relatedTarget
     const row = button.closest('tr')
     // Extract info from data-bs-* attributes
     const name = row?.querySelector('.name')
-    const program = row?.querySelector('.program-type')
-
-    // Update the modal's content.
-    const modalTitle = addNewUniversityModel.querySelector('.modal-title')
-    const modalFooter = addNewUniversityModel.querySelector('.modal-footer')
-    const nameInput = addNewUniversityModel.querySelector('.modal-body #university-name')
-    
+    const programIds = row?.getAttribute('data-program-types');
 
     if (button.innerHTML == "Delete") {
         modalFooter.innerHTML = `
         <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-danger" onclick="deleteUniv(${row?.id})">Confirm Delete</button>`
+        <button class="btn btn-danger" onclick="deleteUniversity('${row?.id}')">Confirm Delete</button>`
+    } else if (!row?.id) {
+        modalFooter.innerHTML = `
+        <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" onclick="createUniversity()">Save</button>`
     } else {
         modalFooter.innerHTML = `
         <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" onclick="saveUniv(${row?.id})">Save</button>`
+        <button class="btn btn-primary" onclick="updateUniversity('${row?.id}')">Save</button>`
     }
 
     if (name) {
         modalTitle.textContent = `Update University`
         nameInput.value = name.innerHTML
+        programTypeInput.innerHTML = '<label for="program-type">Program Type</label>'
+        for (const pId in program_types) {
+          if (program_types.hasOwnProperty(pId)) {
+            const isChecked = programIds.includes(pId) ? "checked" : ""
+            const newOpt = optionSchema.format(pId, isChecked, pId, program_types[pId].name)
+            programTypeInput.innerHTML += newOpt;
+          }
+        }
     } else {
         modalTitle.textContent = 'Add New University'
         nameInput.value = ''
+        setDefaultProgramTypes()
     }
   })
 }
-window.onload = function() {
-  listAllProgramTypes();
+
+/**
+ * --------------------------------------------------
+ * Load Program Types
+ * --------------------------------------------------
+ */
+
+function setDefaultProgramTypes() {
+  programTypeInput.innerHTML = '<label for="program-type">Program Type</label>'
+  for (const pId in program_types) {
+    if (program_types.hasOwnProperty(pId)) {
+      const newOpt = optionSchema.format(pId, "", pId, program_types[pId].name)
+      programTypeInput.innerHTML += newOpt;
+    }
+  }
+}
+
+function getAllCheckedBoxes() {
+  // Find the checkbox within the current form-check
+  const checkedCheckboxIds = [];
+  const formCheckElements = document.querySelectorAll('.form-check');
+  formCheckElements.forEach(formCheck => {
+    const checkbox = formCheck.querySelector('.form-check-input');
+    if (checkbox.checked) {
+      checkedCheckboxIds.push(checkbox.id);
+    }
+  });
+  return checkedCheckboxIds
+}
+
+async function loadProgramTypes() {
+  program_types = await readData("program_types")
+  setDefaultProgramTypes()
+}
+
+window.onload = async function() {
+  await loadProgramTypes();
+  listAll();
 };
 
 /**
@@ -54,17 +109,16 @@ window.onload = function() {
  * --------------------------------------------------
  */
 
-function createProgram() {
-  const newProgramType = {
+function createUniversity() {
+  const newUniversity = {
     name: nameInput.value,
-    commission_rate: commissionInput.value,
-    first_installment: duedateInput.value,
+    program_types: getAllCheckedBoxes()
   };
 
-  writeDataWithNewId(`program_types`, newProgramType)
+  writeDataWithNewId(`universities`, newUniversity)
     .then((result) => {
       if (result) {
-        successMessage("Program type added successfully!")
+        successMessage("University added successfully!")
         .then(() => location.reload())
       }
     })
@@ -72,7 +126,7 @@ function createProgram() {
       failMessage("Error adding program type:", error);
     });
 }
-window.updateProgram = createProgram
+window.createUniversity = createUniversity
 
 
 /**
@@ -81,18 +135,15 @@ window.updateProgram = createProgram
  * --------------------------------------------------
  */
 
-function listAllProgramTypes() {
-  const tableBody = document.getElementById("table-program-body");
+function listAll() {
+  const tableBody = document.getElementById("table-body");
   tableBody.innerHTML = ''
-  readData("program_types")
-    .then((programTypes) => {
-      console.log("Program types:", programTypes);
-
+  readData("universities")
+    .then((university) => {
       const schema = `
-        <tr id="{}">
+        <tr id="{}" data-program-types="{}">
           <td class="name">{}</td>
-          <td class="commission"> {}% </td>
-          <td class="duedate">{}</td>
+          <td class="program-type">{}</td>
           <td class="align-middle white-space-nowrap py-2 text-end">
             <div class="dropdown font-sans-serif position-static">
               <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
@@ -105,21 +156,23 @@ function listAllProgramTypes() {
           </td>
         </tr>`
 
-      Object.keys(programTypes).forEach(pId => {
-        const p = programTypes[pId]
-        const row = schema.format(pId, p.name, p.commission_rate, p.first_installment)
+      Object.keys(university).forEach(uId => {
+        const u = university[uId]
+        const programIds = u.program_types.join(",")
+        const programs = u.program_types.map(pId => program_types[pId].name)
+        const row = schema.format(uId, programIds, u.name, programs.join("<br>"))
         if (tableBody) tableBody.innerHTML += row
       });
       
       listInit()
     })
     .catch((error) => {
-      console.error("Error reading program types:", error);
+      console.error("Error reading Universities:", error);
       if (tableBody) 
-        tableBody.innerHTML = `<tr><td colspan="4">rror reading program types</td></tr>`
+        tableBody.innerHTML = `<tr class="text-center"><td colspan="3">Error reading Universities</td></tr>`
     });
 }
-window.listAllProgramTypes = listAllProgramTypes
+window.listAll = listAll
 
 /**
  * --------------------------------------------------
@@ -127,25 +180,24 @@ window.listAllProgramTypes = listAllProgramTypes
  * --------------------------------------------------
  */
 
-function updateProgram(pId) {
-  const updatedProgramType = {
+function updateUniversity(uId) {
+  const newUniversity = {
     name: nameInput.value,
-    commission_rate: commissionInput.value,
-    first_installment: duedateInput.value,
+    program_types: getAllCheckedBoxes()
   };
 
-  updateData(`program_types/${pId}`, updatedProgramType)
+  updateData(`universities/${uId}`, newUniversity)
     .then((result) => {
       if (result) {
-        successMessage("Program type updated successfully!")
+        successMessage("University updated successfully!")
         .then(() => location.reload())   
       }
     })
     .catch((error) => {
-      alert("Error updating program type:", error);
+      failMessage("Error updating program type:", error);
     });
 }
-window.updateProgram = updateProgram
+window.updateUniversity = updateUniversity
 
 /**
  * --------------------------------------------------
@@ -153,16 +205,17 @@ window.updateProgram = updateProgram
  * --------------------------------------------------
  */
 
-function deleteProgram(pId) {
-  deleteData(`program_types/${pId}`)
+function deleteUniversity(uId) {
+  deleteData(`universities/${uId}`)
     .then((result) => {
       if (result) {
-        successMessage("Program type deleted successfully!")
+        successMessage("University deleted successfully!")
         .then(() => location.reload())
       }
     })
     .catch((error) => {
+      console.log(error)
       failMessage("Error deleting program type:", error);
     });
 }
-window.deleteProgram = deleteProgram
+window.deleteUniversity = deleteUniversity

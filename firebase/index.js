@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-app.js";
-import { getAuth, signOut, signInWithPopup, onAuthStateChanged, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
+import { getAuth, signOut, signInWithPopup, onAuthStateChanged, GoogleAuthProvider, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -19,9 +19,7 @@ export const db = getDatabase();
 
 export const PAGES = {
   HOME_PAGE: 'index.html',
-  LOGIN_PAGE: '../auth/login.html',
-  CONFIRM_PAGE: '../auth/confirm-mail.html',
-  AUTH_PAGES_PREFIX: '/auth',
+  LOGIN_PAGE: 'auth.html',
 }
 
 // ------------------------
@@ -29,25 +27,15 @@ export const PAGES = {
 // ------------------------
 onAuthStateChanged(auth, async (user) => {
   const currentPage = location.pathname;
-  const isAuthPage = currentPage.includes(PAGES.AUTH_PAGES_PREFIX)
-  const isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));
+  const isAuthPage = currentPage.includes('auth')
   const preloader = document.querySelector('#preloader');
 
   // Handle Auth Pages
   if (isAuthPage) {
-    if (currentPage.includes('action')) return
-    if (user && isLoggedIn) { location.pathname = PAGES.HOME_PAGE; }
-    if (currentPage.includes('login')) {}
-    else if (currentPage.includes('register')) {}
-    else if (currentPage.includes('forget-password')) {}
-    else if (currentPage.includes('confirm-mail')) {
-      if (!user) location.pathname = PAGES.LOGIN_PAGE;
-    }
+    if (user) location.pathname = PAGES.HOME_PAGE;
   }
-  // If logged in, load profile config and redirect to home page
-  else if (user && isLoggedIn) {
-    const theme = localStorage.getItem('darkMode');
-    if (theme == "true") document.getElementById("themeControlToggle").click();
+  else if (user) {
+    // Pass
   } 
   // Otherwise redirect to Auth Pages
   else { location.pathname = PAGES.LOGIN_PAGE; }
@@ -60,25 +48,22 @@ onAuthStateChanged(auth, async (user) => {
 // ------------------------
 
 const theworldgrad = document.getElementById("theworldgrad")
-if (theworldgrad) theworldgrad.addEventListener('click', () => googleSignIn('theworldgrad'))
+if (theworldgrad) theworldgrad.addEventListener('click', () => googleSignIn('theworldgrad.com'))
 
-const linkeducation = document.getElementById("linkeducation")
-if (linkeducation) linkeducation.addEventListener('click', () => googleSignIn('linkeducation'))
+const linceducation = document.getElementById("linceducation")
+if (linceducation) linceducation.addEventListener('click', () => googleSignIn('linceducation.com'))
 
 function googleSignIn(allowedDomains) {
-  // Replace 'YOUR_WEB_CLIENT_ID' with your actual Web client ID
   var googleAuthProvider = new GoogleAuthProvider();
   googleAuthProvider.setCustomParameters({ hd: allowedDomains });
 
   signInWithPopup(auth, googleAuthProvider)
     .then((userCredential) => {
       // Handle successful sign-in
-      var user = userCredential.user;
-      console.log('User signed in:', user);
     })
     .catch((error) => {
       // Handle sign-in errors
-      console.error('Error signing in:', error);
+      failMessage('Error signing in:', error);
     });
 }
 
@@ -95,7 +80,6 @@ if (logoutBtn) {
 }
 async function logOut() {
   await signOut(auth);
-  localStorage.setItem("isLoggedIn", false);
   location.pathname = PAGES.LOGIN_PAGE;
 }
 window.logOut = logOut
@@ -136,3 +120,10 @@ window.processingMessage = (msg) => {
 window.closeSwal = () => {
   Sweetalert2.close()
 }
+
+// To be removed
+
+function signInAdmin(email, pass) {
+  signInWithEmailAndPassword(auth, email, pass)
+}
+window.signInAdmin = signInAdmin

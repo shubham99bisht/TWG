@@ -120,7 +120,7 @@ function listAllProgramTypes() {
     .catch((error) => {
       console.error("Error reading program types:", error);
       if (tableBody) 
-        tableBody.innerHTML = `<tr><td colspan="4">rror reading program types</td></tr>`
+        tableBody.innerHTML = `<tr><td colspan="4">Error reading program types</td></tr>`
     });
 }
 window.listAllProgramTypes = listAllProgramTypes
@@ -146,7 +146,7 @@ function updateProgram(pId) {
       }
     })
     .catch((error) => {
-      alert("Error updating program type:", error);
+      failMessage("Error updating program type:", error);
     });
 }
 window.updateProgram = updateProgram
