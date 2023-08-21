@@ -1,4 +1,4 @@
-import { ref, get, set, update, push, remove } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
+import { ref, get, set, update, push, remove, child } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
 import { auth, db } from "./index.js";
 
 const logsRef = ref(db, "logs");
@@ -96,3 +96,25 @@ export async function deleteData(dbPath) {
     return false;
   }
 }
+
+/**
+ * Custom Functions
+*/
+
+// Function to remove a program ID from universities' program_types
+export async function removeProgramFromUniversity(pId) {
+  const dbRef = ref(db, 'universities');
+  try {
+    const dataSnapshot = await get(dbRef);
+    dataSnapshot.forEach(dataSnapshotChild => {
+      const key = dataSnapshotChild.key;
+      const list = dataSnapshotChild.child('program_types').val() || [];
+      const updatedList = list.filter(item => item !== pId);
+      set(child(dbRef, `${key}/program_types`), updatedList);
+    });
+    console.log(`Removed ${pId} from all universities`);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+window.removeProgramFromUniversity = removeProgramFromUniversity

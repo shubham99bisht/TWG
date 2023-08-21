@@ -29,8 +29,9 @@ if (addNewModel) {
     const row = button.closest('tr')
     // Extract info from data-bs-* attributes
     const name = row?.querySelector('.name')
-    const programIds = row?.getAttribute('data-program-types');
+    const programIds = JSON.parse(row?.getAttribute('data-program-types') || '[]');
 
+    console.log(name, programIds)
     if (button.innerHTML == "Delete") {
         modalFooter.innerHTML = `
         <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
@@ -141,7 +142,7 @@ function listAll() {
   readData("universities")
     .then((university) => {
       const schema = `
-        <tr id="{}" data-program-types="{}">
+        <tr id="{}" data-program-types='{}'>
           <td class="name">{}</td>
           <td class="program-type">{}</td>
           <td class="align-middle white-space-nowrap py-2 text-end">
@@ -158,8 +159,9 @@ function listAll() {
 
       Object.keys(university).forEach(uId => {
         const u = university[uId]
-        const programIds = u.program_types.join(",")
-        const programs = u.program_types.map(pId => program_types[pId].name)
+        const programIds = JSON.stringify(u.program_types || [])
+        const programs = (u?.program_types || [])
+          .filter(pId => program_types[pId]?.name).map(pId => program_types[pId].name)
         const row = schema.format(uId, programIds, u.name, programs.join("<br>"))
         if (tableBody) tableBody.innerHTML += row
       });
@@ -206,6 +208,7 @@ window.updateUniversity = updateUniversity
  */
 
 function deleteUniversity(uId) {
+  if (confirm(`Confirm delete university with id: ${id}`))
   deleteData(`universities/${uId}`)
     .then((result) => {
       if (result) {
@@ -215,7 +218,7 @@ function deleteUniversity(uId) {
     })
     .catch((error) => {
       console.log(error)
-      failMessage("Error deleting program type:", error);
+      failMessage("Error deleting university:", error);
     });
 }
 window.deleteUniversity = deleteUniversity

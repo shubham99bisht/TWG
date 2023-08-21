@@ -58,80 +58,78 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <!-- Basic Information -->
-        <div class="card mb-3">
-          <div class="card-header">
-            <h5 class="mb-0">Agent Basic Information</h5>
+        <form id="agent-form">
+          <!-- Basic Information -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="mb-0">Agent Basic Information</h5>
+            </div>
+            <div class="card-body bg-light">
+              <div class="row gx-2">
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="agent-id">Agent Id<span class="text-danger">*</span></label>
+                  <input class="form-control" id="agent-id" name="agentId" type="text" placeholder="Agent Id" required="required" />
+                </div>
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="agent-name">Agent Name<span class="text-danger">*</span></label>
+                  <input class="form-control" id="agent-name" name="name" type="text" placeholder="Agent Name" required="required" />
+                </div>              
+  
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="poc">Contact Person<span class="text-danger">*</span></label>
+                  <input class="form-control" id="poc" name="contactPerson" type="text" placeholder="Contact Person Name" required="required" />
+                </div>
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="phone">Phone<span class="text-danger">*</span></label>
+                  <input class="form-control" name="phone" type="tel" placeholder="+91 XXXX XXXX" required="required" />
+                </div>  
+  
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="email">Email<span class="text-danger">*</span></label>
+                  <input class="form-control" type="email" name="email" placeholder="email@email.com" required="required" />
+                </div>
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="address">Address<span class="text-danger">*</span></label>
+                  <input class="form-control" name="address" type="text" placeholder="Agent's Location" required="required" />
+                </div>
+              </div>
+              </div>
           </div>
-          <div class="card-body bg-light">
-            <form class="row gx-2">
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="agent-id">Agent Id<span class="text-danger">*</span></label>
-                <input class="form-control" id="agent-id" type="text" placeholder="Agent Id" required="required" />
+          <!-- Basic Information Ends -->
+  
+          <!-- Billing Details -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="mb-0">Billing Details</h5>
+            </div>
+            <div class="card-body bg-light">
+              <div class="row gx-2">
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="account-name">Account Name<span class="text-danger">*</span></label>
+                  <input class="form-control" name="accountName" type="text" placeholder="Account Name" required="required" />
+                </div> 
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="account-number">Account Number<span class="text-danger">*</span></label>
+                  <input class="form-control" name="accountNumber" type="text" placeholder="XXXXXXXX1234" required="required" />
+                </div>
+                
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="bank">Bank Name<span class="text-danger">*</span></label>
+                  <input class="form-control" name="bank" type="text" placeholder="Bank (Branch)" required="required" />
+                </div>
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="ifsc">IFSC Code<span class="text-danger">*</span></label>
+                  <input class="form-control" name="ifsc" type="text" placeholder="XXXX" required="required" />
+                </div>  
               </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="agent-name">Agent Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="agent-name" type="text" placeholder="Agent Name" required="required" />
-              </div>              
-
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="poc">Contact Person<span class="text-danger">*</span></label>
-                <input class="form-control" id="poc" type="text" placeholder="Contact Person Name" required="required" />
-              </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="phone">Phone<span class="text-danger">*</span></label>
-                <input class="form-control" id="phone" type="text" placeholder="+91 XXXX XXXX" required="required" />
-              </div>  
-
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="email">Email<span class="text-danger">*</span></label>
-                <input class="form-control" id="email" type="email" name="email" placeholder="email@email.com" required="required" />
-              </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="address">Address<span class="text-danger">*</span></label>
-                <input class="form-control" id="address" type="text" placeholder="Agent's Location" required="required" />
-              </div>
-            </form>
+            </div>
+          </div> 
+          <!-- Billing Details -->
+  
+          <div class="d-grid" id="add">
+            <button class="btn btn-primary" type="submit">Save Agent Details</button>
           </div>
-        </div>
-        <!-- Basic Information Ends -->
-
-        <!-- Billing Details -->
-        <div class="card mb-3">
-          <div class="card-header">
-            <h5 class="mb-0">Billing Details</h5>
-          </div>
-          <div class="card-body bg-light">
-            <form class="row gx-2">
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="account-name">Account Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="account-name" type="text" placeholder="Account Name" required="required" />
-              </div> 
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="account-number">Account Number<span class="text-danger">*</span></label>
-                <input class="form-control" id="account-number" type="text" placeholder="XXXXXXXX1234" required="required" />
-              </div>
-             
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="bank">Bank Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="bank" type="text" placeholder="Bank (Branch)" required="required" />
-              </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="ifsc">IFSC Code<span class="text-danger">*</span></label>
-                <input class="form-control" id="ifsc" type="text" placeholder="XXXX" required="required" />
-              </div>  
-            </form>
-          </div>
-        </div> 
-        <!-- Billing Details -->
-
-        <div class="d-grid" id="add">
-          <button class="btn btn-primary">Add new agent</button>
-        </div>
-        <div class="row d-none" id="confirm">
-          <div class="col-lg-6 d-grid"><button class="btn btn-secondary">Edit</button></div>
-          <div class="col-lg-6 d-grid"><button class="btn btn-primary">Save Changes</button></div>
-        </div>
+        </form>
       </div>
     </div>
   </main>
@@ -163,6 +161,7 @@
   
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
+  <script src="./firebase/agents.js" type="module"></script>
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-import { readData, writeDataWithNewId, updateData, deleteData } from "./helpers.js";
+import { readData, writeDataWithNewId, updateData, deleteData, removeProgramFromUniversity } from "./helpers.js";
 
 const addNewProgramModel = document.getElementById('add-new-modal')
 const modalTitle = addNewProgramModel.querySelector('.modal-title')
@@ -76,7 +76,7 @@ function createProgram() {
       failMessage("Error adding program type:", error);
     });
 }
-window.updateProgram = createProgram
+window.createProgram = createProgram
 
 
 /**
@@ -90,8 +90,6 @@ function listAllProgramTypes() {
   tableBody.innerHTML = ''
   readData("program_types")
     .then((programTypes) => {
-      console.log("Program types:", programTypes);
-
       const schema = `
         <tr id="{}">
           <td class="name">{}</td>
@@ -157,16 +155,20 @@ window.updateProgram = updateProgram
  * --------------------------------------------------
  */
 
-function deleteProgram(pId) {
-  deleteData(`program_types/${pId}`)
-    .then((result) => {
-      if (result) {
-        successMessage("Program type deleted successfully!")
-        .then(() => location.reload())
-      }
-    })
-    .catch((error) => {
-      failMessage("Error deleting program type:", error);
-    });
+async function deleteProgram(pId) {
+  if (!confirm(`Confirm delete agent with id: ${id}`)) return
+  try {
+    processingMessage()
+    await removeProgramFromUniversity(pId)
+    const result = await deleteData(`program_types/${pId}`)
+    if (result) {
+      successMessage("Program type deleted successfully!")
+      .then(() => location.reload())
+    }
+  } catch (error) {
+    failMessage("Error deleting program type:", error);
+  }
 }
 window.deleteProgram = deleteProgram
+
+// TODO: Also remove the pId from all associated universities first
