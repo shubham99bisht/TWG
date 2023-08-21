@@ -64,33 +64,33 @@
             <h5 class="mb-0">Student Basic Information</h5>
           </div>
           <div class="card-body bg-light">
-            <form class="row gx-2">
+            <form class="row gx-2" id="basic-info">
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="student-id">Lead Id (LSQ)<span class="text-danger">*</span></label>
-                <input class="form-control" id="student-id" type="text" placeholder="Lead Id" required="required" />
+                <label class="form-label" for="studentId">Lead Id (LSQ)<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentId" name="studentId" type="text" placeholder="Lead Id" required="required" />
               </div>
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="student-id">Joining Date<span class="text-danger">*</span></label>
-                <input class="form-control" id="student-id" type="text" placeholder="18/05/2023" required="required" />
+                <label class="form-label" for="joinDate">Joining Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="joinDate" name="joinDate" type="text" placeholder="18/05/2023" required="required" />
               </div>
 
               <div class="col-12 mb-3">
-                <label class="form-label" for="student-name">Student Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="student-name" type="text" placeholder="Student Name" required="required" />
+                <label class="form-label" for="studentName">Student Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentName" name="studentName" type="text" placeholder="Student Name" required="required" />
               </div>              
 
               <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="email">Email<span class="text-danger">*</span></label>
-                <input class="form-control" id="email" type="email" name="email" placeholder="email@email.com" required="required" />
+                <input class="form-control" id="email" name="email" type="email" name="email" placeholder="email@email.com" required="required" />
               </div>
               <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="phone">Phone<span class="text-danger">*</span></label>
-                <input class="form-control" id="phone" type="text" placeholder="+91 XXXX XXXX" required="required" />
+                <input class="form-control" id="phone" name="phone" type="text" placeholder="+91 XXXX XXXX" required="required" />
               </div>  
 
               <div class="col-12 mb-3">
                 <label class="form-label" for="address">Address<span class="text-danger">*</span></label>
-                <input class="form-control" id="address" type="text" placeholder="Agent's Location" required="required" />
+                <input class="form-control" id="address" name="address" type="text" placeholder="Agent's Location" required="required" />
               </div>
             </form>
           </div>
@@ -102,68 +102,35 @@
             <h5 class="mb-0">Enrollment Details</h5>
           </div>
           <div class="card-body bg-light">
-            <form class="row gx-2">
-
+            <form class="row gx-2" id="enrollment-info">
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-category">Program Type<span class="text-danger">*</span></label>
-                <select class="form-select" id="course-category" name="course-category">
+                <label class="form-label" for="program_types">Program Type<span class="text-danger">*</span></label>
+                <select class="form-select" id="program_types" name="program_type">
                   <option>Select a category</option>
-                  <option>Academia</option>
-                  <option>Arts & Crafts</option>
-                  <option>Design</option>
-                  <option>Development</option>
-                  <option>Finance</option>
-                  <option>Marketing</option>
-                  <option>Music</option>
-                  <option>Lifestyle</option>
-                  <option>Photography</option>
-                  <option>Miscellaneous</option>
                 </select>
               </div>
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-subcategory">University<span class="text-danger">*</span></label>
-                <select class="form-select" id="course-subcategory" name="course-sub-category">
+                <label class="form-label" for="university">University<span class="text-danger">*</span></label>
+                <select class="form-select" id="university" name="university" disabled>
                   <option>Select a sub-category</option>
-                  <option>3D & Animation</option>
-                  <option>Architectural Design</option>
-                  <option>Graphics Design</option>
-                  <option>Game Design</option>
-                  <option>Fashion Design</option>
-                  <option>Illustration</option>
-                  <option>User Interface Design</option>
-                  <option>UX Design</option>
-                  <option>Web Design</option>
-                  <option>Others…</option>
-                </select>
-              </div>        
-              
-              <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-category">Enrollment Type<span class="text-danger">*</span></label>
-                <select class="form-select" id="course-category" name="course-category">
-                  <option>Direct</option>
-                  <option>Agent</option>
                 </select>
               </div>
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-subcategory">Agent<span class="text-danger">*</span></label>
-                <select class="form-select" id="course-subcategory" name="course-sub-category" disabled>
-                  <option>Select a sub-category</option>
-                  <option>3D & Animation</option>
-                  <option>Architectural Design</option>
-                  <option>Graphics Design</option>
-                  <option>Game Design</option>
-                  <option>Fashion Design</option>
-                  <option>Illustration</option>
-                  <option>User Interface Design</option>
-                  <option>UX Design</option>
-                  <option>Web Design</option>
-                  <option>Others…</option>
+                <label class="form-label" for="source">Source<span class="text-danger">*</span></label>
+                <select class="form-select" id="source" name="source">
+                  <option value="Direct">Direct</option>
+                  <option value="Agent">Agent</option>
                 </select>
-              </div>   
-              
+              </div>
+              <div class="col-sm-6 mb-3">
+                <label class="form-label" for="agent">Agent<span class="text-danger">*</span></label>
+                <select class="form-select" id="agent" name="agent" disabled>
+                  <option>Select a sub-category</option>
+                </select>
+              </div> 
               <div class="col-12 mb-3">
-                <label class="form-label" for="student-name">Fees Paid<span class="text-danger">*</span></label>
-                <input class="form-control" id="student-name" type="number" placeholder="10000" required="required" />
+                <label class="form-label" for="fees">Fees Paid<span class="text-danger">*</span></label>
+                <input class="form-control" id="fees" name="fees" type="number" placeholder="10000" required="required" />
               </div> 
             </form>
           </div>
@@ -177,36 +144,40 @@
               <div class="col">
                 <h5 class="mb-0">Commission Receivable Details</h5>
               </div>
-              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
             </div>            
           </div>
           <div class="card-body bg-light">
-            <form class="row gx-2">     
+            <form class="row gx-2" id="receivable">     
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-category">Payment stage<span class="text-danger">*</span></label>
-                <select class="form-select" id="course-category" name="course-category">
-                  <option>Direct</option>
-                  <option>Agent</option>
+                <label class="form-label" for="stage">Payment stage<span class="text-danger">*</span></label>
+                <select class="form-select" id="Rstage" name="stage">
+                  <option value="hybrid-in-country">Hybrid (In-country)</option>
+                  <option value="pathway-college-term-1">Pathway college Term-1</option>
+                  <option value="pathway-college-term-2">Pathway college Term-2</option>
+                  <option value="pathway-college-year-1">Pathway college Year-1</option>
+                  <option value="university-term-1">University Term-1</option>
+                  <option value="university-term-2">University Term-2</option>
+                  <option value="university-year-1">University Year-1</option>
                 </select>
               </div>
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-subcategory">Status<span class="text-danger">*</span></label>
-                <select class="form-select" id="course-subcategory" name="course-sub-category">
-                  <option selected>Pending</option>
-                  <option>Confirmed</option>
-                  <option>Invoiced</option>
-                  <option>Paid</option>
-                  <option>Not Applicable</option>
+                <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
+                <select class="form-select" id="Rstatus" name="status">
+                  <option value="pending" selected>Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="invoiced">Invoiced</option>
+                  <option value="paid">Paid</option>
+                  <option value="na">Not Applicable</option>
                 </select>
               </div> 
 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="student-name">Commission Receivable<span class="text-danger">*</span></label>
-                <input class="form-control" id="student-name" type="number" placeholder="10000" required="required" />
+                <label class="form-label" for="Ramount">Commission Receivable<span class="text-danger">*</span></label>
+                <input class="form-control" id="Ramount" name="amount" type="number" placeholder="10000" required="required" />
               </div> 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="student-name">Due Date<span class="text-danger">*</span></label>
-                <input class="form-control" id="student-name" type="text" placeholder="18/08/2023" required="required" />
+                <label class="form-label" for="RdueDate">Due Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="RdueDate" name="dueDate" type="text" placeholder="18/08/2023" required="required" />
               </div>                            
             </form>
           </div>
@@ -214,42 +185,46 @@
         <!-- Commission Receivable Details Ends -->    
         
         <!-- Commission Payable Details -->
-        <div class="card mb-3">
+        <div class="card mb-3 d-none" id="agentPaymentDetails">
           <div class="card-header">
             <div class="row align-items-center">
               <div class="col">
                 <h5 class="mb-0">Commission Payable Details</h5>
               </div>
-              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
             </div>            
           </div>
           <div class="card-body bg-light">
-            <form class="row gx-2">     
+            <form class="row gx-2" id="payable">     
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-category">Payment stage<span class="text-danger">*</span></label>
-                <select class="form-select" id="course-category" name="course-category">
-                  <option>Direct</option>
-                  <option>Agent</option>
+                <label class="form-label" for="Pstage">Payment stage<span class="text-danger">*</span></label>
+                <select class="form-select" id="Pstage" name="stage">
+                  <option value="">Select an option</option>
+                  <option value="hybrid-in-country">Hybrid (In-country)</option>
+                  <option value="pathway-college-term-1">Pathway college Term-1</option>
+                  <option value="pathway-college-term-2">Pathway college Term-2</option>
+                  <option value="pathway-college-year-1">Pathway college Year-1</option>
+                  <option value="university-term-1">University Term-1</option>
+                  <option value="university-term-2">University Term-2</option>
+                  <option value="university-year-1">University Year-1</option>
                 </select>
               </div>
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="course-subcategory">Status<span class="text-danger">*</span></label>
-                <select class="form-select" id="course-subcategory" name="course-sub-category" disabled>
-                  <option selected>Pending</option>
-                  <option>Confirmed</option>
-                  <option>Invoiced</option>
-                  <option>Paid</option>
-                  <option>Not Applicable</option>
+                <label class="form-label" for="Pstatus">Status<span class="text-danger">*</span></label>
+                <select class="form-select" id="Pstatus" name="status">
+                  <option value="pending" selected>Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="invoiced">Invoiced</option>
+                  <option value="paid">Paid</option>
+                  <option value="na">Not Applicable</option>
                 </select>
               </div> 
-
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="student-name">Commission Payable<span class="text-danger">*</span></label>
-                <input class="form-control" id="student-name" type="number" placeholder="10000" required="required" />
+                <label class="form-label" for="Pamount">Commission Payable<span class="text-danger">*</span></label>
+                <input class="form-control" id="Pamount" name="amount" type="number" placeholder="10000" required="required" />
               </div> 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="student-name">Due Date<span class="text-danger">*</span></label>
-                <input class="form-control" id="student-name" type="text" placeholder="18/08/2023" required="required" />
+                <label class="form-label" for="PdueDate">Due Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="PdueDate" name="dueDate" type="text" placeholder="18/08/2023" required="required" />
               </div>                             
             </form>
           </div>
@@ -257,7 +232,7 @@
         <!-- Commission Payable Details Ends -->            
 
         <div class="d-grid">
-          <button class="btn btn-primary">Enroll Student</button>
+          <button class="btn btn-primary" id="submitBtn">Enroll Student</button>
         </div>
       </div>
     </div>
@@ -290,6 +265,7 @@
   
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
+  <script src="./firebase/add_student.js" type="module"></script>
 </body>
 
 </html>

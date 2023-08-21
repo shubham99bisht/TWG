@@ -124,6 +124,7 @@ function readAgentDetails() {
     .then((result) => {
       if (!result) failMessage("Agent not found!");
       document.getElementById("agentId").innerHTML = id
+      document.getElementById("name").innerHTML = result?.name
       document.getElementById("phone").innerHTML = result?.phone
       document.getElementById("email").innerHTML = result?.email
       document.getElementById("contactPerson").innerHTML = result?.contactPerson

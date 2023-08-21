@@ -18,8 +18,8 @@ export const auth = getAuth();
 export const db = getDatabase();
 
 export const PAGES = {
-  HOME_PAGE: 'index.html',
-  LOGIN_PAGE: 'auth.html',
+  HOME_PAGE: './index.html',
+  LOGIN_PAGE: './auth.html',
 }
 
 // ------------------------
@@ -32,13 +32,13 @@ onAuthStateChanged(auth, async (user) => {
 
   // Handle Auth Pages
   if (isAuthPage) {
-    if (user) location.pathname = PAGES.HOME_PAGE;
+    if (user) location.href = PAGES.HOME_PAGE;
   }
   else if (user) {
     // Pass
   } 
   // Otherwise redirect to Auth Pages
-  else { location.pathname = PAGES.LOGIN_PAGE; }
+  else { location.href = PAGES.LOGIN_PAGE; }
   if (preloader) preloader.remove();
 });
 
@@ -80,7 +80,7 @@ if (logoutBtn) {
 }
 async function logOut() {
   await signOut(auth);
-  location.pathname = PAGES.LOGIN_PAGE;
+  location.href = PAGES.LOGIN_PAGE;
 }
 window.logOut = logOut
 
