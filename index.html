@@ -15,11 +15,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
   <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
+  <link href="./vendors/choices/choices.min.css" rel="stylesheet" />
   <link href="./assets/css/theme.min.css" rel="stylesheet">
   <link href="./assets/css/user.css" rel="stylesheet">
-  <script>
-    location.href = "universities.html"
-  </script>
 </head>
 
 <body>
@@ -59,343 +57,57 @@
       <div class="content">
         <!-- TopBar -->
         <div id="topbarPlaceholder"></div>
-        <!-- TopBar -->     
+        <!-- TopBar -->
 
-        <div class="row g-3 mb-3">
-          <!-- Main Banner -->
-          <div class="col-xxl-6 col-xl-12">
-            <div class="row g-3">
+        <div class="card mb-3" id="programTable" data-list='{"valueNames":["name","commission"],"page":10,"pagination":true}'>
+          <div class="card-header">
+            <div class="row flex-between-center mb-3">
+              <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Program Types</h5>
+              </div>
+              <div class="col-8 col-sm-auto text-end ps-2">
+                <div id="table-program-replace-element">
+                  <button class="btn btn-falcon-default btn-sm me-2" type="button" data-bs-toggle="modal" data-bs-target="#add-new-modal">
+                    <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span>
+                  </button>
+                  <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">Export</span></button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-12">
-                <div class="card bg-transparent-50 overflow-hidden">
-                  <div class="card-header position-relative">
-                    <div class="position-relative z-index-2">
-                      <div class="row">
-                        <div class="col-lg-8">
-                          <h4 class="text-primary mb-2">Good Afternoon, Jonathan!</h4>
-                          <p>Crypto Market has, <a href="#">increased by 1.25%</a> in last 24 hours.
-                            Here's what's happening with your Portfolio
-                          </p>
-                        </div>
-                        <div class="col-lg-4 text-start text-lg-end">
-                          <p class="fs--1 fw-medium">
-                            Valuation as of: <br class="d-none d-lg-block">
-                            <b>20th Jan, 2023</b> &nbsp;
-                            <a class="fas fa-sync" style="cursor:pointer"></a>
-                          </p>
-                        </div>
-                      </div>
-
-
-                      <div class="row py-3">
-                        <div class="col-6 col-lg-3 pe-lg-3">
-                          <p class="text-600 fs--1 fw-medium">Total Invested </p>
-                          <h4 class="text-800 mb-0">$14,209</h4>
-                        </div>
-                        <div class="col-6 col-lg-3 ps-lg-3">
-                          <p class="text-600 fs--1">Current Value </p>
-                          <div class="d-lg-flex align-items-center">
-                            <h4 class="text-800 mb-0">$21,349.29 </h4>
-                            <span class="badge badge-soft-success mt-2 mt-lg-0 ms-lg-3 rounded-pill">
-                              <span class="fas fa-caret-up me-1"></span>3.5%
-                            </span>
-                          </div>
-                        </div>
-                        <div class="col-0 col-lg-2"></div>
-                        <div class="d-none d-lg-block col-lg-4">
-                          <div class="total-order-ecommerce float-end"
-                            data-echarts='{"series":[{"type":"line","data":[530,480,320,325,110,100,250,210]}],"grid":{"bottom":"-10px"}}'>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Programs" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
                   </div>
-                  <div class="card-body p-0">
-                    <ul class="mb-0 list-unstyled">
-                      <li class="alert mb-0 rounded-0 py-3 px-x1 greetings-item border-top border-x-0 border-top-0">
-                        <div class="row flex-between-center">
-                          <div class="col">
-                            <div class="d-flex">
-                              <div class="fas fa-circle mt-1 fs--2 text-primary"></div>
-                              <p class="fs--1 ps-2 mb-0">Your crypto investments have grown in value...</p>
-                            </div>
-                          </div>
-                          <div class="col-auto d-flex align-items-center"><a class="alert-link fs--1 fw-medium"
-                              href="portfolio.html">View Details<i class="fas fa-chevron-right ms-1 fs--2"></i></a></div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-12">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-lg-4 border-lg-end border-bottom border-lg-0 pb-3 pb-lg-0">
-                        <div class="d-flex flex-between-center mb-3">
-                          <div class="d-flex align-items-center">
-                            <div class="icon-item icon-item-sm bg-soft-primary shadow-none me-2 bg-soft-primary"><span class="fs--2 fas fa-phone text-primary"></span></div>
-                            <h6 class="mb-0">New Contact</h6>
-                          </div>
-                          <div class="dropdown font-sans-serif btn-reveal-trigger">
-                            <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal" type="button" id="dropdown-new-contact" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
-                            <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-new-contact"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                              <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="d-flex">
-                          <div class="d-flex">
-                            <p class="font-sans-serif lh-1 mb-1 fs-4 pe-2">15%</p>
-                            <div class="d-flex flex-column"> <span class="me-1 text-success fas fa-caret-up text-primary"></span>
-                              <p class="fs--2 mb-0 text-nowrap">2500 vs 2683 </p>
-                            </div>
-                          </div>
-                          <div class="echart-crm-statistics w-100 ms-2" data-echart-responsive="true" data-echarts='{"series":[{"type":"line","data":[220,230,150,175,200,170,70,160],"color":"#2c7be5","areaStyle":{"color":{"colorStops":[{"offset":0,"color":"#2c7be53A"},{"offset":1,"color":"#2c7be50A"}]}}}],"grid":{"bottom":"-10px"}}'></div>
-                        </div>
-                      </div>
-                      <div class="col-lg-4 border-lg-end border-bottom border-lg-0 py-3 py-lg-0">
-                        <div class="d-flex flex-between-center mb-3">
-                          <div class="d-flex align-items-center">
-                            <div class="icon-item icon-item-sm bg-soft-primary shadow-none me-2 bg-soft-info"><span class="fs--2 fas fa-user text-info"></span></div>
-                            <h6 class="mb-0">New Users</h6>
-                          </div>
-                          <div class="dropdown font-sans-serif btn-reveal-trigger">
-                            <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal" type="button" id="dropdown-new-users" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
-                            <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-new-users"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                              <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="d-flex">
-                          <div class="d-flex">
-                            <p class="font-sans-serif lh-1 mb-1 fs-4 pe-2">13%</p>
-                            <div class="d-flex flex-column"> <span class="me-1 text-success fas fa-caret-up text-success"></span>
-                              <p class="fs--2 mb-0 text-nowrap">1635 vs 863 </p>
-                            </div>
-                          </div>
-                          <div class="echart-crm-statistics w-100 ms-2" data-echart-responsive="true" data-echarts='{"series":[{"type":"line","data":[90,160,150,120,230,155,220,240],"color":"#27bcfd","areaStyle":{"color":{"colorStops":[{"offset":0,"color":"#27bcfd3A"},{"offset":1,"color":"#27bcfd0A"}]}}}],"grid":{"bottom":"-10px"}}'></div>
-                        </div>
-                      </div>
-                      <div class="col-lg-4 pt-3 pt-lg-0">
-                        <div class="d-flex flex-between-center mb-3">
-                          <div class="d-flex align-items-center">
-                            <div class="icon-item icon-item-sm bg-soft-primary shadow-none me-2 bg-soft-success"><span class="fs--2 fas fa-bolt text-success"></span></div>
-                            <h6 class="mb-0">New Leads</h6>
-                          </div>
-                          <div class="dropdown font-sans-serif btn-reveal-trigger">
-                            <button class="btn btn-link text-600 btn-sm dropdown-toggle dropdown-caret-none btn-reveal" type="button" id="dropdown-new-leads" data-bs-toggle="dropdown" data-boundary="viewport" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--2"></span></button>
-                            <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-new-leads"><a class="dropdown-item" href="#!">View</a><a class="dropdown-item" href="#!">Export</a>
-                              <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="d-flex">
-                          <div class="d-flex">
-                            <p class="font-sans-serif lh-1 mb-1 fs-4 pe-2">16%</p>
-                            <div class="d-flex flex-column"> <span class="me-1 text-success fas fa-caret-down text-danger"></span>
-                              <p class="fs--2 mb-0 text-nowrap">1423 vs 256 </p>
-                            </div>
-                          </div>
-                          <div class="echart-crm-statistics w-100 ms-2" data-echart-responsive="true" data-echarts='{"series":[{"type":"line","data":[200,150,175,130,150,115,130,100],"color":"#00d27a","areaStyle":{"color":{"colorStops":[{"offset":0,"color":"#00d27a3A"},{"offset":1,"color":"#00d27a0A"}]}}}],"grid":{"bottom":"-10px"}}'></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                </form>
+              </div>                
+            </div>               
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive scrollbar">
+              <table class="table table-striped fs--1 mb-0 overflow-hidden">
+                <thead class="bg-200 text-900">
+                  <tr>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Program Name</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="commission_type">Commission Type</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="commission">Commission Rate</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="duedate">First Installment Days</th>
+                    <th class="align-middle no-sort"></th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="table-program-body">
+                  <tr><td colspan="5">Loading Data...</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
-          <!-- Main Banner -->
-
-          <div class="col-xxl-6 col-xl-12">
-            <!-- Top Performers -->
-            <div class="card mb-3">
-              <div class="card-header bg-light py-2">
-                <div class="d-flex flex-between-center">
-                  <h6 class="mb-0">Top Performers <span class="fas fa-info-circle ms-1 text-500" data-bs-toggle="modal" data-bs-target="#info-modal" style="cursor: pointer;"></span></h6>
-                </div>
-              </div>
-              <div class="card-body py-4">
-                <div class="row g-0">
-                  <div class="col-6 col-md-4 border-200 border-bottom border-end pb-4">
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">
-                      <img src="./assets/img/coins/btc.png" style="height: 30px;">
-                      $1,054 
-                    </p>
-                    <div class="d-flex align-items-center ms-4 ps-2">
-                      <h6 class="fs--1 text-500 mb-0">BTC </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-warning"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 border-200 border-md-200 border-bottom border-md-end pb-4 ps-3">
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">1,054 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-warning"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div
-                    class="col-6 col-md-4 border-200 border-bottom border-end border-md-end-0 pb-4 pt-4 pt-md-0 ps-md-3">
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">$145.65 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-success"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div
-                    class="col-6 col-md-4 border-200 border-md-200 border-bottom border-md-bottom-0 border-md-end pt-4 pb-md-0 ps-3 ps-md-0">
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">$100.26 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">$109.65 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-danger"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 border-200 border-md-bottom-0 border-end pt-4 pb-md-0 ps-md-3">
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">$365.53 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-success"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 pb-0 pt-4 ps-3">
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">861 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-info"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Next Prev -->
-              <div class="card-body p-0">
-                <ul class="mb-0 list-unstyled bg-light rounded-3">
-                  <li class="alert mb-0 py-3 px-x1 border-top border-x-0 border-top-0">
-                    <div class="row flex-between-center">
-                      <div class="col">
-                        <a class="alert-link fs--1 fw-medium" href="portfolio.html">
-                          <i class="fas fa-chevron-left ms-1 fs--2"></i> Previous
-                        </a>
-                      </div>
-                      <div class="col-auto d-flex align-items-center">
-                        <a class="alert-link fs--1 fw-medium" href="portfolio.html">
-                          Next <i class="fas fa-chevron-right ms-1 fs--2"></i>
-                        </a>
-                        </a>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>     
-              <!-- Next Prev -->         
-            </div>
-            <!-- Top Performers Ends -->
-
-            <!-- Top Losers -->
-            <div class="card">
-              <div class="card-header bg-light py-2">
-                <div class="d-flex flex-between-center">
-                  <h6 class="mb-0">Top Losers <span class="fas fa-info-circle ms-1 text-500" data-bs-toggle="modal" data-bs-target="#info-modal" style="cursor: pointer;"></span></h6>
-                </div>
-              </div>              
-              <div class="card-body py-4">
-                <div class="row g-0">
-                  <div class="col-6 col-md-4 border-200 border-bottom border-end pb-4">
-                    <h6 class="pb-1 text-700">Orders </h6>
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">15,450 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-primary"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 border-200 border-md-200 border-bottom border-md-end pb-4 ps-3">
-                    <h6 class="pb-1 text-700">Items sold </h6>
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">1,054 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-warning"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div
-                    class="col-6 col-md-4 border-200 border-bottom border-end border-md-end-0 pb-4 pt-4 pt-md-0 ps-md-3">
-                    <h6 class="pb-1 text-700">Refunds </h6>
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">$145.65 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-success"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div
-                    class="col-6 col-md-4 border-200 border-md-200 border-bottom border-md-bottom-0 border-md-end pt-4 pb-md-0 ps-3 ps-md-0">
-                    <h6 class="pb-1 text-700">Gross sale </h6>
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">$100.26 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">$109.65 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-danger"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 border-200 border-md-bottom-0 border-end pt-4 pb-md-0 ps-md-3">
-                    <h6 class="pb-1 text-700">Shipping </h6>
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">$365.53 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-success"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                  <div class="col-6 col-md-4 pb-0 pt-4 ps-3">
-                    <h6 class="pb-1 text-700">Processing </h6>
-                    <p class="font-sans-serif lh-1 mb-1 fs-2">861 </p>
-                    <div class="d-flex align-items-center">
-                      <h6 class="fs--1 text-500 mb-0">13,675 </h6>
-                      <h6 class="fs--2 ps-3 mb-0 text-info"><span class="me-1 fas fa-caret-up"></span>21.8%</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Top Losers End -->         
+          <div class="card-footer d-flex align-items-center justify-content-center">
+            <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+            <ul class="pagination mb-0"></ul>
+            <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
           </div>
-
-          <!-- Performance Chart -->
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header bg-light">
-                <div class="row flex-between-center g-0">
-                  <div class="col-auto">
-                    <h6 class="mb-0 fw-medium">Performance Chart <span class="fas fa-info-circle ms-1 text-500" data-bs-toggle="modal" data-bs-target="#info-modal" style="cursor: pointer;"></span></h6>
-                  </div>
-                  <div class="col-auto d-flex">
-                    <div class="form-check mb-0 d-flex">
-                      <input class="form-check-input form-check-input-primary" id="ecommerceLastMonth" type="checkbox"
-                        checked="checked" />
-                      <label class="form-check-label ps-2 fs--2 text-600 mb-0" for="ecommerceLastMonth">Token/Coins<span
-                          class="text-dark d-none d-md-inline">: $32,502.00</span></label>
-                    </div>
-                    <div class="form-check mb-0 d-flex ps-0 ps-md-3">
-                      <input class="form-check-input ms-2 form-check-input-warning opacity-75" id="ecommercePrevYear"
-                        type="checkbox" checked="checked" />
-                      <label class="form-check-label ps-2 fs--2 text-600 mb-0" for="ecommercePrevYear">NFTs<span
-                          class="text-dark d-none d-md-inline">: $46,018.00</span></label>
-                    </div>
-                    <div class="form-check mb-0 d-flex ps-0 ps-md-3">
-                      <input class="form-check-input ms-2 form-check-input-warning opacity-75" id="ecommercePrevYear"
-                        type="checkbox" checked="checked" />
-                      <label class="form-check-label ps-2 fs--2 text-600 mb-0" for="ecommercePrevYear">Defi/Protocol<span
-                          class="text-dark d-none d-md-inline">: $46,018.00</span></label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-body pe-xxl-0">
-                <!-- Find the JS file for the following chart at: src/js/charts/echarts/total-sales-ecommerce.js-->
-                <!-- If you are not using gulp based workflow, you can find the transpiled code at: public/assets/js/theme.js-->
-                <div class="echart-line-total-sales-ecommerce" data-echart-responsive="true"
-                  data-options='{"optionOne":"ecommerceLastMonth","optionTwo":"ecommercePrevYear"}'></div>
-              </div>
-            </div>
-          </div>
-          <!-- Performance Chart Ends -->
         </div>
       </div>
     </div>
@@ -410,6 +122,75 @@
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
 
+  <!-- New Program Modal -->
+  <div class="modal fade" id="add-new-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Add New Program </h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="program-name">Program Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="program-name" type="text" placeholder="Program Name" required="required" />
+                <div class="form-text">Program Id will be assigned automatically.</div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="commissionType" class="form-label">Commission Type<span class="text-danger">*</span></label>
+                <select class="form-select" id="commissionType" onchange="toggleCommissionInput()">
+                  <option value="percentage">Percentage (%)</option>
+                  <option value="fixed">Fixed Value</option>
+                </select>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="commission" class="form-label" id="commissionLabel">Commission Rate (%)<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" id="commission" min="0" max="100" step="0.01" required>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="duedate">First Installment Date<span class="text-danger">*</span></label>
+                <input class="form-control" id="duedate" type="text" placeholder="10" required="required" />
+                <div class="form-text">Number of days from the enrollment date when first installment will be due.</div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add New Program Ends -->
+
+  <script>
+    function toggleCommissionInput() {
+      const commissionTypeSelect = document.getElementById('commissionType');
+      const commissionInputLabel = document.getElementById('commissionLabel');
+      const commissionInput = document.getElementById('commission');
+
+      if (commissionTypeSelect.value === 'percentage') {
+        commissionInputLabel.textContent = 'Commission Rate (%)';
+        commissionInput.setAttribute('min', '0');
+        commissionInput.setAttribute('max', '100');
+        commissionInput.setAttribute('step', '0.01');
+      } else if (commissionTypeSelect.value === 'fixed') {
+        commissionInputLabel.textContent = 'Fixed Commission';
+        commissionInput.removeAttribute('min');
+        commissionInput.removeAttribute('max');
+        commissionInput.removeAttribute('step');
+      }
+    }
+
+    // Initialize input state on page load
+    toggleCommissionInput();
+  </script>
 
   <!--    JavaScripts-->
   <script src="./vendors/popper/popper.min.js"></script>
@@ -424,10 +205,12 @@
   <script src="./vendors/lodash/lodash.min.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
   <script src="./vendors/list.js/list.min.js"></script>
+  <script src="./vendors/choices/choices.min.js"></script>
   <script src="./assets/js/theme.js"></script>
   
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
+  <script src="./firebase/program_types.js" type="module"></script>
 </body>
 
 </html>

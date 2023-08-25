@@ -17,7 +17,7 @@ const schema = `<a class="border-bottom-0 notification rounded-0 border-x-0 bord
 async function loadLogs() {
     const users = await readData('users')
     const logs = await readData('logs')
-    logList = ''
+    logList.innerHTML = ''
 
     for (let logId in logs) {
         const log = logs[logId]

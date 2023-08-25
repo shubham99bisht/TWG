@@ -6,6 +6,7 @@ const modalFooter = addNewProgramModel.querySelector('.modal-footer')
 
 // Modal's form inputs
 const nameInput = addNewProgramModel.querySelector('.modal-body #program-name')
+const commissionTypeInput = addNewProgramModel.querySelector('.modal-body #commissionType');
 const commissionInput = addNewProgramModel.querySelector('.modal-body #commission')
 const duedateInput = addNewProgramModel.querySelector('.modal-body #duedate')
 
@@ -17,7 +18,11 @@ if (addNewProgramModel) {
     // Extract info from data-bs-* attributes
     const name = row?.querySelector('.name')
     const commission = row?.querySelector('.commission')
+    const commissionType = row?.querySelector('.commission_type')?.innerHTML.trim() || 'percentage'
     const duedate = row?.querySelector('.duedate')
+
+    commissionTypeInput.value = commissionType
+    toggleCommissionInput()
 
     // Update the modal's content.
     if (name) {
@@ -61,9 +66,19 @@ window.onload = function() {
 function createProgram() {
   const newProgramType = {
     name: nameInput.value,
+    commission_type: commissionTypeInput.value,
     commission_rate: commissionInput.value,
     first_installment: duedateInput.value,
   };
+  if (!newProgramType.name || !newProgramType.commission_type || !newProgramType.commission_rate || !newProgramType.first_installment) {
+    failMessage("Please provide all details"); return
+  }
+  if ((newProgramType.commission_rate < 0) || (newProgramType.commission_type == 'percentage' && newProgramType.commission_rate > 100)) {
+    failMessage("Invalid commission rate."); return
+  }
+  if (newProgramType.first_installment < 0) {
+    failMessage("Invalid first installment date"); return
+  }
 
   writeDataWithNewId(`program_types`, newProgramType)
     .then((result) => {
@@ -93,7 +108,8 @@ function listAllProgramTypes() {
       const schema = `
         <tr id="{}">
           <td class="name">{}</td>
-          <td class="commission"> {}% </td>
+          <td class="commission_type"> {} </td>
+          <td class="commission"> {} </td>
           <td class="duedate">{}</td>
           <td class="align-middle white-space-nowrap py-2 text-end">
             <div class="dropdown font-sans-serif position-static">
@@ -109,7 +125,7 @@ function listAllProgramTypes() {
 
       Object.keys(programTypes).forEach(pId => {
         const p = programTypes[pId]
-        const row = schema.format(pId, p.name, p.commission_rate, p.first_installment)
+        const row = schema.format(pId, p.name, p.commission_type, p.commission_rate, p.first_installment)
         if (tableBody) tableBody.innerHTML += row
       });
       
@@ -118,7 +134,7 @@ function listAllProgramTypes() {
     .catch((error) => {
       console.error("Error reading program types:", error);
       if (tableBody) 
-        tableBody.innerHTML = `<tr><td colspan="4">Error reading program types</td></tr>`
+        tableBody.innerHTML = `<tr><td colspan="5">Error reading program types</td></tr>`
     });
 }
 window.listAllProgramTypes = listAllProgramTypes
@@ -132,9 +148,20 @@ window.listAllProgramTypes = listAllProgramTypes
 function updateProgram(pId) {
   const updatedProgramType = {
     name: nameInput.value,
+    commission_type: commissionTypeInput.value,
     commission_rate: commissionInput.value,
     first_installment: duedateInput.value,
   };
+
+  if (!updatedProgramType.name || !updatedProgramType.commission_type || !updatedProgramType.commission_rate || !updatedProgramType.first_installment) {
+    failMessage("Please provide all details"); return
+  }
+  if ((updatedProgramType.commission_rate < 0) || (updatedProgramType.commission_type == 'percentage' && updatedProgramType.commission_rate > 100)) {
+    failMessage("Invalid commission rate."); return
+  }
+  if (updatedProgramType.first_installment < 0) {
+    failMessage("Invalid first installment date"); return
+  }
 
   updateData(`program_types/${pId}`, updatedProgramType)
     .then((result) => {
@@ -170,5 +197,3 @@ async function deleteProgram(pId) {
   }
 }
 window.deleteProgram = deleteProgram
-
-// TODO: Also remove the pId from all associated universities first

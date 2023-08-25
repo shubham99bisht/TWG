@@ -17,16 +17,18 @@ if (addNewAgent) {
 }
 
 async function createAgent(data) {
-  const {agentId, name, phone, 
-    email, contactPerson, address,
+  const agentId = document.getElementById('agentId').value
+  const { name, phone, email, contactPerson, address,
     accountName, accountNumber, bank, ifsc
   } = data
+
+  console.log(data)
 
   if (!agentId || !name || !phone || !email 
     || !contactPerson || !address || !accountName
     || !accountNumber || !bank || !ifsc
   ) {
-    failMessage("Please provide all data");
+    failMessage("Please provide all data"); return
   }
 
   // const date = new Date()
@@ -37,18 +39,20 @@ async function createAgent(data) {
     },
     // createdAt: date, updatedAt: date
   }
-  
-  const oldAgent = await readData(`agents/${agentId}`)
-  if (oldAgent) {
-    alert("Agent Id already exists!")
-    return
-  }
 
+  const params = new URLSearchParams(document.location.search);
+  if (!params.get('id')) {
+    const oldAgent = await readData(`agents/${agentId}`)
+    if (oldAgent) {
+      failMessage("Agent Id already exists!"); return
+    }
+  }
+  
   writeData(`agents/${agentId}`, newAgent)
     .then((result) => {
       if (result) {
         successMessage("Agent added successfully!")
-          .then(() => location.reload())
+          .then(() => location.href = "agents.html")
       }
     })
     .catch((error) => {
@@ -124,6 +128,7 @@ function readAgentDetails() {
     .then((result) => {
       if (!result) failMessage("Agent not found!");
       document.getElementById("agentId").innerHTML = id
+      document.getElementById("update").href = `add_agent.html?id=${id}`
       document.getElementById("name").innerHTML = result?.name
       document.getElementById("phone").innerHTML = result?.phone
       document.getElementById("email").innerHTML = result?.email
@@ -140,6 +145,34 @@ function readAgentDetails() {
     });
 }
 window.readAgentDetails = readAgentDetails
+
+/**
+ * --------------------------------------------------
+ * Update Agent with id
+ * --------------------------------------------------
+ */
+
+function prepareUpdateForm(id) {
+  readData(`agents/${id}`)
+    .then((result) => {
+      if (!result) failMessage("Agent not found!");
+      const agentIdInput = document.getElementById("agentId")
+      agentIdInput.value = id; agentIdInput.disabled = true;
+      document.getElementById("name").value = result?.name
+      document.getElementById("phone").value = result?.phone
+      document.getElementById("email").value = result?.email
+      document.getElementById("contactPerson").value = result?.contactPerson
+      document.getElementById("address").value = result?.address
+      document.getElementById("accountName").value = result?.billing?.accountName
+      document.getElementById("accountNumber").value = result?.billing?.accountNumber
+      document.getElementById("bank").value = result?.billing?.bank
+      document.getElementById("ifsc").value = result?.billing?.ifsc
+    })
+    .catch((error) => {
+      console.log(error)
+      failMessage("Error fetching agent");
+    });
+}
 
 /**
  * --------------------------------------------------
@@ -182,6 +215,9 @@ window.onload = () => {
       break;
     }
     case "add_agent": {
+      const params = new URLSearchParams(document.location.search);
+      const id = params.get('id')
+      if (id) prepareUpdateForm(id)
       // Don't do anything
       // onSubmit eventListener already added
     }

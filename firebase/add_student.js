@@ -188,7 +188,7 @@ window.onload = async () => {
   updateProgramsList()
 }
 
-submitBtn.onclick = createStudent()
+submitBtn.onclick = createStudent
 
 sourceSelect.addEventListener("change", () => {
   if (sourceSelect.value === "Agent") {
