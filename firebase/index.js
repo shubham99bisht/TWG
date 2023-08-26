@@ -157,3 +157,16 @@ function signInAdmin(email, pass) {
   signInWithEmailAndPassword(auth, email, pass)
 }
 window.signInAdmin = signInAdmin
+
+
+// Payment Stages
+const paymentStages = [
+  { value: 'hybrid-in-country', label: 'Hybrid (In-country)' },
+  { value: 'pathway-term-1', label: 'Pathway college Term-1' },
+  { value: 'pathway-term-2', label: 'Pathway college Term-2' },
+  { value: 'pathway-year-1', label: 'Pathway college Year-1' },
+  { value: 'university-term-1', label: 'University Term-1' },
+  { value: 'university-term-2', label: 'University Term-2' },
+  { value: 'university-year-1', label: 'University Year-1' }
+];
+window.paymentStages = paymentStages;

@@ -15,9 +15,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
   <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
-  <link href="./vendors/choices/choices.min.css" rel="stylesheet" />
   <link href="./assets/css/theme.min.css" rel="stylesheet">
   <link href="./assets/css/user.css" rel="stylesheet">
+
+  <style>
+    .table tr td:last-child {
+        padding-right: 0.75rem;
+    }
+  </style>
 </head>
 
 <body>
@@ -59,51 +64,78 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <div class="card mb-3" id="paymentStagesTable" data-list='{"valueNames":["id","name"],"page":20,"pagination":true}'>
-          <div class="card-header">
-            <div class="row flex-between-center mb-3">
-              <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
-                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Payment Stages</h5>
+        <form id="UniversityForm">
+          <!-- Basic Information -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="mb-0">University Basic Information</h5>
+            </div>
+            <div class="card-body bg-light">
+              <div class="row gx-2">
+                <div class="col-12 mb-3">
+                  <label class="form-label" for="name">University Name<span class="text-danger">*</span></label>
+                  <input class="form-control" id="name" name="name" type="text" placeholder="University Name" required="required" />
+                  <div class="form-text">University Id will be assigned automatically.</div>
+                </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12">
-                <form>
-                  <div class="input-group">
-                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Programs" aria-label="search" />
-                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
-                  </div>
-                </form>
-              </div>                
-            </div>               
           </div>
-          <div class="card-body p-0">
-            <div class="table-responsive scrollbar">
-              <table class="table table-striped fs--1 mb-0 overflow-hidden">
-                <thead class="bg-200 text-900">
-                  <tr>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="id">#</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Payment Stage</th>
-                  </tr>
-                </thead>
-                <tbody class="list" id="table-payment-body">
-                    <tr><td class="id">1</td><td class="name">Hybrid (In-country)</td></tr>
-                    <tr><td class="id">2</td><td class="name">Pathway college Term-1</td></tr>
-                    <tr><td class="id">3</td><td class="name">Pathway college Term-2</td></tr>
-                    <tr><td class="id">4</td><td class="name">Pathway college Year-1</td></tr>
-                    <tr><td class="id">5</td><td class="name">University Term-1</td></tr>
-                    <tr><td class="id">6</td><td class="name">University Term-2</td></tr>
-                    <tr><td class="id">7</td><td class="name">University Year-1</td></tr>
-                </tbody>
-              </table>
+          <!-- Basic Information Ends -->
+  
+          <!-- Billing Details -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="mb-0">Billing Details</h5>
+            </div>
+            <div class="card-body bg-light">
+              <div class="row gx-2">
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="accountName">Account Name<span class="text-danger">*</span></label>
+                  <input class="form-control" id="accountName" name="accountName" type="text" placeholder="Account Name" required="required" />
+                </div> 
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="accountNumber">Account Number<span class="text-danger">*</span></label>
+                  <input class="form-control" id="accountNumber" name="accountNumber" type="text" placeholder="XXXXXXXX1234" required="required" />
+                </div>
+                
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="bank">Bank Name<span class="text-danger">*</span></label>
+                  <input class="form-control" id="bank" name="bank" type="text" placeholder="Bank (Branch)" required="required" />
+                </div>
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="ifsc">IFSC Code<span class="text-danger">*</span></label>
+                  <input class="form-control" id="ifsc" name="ifsc" type="text" placeholder="XXXX" required="required" />
+                </div>  
+              </div>
+            </div>
+          </div> 
+          <!-- Billing Details -->
+
+          <!-- Program Details -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="mb-0">Program Details</h5>
+            </div>
+            <div class="card-body bg-light">
+              
+              <!-- Dynamically add program types here -->
+
+              <button class="btn btn-outline-primary btn-sm mt-2" type="button" id="addProgram" onclick="addProgramType(event)" disabled>
+                <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Program Types 
+              </button>
+            </div>
+          </div> 
+          <!-- Program Details -->
+  
+          <div class="row">
+            <div class="col-6 d-grid">
+              <a class="btn btn-secondary" href="universities.html">Cancel</a>
+            </div>
+            <div class="col-6 d-grid" id="add">
+              <button class="btn btn-primary" type="submit">Save University</button>
             </div>
           </div>
-          <div class="card-footer d-flex align-items-center justify-content-center">
-            <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
-            <ul class="pagination mb-0"></ul>
-            <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   </main>
@@ -116,6 +148,7 @@
     <div></div><div></div><div></div><div></div>
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
+
 
   <!--    JavaScripts-->
   <script src="./vendors/popper/popper.min.js"></script>
@@ -130,14 +163,11 @@
   <script src="./vendors/lodash/lodash.min.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
   <script src="./vendors/list.js/list.min.js"></script>
-  <script src="./vendors/choices/choices.min.js"></script>
   <script src="./assets/js/theme.js"></script>
-  <script>
-    listInit()
-  </script>
   
   <!-- Firebase -->
-  <script src="./firebase/index.js" type="module"></script>
+  <!-- <script src="./firebase/index.js" type="module"></script> -->
+  <script src="./firebase/add_university.js" type="module"></script>
 </body>
 
 </html>

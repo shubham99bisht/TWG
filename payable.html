@@ -188,7 +188,7 @@
             <h5 class="mb-1 modal-title">Update Status </h5>
           </div>
           <div class="p-4 pb-0">
-            <form>
+            <form id="updateStatusForm">
               <div class="col-12 mb-3">
                 <label class="form-label" for="agent-name">Status<span class="text-danger">*</span></label>
                 <select class="form-select" aria-label="Default select example">
@@ -203,27 +203,36 @@
                 <label class="form-label" for="notes">Notes<span class="text-danger">*</span></label>
                 <textarea class="form-control" id="notes" placeholder="Notes/Comments" rows="3"></textarea>
               </div>
-              <hr>
-              <p class="text-center mb-1">Next Payment details</p>
               <div class="col-12 mb-3">
-                <label class="form-label" for="duedate">Due Date<span class="text-danger">*</span></label>
-                <input class="form-control" id="duedate" type="text" placeholder="DD-MM-YYYY" />
-              </div>
-              <div class="col-12 mb-3">
-                <label class="form-label" for="amount">Amount<span class="text-danger">*</span></label>
-                <input class="form-control" id="amount" type="text" placeholder="$1000" />
-              </div>
-
-              <div class="col-12 mb-3">
-                <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
-                <select class="form-select" aria-label="Default select example">
-                  <option selected="">Pending</option>
-                  <option value="1">Invoiced</option>
-                  <option value="2">Confirmed</option>
-                  <option value="3">Paid</option>
-                  <option value="4">Not Applicable</option>
-                  <option value="5">No further commissions</option>
+                <label class="form-label" for="morePayments">Are more Payments expected?<span class="text-danger">*</span></label>
+                <select class="form-select" id="morePayments">
+                  <option value="0">No</option>
+                  <option value="1">Yes</option>
                 </select>
+              </div>
+              <div class="d-none" id="nextPaymentDetails">
+                <hr>
+                <p class="text-center mb-1">Next Payment details</p>
+                <div class="col-12 mb-3">
+                  <label class="form-label" for="duedate">Due Date<span class="text-danger">*</span></label>
+                  <input class="form-control" id="duedate" type="text" placeholder="DD-MM-YYYY" />
+                </div>
+                <div class="col-12 mb-3">
+                  <label class="form-label" for="amount">Amount<span class="text-danger">*</span></label>
+                  <input class="form-control" id="amount" type="text" placeholder="$1000" />
+                </div>
+  
+                <div class="col-12 mb-3">
+                  <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
+                  <select class="form-select" aria-label="Default select example">
+                    <option selected="">Pending</option>
+                    <option value="1">Invoiced</option>
+                    <option value="2">Confirmed</option>
+                    <option value="3">Paid</option>
+                    <option value="4">Not Applicable</option>
+                    <option value="5">No further commissions</option>
+                  </select>
+                </div>
               </div>
             </form>
           </div>
@@ -236,6 +245,24 @@
     </div>
   </div>
   <!-- Update Status Ends -->  
+
+
+  <script>
+    const morePaymentsSelect = document.getElementById("morePayments")
+    morePaymentsSelect.addEventListener("change", () => {
+      console.log(morePaymentsSelect.value)
+      if (morePaymentsSelect.value == "1") {
+        nextPaymentDetails.classList.remove("d-none")
+      } else {
+        nextPaymentDetails.classList.add("d-none")
+      }
+    })
+
+    const updateStatusModal = document.getElementById("update-status")
+    updateStatusModal.addEventListener('show.bs.modal', event => {
+      document.getElementById("updateStatusForm").reset();
+    })
+  </script>
 
 
   <!--    JavaScripts-->
