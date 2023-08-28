@@ -170,3 +170,49 @@ const paymentStages = [
   { value: 'university-year-1', label: 'University Year-1' }
 ];
 window.paymentStages = paymentStages;
+
+// Download functions
+function downloadCSV(downloadName='data') {
+  const table = document.querySelector('.table');
+  if (!table) {
+      console.error("Table element not found.");
+      return;
+  }  
+
+  var rows = table.querySelectorAll('tr');
+  var csvContent = "data:text/csv;charset=utf-8,";
+  
+  rows.forEach(function(row) {
+      var rowData = [];
+      row.querySelectorAll('td, th').forEach(function(cell) {
+          rowData.push(cell.textContent.trim());
+      });
+      csvContent += rowData.join(',') + "\r\n";
+  });
+  
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", blobUrl);
+  link.setAttribute("download", downloadName + ".csv");
+
+  link.click();
+
+  URL.revokeObjectURL(blobUrl);
+}
+
+const { jsPDF } = window.jspdf;
+const pdf = new jsPDF();
+function downloadPDF(downloadName='data') {
+  const table = document.querySelector('.table');  
+  if (!table) {
+      console.error("Table element not found.");
+      return;
+  }  
+  pdf.autoTable({ html: table });
+  pdf.save(`${downloadName}.pdf`);
+}
+
+window.downloadCSV = downloadCSV
+window.downloadPDF = downloadPDF

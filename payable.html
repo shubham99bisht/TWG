@@ -61,15 +61,14 @@
         <div class="card z-index-1" id="payableCommissions" data-list='{"valueNames":["agent","student","university","duedate","amount","status"],"page":5,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center">
-              <div class="col-6 d-flex align-items-center">
+              <div class="col-6 col-md-auto d-flex align-items-center">
                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Commissions Payable</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
-                <div id="table-purchases-replace-element">                  
-                  <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">Export</span></button>
-                </div>
+                <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF()"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+                <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV()"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
               </div>
-              <div class="col-12 col-md-4 mt-1 mt-md-0 ms-auto text-end">
+              <div class="col-12 col-md-5 mt-1 mt-md-0 ms-auto text-end">
                 <form>
                   <div class="input-group">
                     <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for a page" aria-label="search" />
@@ -279,6 +278,8 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
   <script src="./vendors/list.js/list.min.js"></script>
   <script src="./assets/js/theme.js"></script>
+  <script src="./vendors/jspdf/index.js"></script>
+  <script src="./vendors/jspdf/autotable.js"></script>
   
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>

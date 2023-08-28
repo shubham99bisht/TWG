@@ -70,7 +70,8 @@
                   <button class="btn btn-falcon-default btn-sm me-2" type="button" data-bs-toggle="modal" data-bs-target="#add-new-modal">
                     <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span>
                   </button>
-                  <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">Export</span></button>
+                  <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF()"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+                  <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV()"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
                 </div>
               </div>
             </div>
@@ -164,7 +165,9 @@
   <script src="./vendors/list.js/list.min.js"></script>
   <script src="./vendors/choices/choices.min.js"></script>
   <script src="./assets/js/theme.js"></script>
-  
+  <script src="./vendors/jspdf/index.js"></script>
+  <script src="./vendors/jspdf/autotable.js"></script>
+
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
   <script src="./firebase/program_types.js" type="module"></script>

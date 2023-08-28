@@ -67,7 +67,8 @@
               <div class="col-8 col-sm-auto text-end ps-2">
                 <div id="table-students-replace-element">
                   <a class="btn btn-falcon-default btn-sm" href="add_student.html"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span></a>
-                  <button class="btn btn-falcon-default btn-sm" type="button"><span class="fas fa-external-link-alt" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">Export</span></button>
+                  <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF()"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+                  <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV()"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>                  
                 </div>
               </div>
             </div>
@@ -135,7 +136,9 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
   <script src="./vendors/list.js/list.min.js"></script>
   <script src="./assets/js/theme.js"></script>
-  
+  <script src="./vendors/jspdf/index.js"></script>
+  <script src="./vendors/jspdf/autotable.js"></script>
+
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
   <script src="./firebase/students.js" type="module"></script>

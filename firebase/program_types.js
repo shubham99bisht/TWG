@@ -23,7 +23,7 @@ if (addNewProgramModel) {
       nameInput.value = name.innerHTML.trim()
       modalFooter.innerHTML = `
         <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" onclick="updateProgram('${row?.id}')">Save</button>`
+        <button class="btn btn-warning" onclick="updateProgram('${row?.id}')">Update</button>`
     } else {
       modalTitle.textContent = 'Add New Program'
       nameInput.value = ''
@@ -82,14 +82,9 @@ function listAllProgramTypes() {
         <tr id="{}">
           <td class="name">{}</td>
           <td class="align-middle white-space-nowrap py-2 text-end">
-            <div class="dropdown font-sans-serif position-static">
-              <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
-              <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="customer-dropdown-1">
-                <div class="py-2">
-                  <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#add-new-modal">Edit</a>
-                  <a class="dropdown-item text-danger" type="button" onclick="deleteProgram('{}')">Delete</a></div>
-              </div>
-            </div>
+            <a data-bs-toggle="modal" data-bs-target="#add-new-modal" style="cursor:pointer">
+              <i class="fas fa-edit"></i>
+            </a>
           </td>
         </tr>`
 

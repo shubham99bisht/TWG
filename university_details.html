@@ -62,7 +62,7 @@
           <div class="card-header">
             <div class="row align-items-center">
               <div class="col">
-                <h5 class="mb-0" id="name">Agent Name</h5>
+                <h5 class="mb-0" id="name">University Name</h5>
               </div>
               <div class="col-auto"><a class="btn btn-falcon-default btn-sm" id="update"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
             </div>
@@ -76,30 +76,6 @@
                     <p class="fw-semi-bold mb-1">ID</p>
                   </div>
                   <div class="col" id="agentId">-</div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <p class="fw-semi-bold mb-1">Phone</p>
-                  </div>
-                  <div class="col" id="phone">-</div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <p class="fw-semi-bold mb-1">Email</p>
-                  </div>
-                  <div class="col" id="email"><a href="">-</a></div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <p class="fw-semi-bold mb-1">POC</p>
-                  </div>
-                  <div class="col" id="contactPerson">-</div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <p class="fw-semi-bold mb-0">Address</p>
-                  </div>
-                  <div class="col" id="address">-</div>
                 </div>
               </div>
               <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1">
@@ -127,6 +103,25 @@
                     <p class="fw-semi-bold mb-1">IFSC</p>
                   </div>
                   <div class="col" id="ifsc">-</div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="table-responsive scrollbar">
+                  <table class="table table-striped fs--1 mb-0 overflow-hidden">
+                    <thead class="bg-200 text-900">
+                      <tr>
+                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Name</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program_type">Program Type</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="payment_stage">Payment Stages</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="payable">Payable</th>
+                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="receivable">Receivable</th>
+                      </tr>
+                    </thead>
+                    <tbody class="list" id="table-body">
+                      <tr class="text-center"><td colspan="6">Loading Universities...</td></tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -209,7 +204,7 @@
 
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
-  <script src="./firebase/agents.js" type="module"></script>
+  <script src="./firebase/university.js" type="module"></script>
 </body>
 
 </html>
