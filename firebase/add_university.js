@@ -36,6 +36,7 @@ function addPaymentStage(event) {
           </select>
         </td>
         <td><input class="form-control form-control-sm" type="number" required="required"/></td>
+        <td><input class="form-control form-control-sm" type="number" required="required"/></td>
         <td rowspan="2" class="text-center align-middle"><button class="btn btn-link btn-sm" type="button" onclick="removePaymentStage(event)"><span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span></button></td>`
 
   const paymentStage2 = `
@@ -46,6 +47,7 @@ function addPaymentStage(event) {
             <option value="percentage">Percentage</option>
           </select>
         </td>
+        <td><input class="form-control form-control-sm" type="number" required="required"/></td>
         <td><input class="form-control form-control-sm" type="number" required="required"/></td>`
   const button = event.target;
 
@@ -96,19 +98,23 @@ function addProgramType(event) {
       </div>
     </div>
 
-    <table class="table table-bordered mt-3 bg-white dark__bg-1100">
-      <thead>
-        <tr class="fs--1">
-          <th>Payment Stage</th>
-          <th>Payment Type</th>
-          <th>Commission Type</th>
-          <th>Commission Rate</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <div class="table-responsive">
+      <table class="table table-bordered mt-3 bg-white dark__bg-1100">
+        <thead>
+          <tr class="fs--1">
+            <th>Payment Stage</th>
+            <th>Payment Type</th>
+            <th>Commission Type</th>
+            <th>Commission Rate</th>
+            <th>Installment Days</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
     <div class="text-end">
       <button class="btn btn-falcon-default btn-sm mt-2" type="button" onclick="addPaymentStage(event)"><span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>More Payment Stages </button>
     </div>
@@ -168,20 +174,27 @@ universityForm.addEventListener('submit', function (event) {
           const commissionType = element.value;
           const commissionInput = inputsAndSelects[i + 1];
           const commissionValue = commissionInput.value;
+          const installmentDays = inputsAndSelects[i + 2].value;
   
           if (commissionType === 'percentage' && (commissionValue < 0 || commissionValue > 100)) {
             alert('Percentage commission value must be between 0 and 100');
+            return;
+          }
+
+          if (installmentDays < 0) {
+            alert('Please provide positive installment days');
             return;
           }
   
           // 0: Payable, 1: Receivable
           currentProgramType.paymentStages[currentProgramType.paymentStages.length - 1].commissions.push({
             type: commissionType,
-            value: commissionValue
+            value: commissionValue,
+            installmentDays
           });
   
           // Skip the next iteration as it's already processed
-          i++;
+          i+=2;
         }
       }
     }

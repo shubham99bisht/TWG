@@ -15,9 +15,6 @@ const programSelect = document.getElementById("program_types")
 const universitySelect = document.getElementById("university")
 
 // Inputs
-const feesInput = document.getElementById("fees")
-const studentIdInput = document.getElementById("studentId")
-const joinDateInput = document.getElementById("joinDate")
 
 const receiveDueDateInput = document.getElementById("RdueDate")
 const receiveAmountInput = document.getElementById("Ramount")
@@ -26,7 +23,7 @@ const payableDueDateInput = document.getElementById("PdueDate")
 const payableAmountInput = document.getElementById("Pamount")
 
 // Global Variables
-let programs = {}, universities = {}, agents = {}, AGENT_COMMISSION_RATE = 10
+let programs = {}, universities = {}, agents = {}
 
 
 /**
@@ -40,42 +37,44 @@ async function createStudent() {
   const basicInfoData = Object.fromEntries(new FormData(basicInfo));
   const enrollmentInfoData = Object.fromEntries(new FormData(enrollmentInfo));
 
-  const {
-    studentId, joinDate, studentName,
-    email, phone, address
-  } = basicInfoData
+  const { studentId, joinMonth, joinYear, universityStudentId, studentName } = basicInfoData
+  let { program_type, university, source, agent } = enrollmentInfoData
+  const date = new Date(joinYear, joinMonth)
+  const joinDate = `${date.toISOString().slice(0,10)}`
 
-  const {
-    program_type, university, source, agent, fees
-  } = enrollmentInfoData
-
+  // Validation
   if (
-    !studentId || !studentName || !phone || !email || !address ||
-    !source || !program_type || !university || !fees
+    !studentId || !studentName || !joinMonth || !joinYear || !universityStudentId ||
+    !source || !program_type || !university
   ) { failMessage("Please provide all data"); return }
-  if (source == "Agent" && !agent) { failMessage("Agent Info missing!"); return }
-
-  await createReceivable(studentId, university)
-  const newStudent = {
-    joinDate, name: studentName, email, phone, address,
-    program_type, university, source, fees
-  }
   if (source == "Agent") {
-    newStudent["agent"] = agent
-    await createPayable(studentId, agent)
-  }
+    if (!agent) {failMessage("Agent Info missing!"); return }
+  } else { agent = '' }
   
+  // Verifying old entries
   const oldStudent = await readData(`students/${studentId}`)
   if (oldStudent) {
     failMessage("Student Id already exists!")
     return
   }
 
+  // Receivable and Payable enteries
+  await createReceivable(studentId, university, agent)
+  if (source == "Agent") await createPayable(studentId, university, agent)
+
+  // Create Student
+  const newStudent = {
+    studentId, joinDate, universityStudentId, studentName,
+    program_type, university, source
+  }
+  if (source == "Agent") newStudent["agent"] = agent
+  console.log(newStudent)
+
   writeData(`students/${studentId}`, newStudent)
     .then((result) => {
       if (result) {
         successMessage("Student added successfully!")
-          .then(() => location.href = 'students.html')
+          .then(() => location.reload())
       }
     })
     .catch((error) => {
@@ -84,17 +83,17 @@ async function createStudent() {
     });
 }
 
-async function createReceivable(student, university) {
+async function createReceivable(student, university, agent) {
   const receivableFormData = Object.fromEntries(new FormData(receivableForm));
   writeDataWithNewId(`receivable`, {
-    ...receivableFormData, student, university
+    ...receivableFormData, student, university, agent
   })
 }
 
-async function createPayable(student, agent) {
+async function createPayable(student, university, agent) {
   const payableFormData = Object.fromEntries(new FormData(payableForm));
   writeDataWithNewId('payable', {
-    ...payableFormData, student, agent
+    ...payableFormData, student, university, agent
   })
 }
 
@@ -112,7 +111,6 @@ async function fetchData() {
   programs = await readData("program_types")
   universities = await readData("universities")
   agents = await readData("agents")
-  AGENT_COMMISSION_RATE = await readData("AGENT_COMMISSION_RATE")
 }
 
 function updateAgentList() {
@@ -140,7 +138,8 @@ function updateProgramsList() {
 function updateUniversityList(pId) {
   universitySelect.innerHTML = '<option>Select a university</option>'
   for (const id in universities) {
-    if (universities[id].program_types.includes(pId)) {
+    const programs = universities[id].programTypes.map(p => p.type)
+    if (programs.includes(pId)) {
       const option = document.createElement("option");
       option.id = id;
       option.value = id;
@@ -150,30 +149,100 @@ function updateUniversityList(pId) {
   }
 }
 
+function updatePaymentStageList() {
+  const uid = universitySelect.value
+  const pid = programSelect.value
+
+  Pstage.innerHTML = '<option>Select stage</option>'
+  Rstage.innerHTML = '<option>Select stage</option>'
+
+  const pType = universities[uid].programTypes.find(pt => pt.type == pid)
+  if (!pType) return
+
+  console.log(pType)
+
+  const stageIds = pType.paymentStages.map(pst => pst.stage)
+  stageIds.forEach(stageId => {
+    let paymentStage = paymentStages.find(x => x.value == stageId)
+    if (paymentStage) {
+      let option = document.createElement("option");
+      option.value = paymentStage.value;
+      option.textContent = paymentStage.label;
+      Pstage.appendChild(option);
+
+      option = document.createElement("option");
+      option.value = paymentStage.value;
+      option.textContent = paymentStage.label;
+      Rstage.appendChild(option);
+    }
+  });
+}
+
 function computeComissionReceivable() {
-  const fees = feesInput.value || 0;
-  const program = programs[programSelect.value];
+  const uid = universitySelect.value
+  const pid = programSelect.value
+  const sid = Rstage.value
+  const fees = Rfees.value || 0
 
-  if (!program) return
+  if (!uid || !pid || !sid || !fees) return
+  const university = universities[uid]
+  if (!university) return
+  const programType = university.programTypes.find(p => p.type == pid)
+  if (!programType) return
+  const stage = programType.paymentStages.find(s => s.stage == sid)
+  if (!stage) return
+  const commissions = stage.commissions
+  if (!commissions) return
   
-  let dueDate = new Date(joinDateInput.value)
+  let dueDate = new Date(joinYear.value, joinMonth.value)
   if (dueDate == 'Invalid Date') dueDate = new Date()
-  dueDate.setDate(dueDate.getDate() + program.first_installment);
+  dueDate.setDate(dueDate.getDate() + parseInt(commissions[1].installmentDays));
 
-  receiveDueDateInput.value = `${dueDate.getFullYear()}-${dueDate.getMonth()+1}-${dueDate.getDate()}`
-  receiveAmountInput.value = fees * (program.commission_rate/100)
+  switch (commissions[1].type) {
+    case 'fixed': {
+      receiveAmountInput.value = commissions[1].value
+      break;
+    }
+    case 'percentage': {
+      receiveAmountInput.value = fees * (commissions[1].value/100)
+      break;
+    }
+  }
+  receiveDueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
 }
 
 function computeComissionPayable() {
-  const fees = feesInput.value || 0;
-  // const agent = agents[agentSelect.value];
+  const uid = universitySelect.value
+  const pid = programSelect.value
+  const sid = Pstage.value
+  const fees = Pfees.value || 0
 
-  let dueDate = new Date(joinDateInput.value)
+  if (!uid || !pid || !sid || !fees) return
+  const university = universities[uid]
+  if (!university) return
+  const programType = university.programTypes.find(p => p.type == pid)
+  if (!programType) return
+  const stage = programType.paymentStages.find(s => s.stage == sid)
+  if (!stage) return
+  const commissions = stage.commissions
+  if (!commissions) return
+
+  let dueDate = new Date(joinYear.value, joinMonth.value)
   if (dueDate == 'Invalid Date') dueDate = new Date()
-  dueDate.setDate(dueDate.getDate());
+  dueDate.setDate(dueDate.getDate() + parseInt(commissions[0].installmentDays));
+  
+  switch (commissions[0].type) {
+    case 'fixed': {
+      payableAmountInput.value = commissions[0].value
+      break;
+    }
+    case 'percentage': {
+      payableAmountInput.value = fees * (commissions[0].value/100)
+      break;
+    }
+  }
 
-  payableDueDateInput.value = `${dueDate.getFullYear()}-${dueDate.getMonth()+1}-${dueDate.getDate()}`
-  payableAmountInput.value = fees * (AGENT_COMMISSION_RATE/100)
+  payableDueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
 }
 
 /**
@@ -203,21 +272,14 @@ sourceSelect.addEventListener("change", () => {
 programSelect.addEventListener("change", () => {
   if (programSelect.value) {
     updateUniversityList(programSelect.value)
-    universitySelect.disabled = false;
-
-    feesInput.disabled = false;
-    computeComissionReceivable()
   } else {
-    feesInput.disabled = true
     universitySelect.disabled = true;
   }
 })
 
-agentSelect.addEventListener("change", () => {
-  computeComissionPayable()
+universitySelect.addEventListener("change", () => {
+  updatePaymentStageList()
 })
 
-feesInput.addEventListener("change", () => {
-  computeComissionReceivable()
-  computeComissionPayable()
-})
+payableRecompute.addEventListener("click", computeComissionPayable)
+receivableRecompute.addEventListener("click", computeComissionReceivable)

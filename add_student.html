@@ -69,29 +69,50 @@
                 <label class="form-label" for="studentId">Lead Id (LSQ)<span class="text-danger">*</span></label>
                 <input class="form-control" id="studentId" name="studentId" type="text" placeholder="Lead Id" required="required" />
               </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="joinDate">Joining Date<span class="text-danger">*</span></label>
-                <input class="form-control" id="joinDate" name="joinDate" type="text" placeholder="18/05/2023" required="required" />
+              <div class="col-lg-3 col-6 mb-3">
+                <label class="form-label" for="joinMonth">Joining Month<span class="text-danger">*</span></label>
+                <select class="form-select" id="joinMonth" name="joinMonth">
+                  <option value="0">Jan</option>
+                  <option value="1">Feb</option>
+                  <option value="2">Mar</option>
+                  <option value="3">Apr</option>
+                  <option value="4">May</option>
+                  <option value="5">June</option>
+                  <option value="6">July</option>
+                  <option value="7">Aug</option>
+                  <option value="8">Sept</option>
+                  <option value="9">Oct</option>
+                  <option value="10">Nov</option>
+                  <option value="11">Dec</option>
+                </select>
+              </div>
+              <div class="col-lg-3 col-6 mb-3">
+                <label class="form-label" for="joinYear">Joining Year<span class="text-danger">*</span></label>
+                <select class="form-select" id="joinYear" name="joinYear">
+                  <option value="2015">2015</option>
+                  <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023" selected>2023</option>
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                </select>
               </div>
 
-              <div class="col-12 mb-3">
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="universityStudentId">University Student Id<span class="text-danger">*</span></label>
+                <input class="form-control" id="universityStudentId" name="universityStudentId" type="text" required="required" />
+              </div>
+
+              <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="studentName">Student Name<span class="text-danger">*</span></label>
                 <input class="form-control" id="studentName" name="studentName" type="text" placeholder="Student Name" required="required" />
-              </div>              
-
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="email">Email<span class="text-danger">*</span></label>
-                <input class="form-control" id="email" name="email" type="email" name="email" placeholder="email@email.com" required="required" />
-              </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="phone">Phone<span class="text-danger">*</span></label>
-                <input class="form-control" id="phone" name="phone" type="text" placeholder="+91 XXXX XXXX" required="required" />
-              </div>  
-
-              <div class="col-12 mb-3">
-                <label class="form-label" for="address">Address<span class="text-danger">*</span></label>
-                <input class="form-control" id="address" name="address" type="text" placeholder="Agent's Location" required="required" />
-              </div>
+              </div>    
             </form>
           </div>
         </div>              
@@ -111,8 +132,8 @@
               </div>
               <div class="col-sm-6 mb-3">
                 <label class="form-label" for="university">University<span class="text-danger">*</span></label>
-                <select class="form-select" id="university" name="university" disabled>
-                  <option>Select a sub-category</option>
+                <select class="form-select" id="university" name="university">
+                  <option>Select a program type first</option>
                 </select>
               </div>
               <div class="col-sm-6 mb-3">
@@ -125,17 +146,16 @@
               <div class="col-sm-6 mb-3">
                 <label class="form-label" for="agent">Agent<span class="text-danger">*</span></label>
                 <select class="form-select" id="agent" name="agent" disabled>
-                  <option>Select a sub-category</option>
+                  <option>Select an Agent</option>
                 </select>
-              </div> 
-              <div class="col-12 mb-3">
-                <label class="form-label" for="fees">Fees Paid<span class="text-danger">*</span></label>
-                <input class="form-control" id="fees" name="fees" type="number" placeholder="10000" required="required" />
               </div> 
             </form>
           </div>
         </div>
         <!-- Enrollment Details Ends -->
+
+        <hr>
+        <h5 class="text-center mt-4 mb-3">First Payment Details</h5>
 
         <!-- Commission Receivable Details -->
         <div class="card mb-3">
@@ -151,13 +171,7 @@
               <div class="col-sm-6 mb-3">
                 <label class="form-label" for="stage">Payment stage<span class="text-danger">*</span></label>
                 <select class="form-select" id="Rstage" name="stage">
-                  <option value="hybrid-in-country">Hybrid (In-country)</option>
-                  <option value="pathway-college-term-1">Pathway college Term-1</option>
-                  <option value="pathway-college-term-2">Pathway college Term-2</option>
-                  <option value="pathway-college-year-1">Pathway college Year-1</option>
-                  <option value="university-term-1">University Term-1</option>
-                  <option value="university-term-2">University Term-2</option>
-                  <option value="university-year-1">University Year-1</option>
+                  <option>Select stage</option>
                 </select>
               </div>
               <div class="col-sm-6 mb-3">
@@ -172,12 +186,21 @@
               </div> 
 
               <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="Rfees">Fees Paid<span class="text-danger">*</span></label>
+                <input class="form-control" id="Rfees" name="fees" type="number" placeholder="10000" required="required" />
+              </div>  
+              
+              <div class="col-lg-6 col-12 mb-3 d-grid my-auto">
+                <button class="btn btn-secondary" type="button" id="receivableRecompute">Compute Commission</button>
+              </div>
+
+              <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="Ramount">Commission Receivable<span class="text-danger">*</span></label>
                 <input class="form-control" id="Ramount" name="amount" type="number" placeholder="10000" required="required" />
               </div> 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="RdueDate">Due Date<span class="text-danger">*</span></label>
-                <input class="form-control" id="RdueDate" name="dueDate" type="text" placeholder="18/08/2023" required="required" />
+                <label class="form-label" for="RdueDate">Due Date (YYYY-MM-DD)<span class="text-danger">*</span></label>
+                <input class="form-control" id="RdueDate" name="dueDate" type="text" placeholder="YYYY-MM-DD" required="required" />
               </div>                            
             </form>
           </div>
@@ -198,14 +221,7 @@
               <div class="col-sm-6 mb-3">
                 <label class="form-label" for="Pstage">Payment stage<span class="text-danger">*</span></label>
                 <select class="form-select" id="Pstage" name="stage">
-                  <option value="">Select an option</option>
-                  <option value="hybrid-in-country">Hybrid (In-country)</option>
-                  <option value="pathway-college-term-1">Pathway college Term-1</option>
-                  <option value="pathway-college-term-2">Pathway college Term-2</option>
-                  <option value="pathway-college-year-1">Pathway college Year-1</option>
-                  <option value="university-term-1">University Term-1</option>
-                  <option value="university-term-2">University Term-2</option>
-                  <option value="university-year-1">University Year-1</option>
+                  <option>Select stage</option>
                 </select>
               </div>
               <div class="col-sm-6 mb-3">
@@ -218,13 +234,23 @@
                   <option value="na">Not Applicable</option>
                 </select>
               </div> 
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="Pfees">Fees Paid<span class="text-danger">*</span></label>
+                <input class="form-control" id="Pfees" name="fees" type="number" placeholder="10000" required="required" />
+              </div>  
+              
+              <div class="col-lg-6 col-12 mb-3 d-grid my-auto">
+                <button class="btn btn-secondary" type="button" id="payableRecompute">Compute Commission</button>
+              </div>
+
               <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="Pamount">Commission Payable<span class="text-danger">*</span></label>
                 <input class="form-control" id="Pamount" name="amount" type="number" placeholder="10000" required="required" />
               </div> 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="PdueDate">Due Date<span class="text-danger">*</span></label>
-                <input class="form-control" id="PdueDate" name="dueDate" type="text" placeholder="18/08/2023" required="required" />
+                <label class="form-label" for="PdueDate">Due Date (YYYY-MM-DD)<span class="text-danger">*</span></label>
+                <input class="form-control" id="PdueDate" name="dueDate" type="text" placeholder="YYYY-MM-DD" required="required" />
               </div>                             
             </form>
           </div>

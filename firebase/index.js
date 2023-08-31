@@ -167,7 +167,8 @@ const paymentStages = [
   { value: 'pathway-year-1', label: 'Pathway college Year-1' },
   { value: 'university-term-1', label: 'University Term-1' },
   { value: 'university-term-2', label: 'University Term-2' },
-  { value: 'university-year-1', label: 'University Year-1' }
+  { value: 'university-year-1', label: 'University Year-1' },
+  { value: 'no-further-payment', label: 'No Further Payment' },
 ];
 window.paymentStages = paymentStages;
 

@@ -1,5 +1,7 @@
 import { readData } from "./helpers.js";
 
+let students = {}, universities = {}, agents = {}
+
 /**
  * --------------------------------------------------
  * Read All
@@ -12,12 +14,13 @@ function listAllPayables() {
   tableBody.innerHTML = ''
   readData("payable")
     .then(async (payables) => {
-      console.log(payables)
       const schema = `<tr class="btn-reveal-trigger">
-        <th class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></th>
         <td class="align-middle white-space-nowrap student"><a href="student_details.html?id={}">{}</a></td>
-        <td class="align-middle text-nowrap duedate">{}</td>
+        <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
+        <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
+        <td class="align-middle stage">{}</td>
         <td class="align-middle amount">{}</td>
+        <td class="align-middle text-nowrap duedate">{}</td>
         <td class="align-middle fs-0 white-space-nowrap status text-center">
           {}
         </td>
@@ -33,9 +36,11 @@ function listAllPayables() {
 
       const promises = Object.keys(payables).map(async id => {
         const p = payables[id]
-        const AgentName = await readData(`agents/${p?.agent}/name`)
-        const StudentName = await readData(`students/${p?.student}/name`)
-        // const UniversityName = await readData(`universities/${p?.university}/name`)
+        const AgentName = agents[p.agent].name
+        const StudentName = students[p.student].studentName
+        const UniversityName = universities[p?.university].name
+
+        const stage = paymentStages.find(s => s.value == p.stage)
         let status = ''
         switch (p?.status) {
           case 'confirmed': {
@@ -61,7 +66,8 @@ function listAllPayables() {
           }
         }
 
-        const row = schema.format(p.agent, AgentName, p.student, StudentName, p.dueDate, p.amount, status)
+        const row = schema.format(p.student, StudentName, p.university, UniversityName,
+          p.agent, AgentName, stage.label, p.amount, p.dueDate, status)
         if (tableBody) tableBody.innerHTML += row
       });
 
@@ -84,6 +90,9 @@ window.listAllPayables = listAllPayables
  * --------------------------------------------------
  */
 
-window.onload = () => {
+window.onload = async () => {
+  students = await readData("students")
+  universities = await readData("universities")
+  agents = await readData("agents")
   listAllPayables()
 }

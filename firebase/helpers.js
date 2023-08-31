@@ -1,4 +1,4 @@
-import { ref, get, set, update, push, remove, child } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
+import { ref, get, set, update, push, remove, child, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
 import { auth, db } from "./index.js";
 
 const logsRef = ref(db, "logs");
@@ -118,3 +118,28 @@ export async function removeProgramFromUniversity(pId) {
   }
 }
 window.removeProgramFromUniversity = removeProgramFromUniversity
+
+export async function fetchPaymentDetails(type, id) {
+  if (!['student', 'agent', 'university'].includes(type)) return
+
+  const Rquery = query(ref(db, "receivable"), orderByChild(type), equalTo(id));
+  const Pquery = query(ref(db, "payable"), orderByChild(type), equalTo(id));
+
+  try {
+    const Rsnapshot = await get(Rquery);
+    const REntries = {};
+    Rsnapshot.forEach((childSnapshot) => {
+      REntries[childSnapshot.key] = childSnapshot.val()
+    });
+
+    const Psnapshot = await get(Pquery);
+    const PEntries = {};
+    Psnapshot.forEach((childSnapshot) => {
+      PEntries[childSnapshot.key] = childSnapshot.val()
+    });
+    
+    return {"Receivable": REntries, "Payable": PEntries}
+  } catch (error) {
+    throw error;
+  }
+}
