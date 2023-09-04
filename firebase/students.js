@@ -1,4 +1,4 @@
-import { readData, deleteData, fetchPaymentDetails } from "./helpers.js";
+import { readData, deleteData, fetchPaymentDetails, updateData } from "./helpers.js";
 
 // Global Variables
 let programs = {}, students = {}, universities = {}, agents = {}
@@ -36,7 +36,7 @@ function listAllStudents() {
                     <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-0" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="customer-dropdown-0">
                         <div class="py-2">
-                          <a class="dropdown-item" href="agent.html?id={}">More Details</a>
+                          <a class="dropdown-item" href="student_details.html?id={}">More Details</a>
                           <a class="dropdown-item text-warning" href="add_student.html?id={}">Edit Student</a>
                         </div>
                     </div>
@@ -54,11 +54,11 @@ function listAllStudents() {
         }
         
         const row = schema.format(id, id, s.studentName, s.universityStudentId, u, p, source, id, id)
-        console.log(row)
         if (tableBody) tableBody.innerHTML += row
       });
 
       listInit()
+      closeSwal()
     })
     .catch((error) => {
       console.error("Error reading students:", error);
@@ -77,6 +77,7 @@ window.listAllStudents = listAllStudents
 function readStudentDetails(id) {
   readData(`students/${id}`)
     .then(async (result) => {
+      students[id] = result
       if (!result) failMessage("Student not found!");
 
       const universityName = await readData(`universities/${result?.university}/name`)
@@ -91,6 +92,8 @@ function readStudentDetails(id) {
       document.getElementById("program_type").innerHTML = programName || ''
       document.getElementById("source").innerHTML = result?.source
       document.getElementById("agent").innerHTML = result?.agent || '-'
+
+      closeSwal()
     })
     .catch((error) => {
       console.log(error)
@@ -170,6 +173,60 @@ async function updatePayables(tableBody, payables) {
 
 /**
  * --------------------------------------------------
+ * Update Student with id
+ * --------------------------------------------------
+ */
+
+const updateStudentModal = document.getElementById('update-details-modal')
+if (updateStudentModal)
+updateStudentModal.addEventListener('show.bs.modal', event => {
+  const params = new URLSearchParams(document.location.search);
+  const id = params.get('id')
+  const student = students[id]
+  const joinDate = new Date(student.joinDate)
+  updateStudentModal.querySelector('#studentId').value = id
+  updateStudentModal.querySelector('#joinMonth').value = joinDate.getMonth()
+  updateStudentModal.querySelector('#joinYear').value = joinDate.getFullYear()
+  updateStudentModal.querySelector('#studentName').value = student.studentName
+  updateStudentModal.querySelector('#universityStudentId').value = student.universityStudentId
+})
+
+async function updateStudent() {
+  try {
+    processingMessage()
+    const params = new URLSearchParams(document.location.search);
+    const id = params.get('id')
+    
+    const basicInfoData = Object.fromEntries(new FormData(updateStudentForm));
+  
+    const studentId = updateStudentForm.querySelector('#studentId').value
+    const { joinMonth, joinYear, universityStudentId, studentName } = basicInfoData
+    const date = new Date(joinYear, joinMonth, 2)
+    const joinDate = `${date.toISOString().slice(0,10)}`
+  
+    // Validation
+    if (id != studentId) failMessage("Can't update student LSQ Id")
+    if (!studentId || !studentName || !joinMonth || !joinYear || !universityStudentId) 
+      { failMessage("Please provide all data"); return }
+  
+    const newStudent = { studentId, joinDate, universityStudentId, studentName }
+    updateData(`students/${studentId}`, newStudent)
+      .then((result) => {
+        if (result) {
+          successMessage("Student added successfully!")
+            .then(() => location.reload())
+        }
+      })
+  }
+  catch(error) {
+    console.log(error)
+    failMessage("Error adding student");
+  }
+}
+window.updateStudent = updateStudent
+
+/**
+ * --------------------------------------------------
  * Delete Student
  * --------------------------------------------------
  */
@@ -196,6 +253,7 @@ function deleteStudent(id) {
  */
 
 window.onload = async () => {
+  processingMessage()
   const pageName = window.location.pathname.split('/').pop().split(".html")[0];
   await fetchData()
   switch (pageName) {
@@ -213,3 +271,5 @@ window.onload = async () => {
     }
   }
 }
+const updateBtn = document.getElementById("updateBtn")
+if (updateBtn) updateBtn.onclick = updateStudent

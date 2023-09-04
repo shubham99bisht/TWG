@@ -64,7 +64,7 @@
               <div class="col">
                 <h5 class="mb-0" id="name">Student Name</h5>
               </div>
-              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" href="#!"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
+              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#update-details-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
             </div>
           </div>
           <div class="card-body bg-light border-top">
@@ -206,6 +206,77 @@
     <div></div><div></div><div></div><div></div>
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
+
+  <!-- Update Student Modal -->
+  <div class="modal fade" id="update-details-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Update Student Details</h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form class="row" id="updateStudentForm">
+              <div class="col-12 mb-3">
+                <label class="form-label" for="studentId">Lead Id (LSQ)<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentId" name="studentId" type="text" disabled />
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label" for="joinMonth">Joining Month<span class="text-danger">*</span></label>
+                <select class="form-select" id="joinMonth" name="joinMonth">
+                  <option value="0">Jan</option>
+                  <option value="1">Feb</option>
+                  <option value="2">Mar</option>
+                  <option value="3">Apr</option>
+                  <option value="4">May</option>
+                  <option value="5">June</option>
+                  <option value="6">July</option>
+                  <option value="7">Aug</option>
+                  <option value="8">Sept</option>
+                  <option value="9">Oct</option>
+                  <option value="10">Nov</option>
+                  <option value="11">Dec</option>
+                </select>
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label" for="joinYear">Joining Year<span class="text-danger">*</span></label>
+                <select class="form-select" id="joinYear" name="joinYear">
+                  <option value="2015">2015</option>
+                  <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023" selected>2023</option>
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                </select>
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="studentName">Student Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentName" name="studentName" type="text" placeholder="Student Name" required="required" />
+              </div> 
+              <div class="col-12 mb-3">
+                <label class="form-label" for="universityStudentId">University Student Id<span class="text-danger">*</span></label>
+                <input class="form-control" id="universityStudentId" name="universityStudentId" type="text" required="required" />
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-warning" id="updateBtn">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add Update Student Ends -->  
 
 
   <!--    JavaScripts-->

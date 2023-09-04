@@ -39,7 +39,7 @@ async function createStudent() {
 
   const { studentId, joinMonth, joinYear, universityStudentId, studentName } = basicInfoData
   let { program_type, university, source, agent } = enrollmentInfoData
-  const date = new Date(joinYear, joinMonth)
+  const date = new Date(joinYear, joinMonth, 2)
   const joinDate = `${date.toISOString().slice(0,10)}`
 
   // Validation
