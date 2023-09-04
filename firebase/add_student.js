@@ -204,7 +204,7 @@ function computeComissionReceivable() {
       break;
     }
     case 'percentage': {
-      receiveAmountInput.value = fees * (commissions[1].value/100)
+      receiveAmountInput.value = parseInt(fees * (commissions[1].value/100))
       break;
     }
   }
@@ -237,7 +237,7 @@ function computeComissionPayable() {
       break;
     }
     case 'percentage': {
-      payableAmountInput.value = fees * (commissions[0].value/100)
+      payableAmountInput.value = parseInt(fees * (commissions[0].value/100))
       break;
     }
   }

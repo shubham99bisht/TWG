@@ -58,7 +58,7 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->     
 
-        <div class="card z-index-1" id="payableCommissions" data-list='{"valueNames":["student","university","agent","stage","duedate","amount","status"],"page":50,"pagination":true}'>
+        <div class="card z-index-1" id="payableCommissions" data-list='{"valueNames":["student","university","agent","stage","duedate","fees","amount","status"],"page":50,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center">
               <div class="col-6 col-md-auto d-flex align-items-center">
@@ -87,6 +87,7 @@
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="university">University</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="agent">Agent</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="stage">Payment Stage</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="fees">Fees</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="amount">Amount</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="duedate">Due Date</th>
                     <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="status">Status</th>
@@ -94,7 +95,7 @@
                   </tr>
                 </thead>
                 <tbody class="list" id="table-payable-body">
-                  <tr class="text-center"><td colspan="8">Loading...</td></tr>
+                  <tr class="text-center"><td colspan="9">Loading...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -120,7 +121,7 @@
   </div>
 
   <!-- View Details Modal -->
-  <div class="modal fade" id="view-details" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal fade" id="edit-details" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
       <div class="modal-content position-relative">
         <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
@@ -128,48 +129,54 @@
         </div>
         <div class="modal-body p-0">
           <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
-            <h5 class="mb-1 modal-title">Edit/View Details </h5>
+            <h5 class="mb-1 modal-title">Edit Details </h5>
           </div>
           <div class="p-4 pb-0">
-            <form>
-              <div class="col-12 mb-3">
-                <label class="form-label" for="agent-name">Agent Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="agent-name" type="text" placeholder="Agent Name" disabled />
-              </div>
-              <div class="col-12 mb-3">
+            <form class="row" id="updatePaymentDetailsForm">
+              <input class="form-control" id="payment-id" name="payment-id" type="text" hidden />
+              <div class="col-12 col-lg-6 mb-3">
                 <label class="form-label" for="student-name">Student Name<span class="text-danger">*</span></label>
                 <input class="form-control" id="student-name" type="text" placeholder="student Name" disabled />
               </div>
-              <div class="col-12 mb-3">
+              <div class="col-12 col-lg-6 mb-3">
                 <label class="form-label" for="university-name">University Name<span class="text-danger">*</span></label>
                 <input class="form-control" id="university-name" type="text" placeholder="University Name" disabled />
+              </div>              
+              <div class="col-12 col-lg-6 mb-3">
+                <label class="form-label" for="agent-name">Agent Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="agent-name" type="text" placeholder="Agent Name" disabled />
+              </div>
+              <div class="col-12 col-lg-6 mb-3">
+                <label class="form-label" for="stage">Payment Stage<span class="text-danger">*</span></label>
+                <input class="form-control" id="stage" type="text" disabled />
+              </div>
+              <div class="col-12 col-lg-6 mb-3">
+                <label class="form-label" for="fees">Fees<span class="text-danger">*</span></label>
+                <input class="form-control" id="fees" type="text" disabled />
+              </div>
+              <div class="col-12 col-lg-6 mb-3">
+                <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
+                <input class="form-control" id="status" type="text" placeholder="Pending" disabled/>
               </div>
 
               <div class="col-12 mb-3">
                 <label class="form-label" for="duedate">Due Date<span class="text-danger">*</span></label>
-                <input class="form-control" id="duedate" type="text" placeholder="DD-MM-YYYY" />
+                <input class="form-control" id="duedate" name="dueDate" type="text" placeholder="DD-MM-YYYY" />
               </div>
               <div class="col-12 mb-3">
                 <label class="form-label" for="amount">Amount<span class="text-danger">*</span></label>
-                <input class="form-control" id="amount" type="text" placeholder="$1000" />
+                <input class="form-control" id="amount" name="amount" type="text" placeholder="$1000" />
               </div>
-
               <div class="col-12 mb-3">
-                <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
-                <select class="form-select" aria-label="Default select example">
-                  <option selected="">Pending</option>
-                  <option value="1">Invoiced</option>
-                  <option value="2">Confirmed</option>
-                  <option value="3">Paid</option>
-                  <option value="4">Not Applicable</option>
-                </select>
+                <label class="form-label" for="notes">Notes<span class="text-danger">*</span></label>
+                <textarea class="form-control" id="notes" name="notes" placeholder="Notes/Comments" rows="2"></textarea>
               </div>
             </form>
           </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-          <button class="btn btn-primary">Save</button>
+          <button class="btn btn-warning" onclick="updateDetails()">Update</button>
         </div>
       </div>
     </div>
@@ -178,7 +185,7 @@
 
   <!-- Update Status Modal -->
   <div class="modal fade" id="update-status" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document" style="max-width: 500px">
       <div class="modal-content position-relative">
         <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
           <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -187,50 +194,62 @@
           <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
             <h5 class="mb-1 modal-title">Update Status </h5>
           </div>
-          <div class="p-4 pb-0">
+          <div class="px-4 py-2">
             <form id="updateStatusForm">
+              <input class="form-control" id="payment-id" name="payment-id" type="hidden" />
               <div class="col-12 mb-3">
-                <label class="form-label" for="agent-name">Status<span class="text-danger">*</span></label>
-                <select class="form-select" aria-label="Default select example">
-                  <option selected="">Pending</option>
-                  <option value="1">Invoiced</option>
-                  <option value="2">Confirmed</option>
-                  <option value="3">Paid</option>
-                  <option value="4">Not Applicable</option>
+                <label class="form-label">Status<span class="text-danger">*</span></label>
+                <select class="form-select" id="status" name="status">
+                  <option value="pending" selected>Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="invoiced">Invoiced</option>
+                  <option value="paid">Paid</option>
+                  <option value="na">Not Applicable</option>
                 </select>
               </div>
               <div class="col-12 mb-3">
                 <label class="form-label" for="notes">Notes<span class="text-danger">*</span></label>
-                <textarea class="form-control" id="notes" placeholder="Notes/Comments" rows="3"></textarea>
+                <textarea class="form-control" id="notes" name="notes" placeholder="Notes/Comments" rows="2"></textarea>
               </div>
               <div class="col-12 mb-3">
                 <label class="form-label" for="morePayments">Are more Payments expected?<span class="text-danger">*</span></label>
-                <select class="form-select" id="morePayments">
+                <select class="form-select" id="morePayments" name="morePayments">
                   <option value="0">No</option>
                   <option value="1">Yes</option>
                 </select>
               </div>
-              <div class="d-none" id="nextPaymentDetails">
+              <div class="row d-none" id="nextPaymentDetails">
                 <hr>
-                <p class="text-center mb-1">Next Payment details</p>
                 <div class="col-12 mb-3">
-                  <label class="form-label" for="duedate">Due Date<span class="text-danger">*</span></label>
-                  <input class="form-control" id="duedate" type="text" placeholder="DD-MM-YYYY" />
+                  <label class="form-label" for="stage">Next Payment Stage<span class="text-danger">*</span></label>
+                  <select class="form-select" id="stage" name="stage">
+                    <option>Select stage</option>
+                  </select>
                 </div>
-                <div class="col-12 mb-3">
+                <div class="col-6 mb-3">
+                  <label class="form-label" for="fees">Fees Paid<span class="text-danger">*</span></label>
+                  <input class="form-control" id="fees" name="fees" type="text" />
+                </div>
+                <div class="col-6 mb-3 d-grid my-auto">
+                  <button class="btn btn-secondary" id="computeCommission" type="button">Compute</button>
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label" for="dueDate">Due Date<span class="text-danger">*</span></label>
+                  <input class="form-control" id="dueDate" name="dueDate" type="text" placeholder="YYYY-MM-DD" />
+                </div>
+                <div class="col-6 mb-3">
                   <label class="form-label" for="amount">Amount<span class="text-danger">*</span></label>
-                  <input class="form-control" id="amount" type="text" placeholder="$1000" />
+                  <input class="form-control" id="amount" name="amount" type="text" placeholder="1000" />
                 </div>
   
                 <div class="col-12 mb-3">
-                  <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
-                  <select class="form-select" aria-label="Default select example">
-                    <option selected="">Pending</option>
-                    <option value="1">Invoiced</option>
-                    <option value="2">Confirmed</option>
-                    <option value="3">Paid</option>
-                    <option value="4">Not Applicable</option>
-                    <option value="5">No further commissions</option>
+                  <label class="form-label" for="newStatus">Status<span class="text-danger">*</span></label>
+                  <select class="form-select" id="newStatus" name="newStatus">
+                    <option value="pending" selected>Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="invoiced">Invoiced</option>
+                    <option value="paid">Paid</option>
+                    <option value="na">Not Applicable</option>
                   </select>
                 </div>
               </div>
@@ -239,31 +258,12 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-          <button class="btn btn-primary">Confirm Updates</button>
+          <button class="btn btn-primary" onclick="updateStatus()">Confirm Updates</button>
         </div>
       </div>
     </div>
   </div>
   <!-- Update Status Ends -->  
-
-
-  <script>
-    const morePaymentsSelect = document.getElementById("morePayments")
-    morePaymentsSelect.addEventListener("change", () => {
-      console.log(morePaymentsSelect.value)
-      if (morePaymentsSelect.value == "1") {
-        nextPaymentDetails.classList.remove("d-none")
-      } else {
-        nextPaymentDetails.classList.add("d-none")
-      }
-    })
-
-    const updateStatusModal = document.getElementById("update-status")
-    updateStatusModal.addEventListener('show.bs.modal', event => {
-      document.getElementById("updateStatusForm").reset();
-    })
-  </script>
-
 
   <!--    JavaScripts-->
   <script src="./vendors/popper/popper.min.js"></script>

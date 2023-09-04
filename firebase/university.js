@@ -111,18 +111,11 @@ async function updatePayables(tableBody, payables) {
     <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
     <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
     <td class="align-middle stage">{}</td>
+    <td class="align-middle fees">{}</td>
     <td class="align-middle amount">{}</td>
     <td class="align-middle text-nowrap duedate">{}</td>
     <td class="align-middle fs-0 white-space-nowrap status text-center">
       {}
-    </td>
-    <td class="align-middle white-space-nowrap text-end">
-      <div class="dropstart font-sans-serif position-static d-inline-block">
-        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
-        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-1"><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">View</a><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-details">Edit</a>
-          <div class="dropdown-divider"></div><a class="dropdown-item text-warning"  data-bs-toggle="modal" data-bs-target="#update-status">Update Status</a>
-        </div>
-      </div>
     </td>
   </tr>`
 
@@ -159,7 +152,7 @@ async function updatePayables(tableBody, payables) {
     }
 
     const row = schema.format(p.student, StudentName, p.university, UniversityName,
-        p.agent, AgentName, stage.label, p.amount, p.dueDate, status)
+        p.agent, AgentName, stage.label, p.fees, p.amount, p.dueDate, status)
       if (tableBody) tableBody.innerHTML += row
   });
 
