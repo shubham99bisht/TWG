@@ -64,7 +64,7 @@
               <div class="col">
                 <h5 class="mb-0" id="name">University Name</h5>
               </div>
-              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" id="update"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
+              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#update-basicinfo-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
             </div>
           </div>
           <div class="card-body bg-light border-top">
@@ -122,6 +122,7 @@
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="payment_stage">Payment Stages</th>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="payable">Payable</th>
                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="receivable">Receivable</th>
+                        <th class="no-sort pe-1 align-middle white-space-nowrap">Actions</th>
                       </tr>
                     </thead>
                     <tbody class="list" id="table-body">
@@ -130,6 +131,12 @@
                   </table>
                 </div>
               </div>
+            </div>
+
+            <div class="text-end">
+              <button class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal" data-bs-target="#commissions-modal" id="addProgramBtn" disabled>
+                <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Program Types 
+              </button>            
             </div>
           </div>
         </div>
@@ -221,6 +228,136 @@
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
 
+  <!-- Update University Info Modal -->
+  <div class="modal fade" id="update-basicinfo-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Update University Info </h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form class="row" id="basicInfoForm">
+              <input class="form-control" id="universityId" name="universityId" type="text" hidden />
+              <div class="col-12 mb-3">
+                <label class="form-label" for="name">University Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="name" name="name" type="text" placeholder="University Name" required="required" />
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="poc">Contact Person Name</label>
+                <input class="form-control" id="poc" name="poc" type="text"/>
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" id="email" name="email" type="email"/>
+              </div>   
+              
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="accountName">Account Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="accountName" name="accountName" type="text" placeholder="Account Name" required="required" />
+              </div> 
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="accountNumber">Account Number<span class="text-danger">*</span></label>
+                <input class="form-control" id="accountNumber" name="accountNumber" type="text" placeholder="XXXXXXXX1234" required="required" />
+              </div>
+              
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="bank">Bank Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="bank" name="bank" type="text" placeholder="Bank (Branch)" required="required" />
+              </div>
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="ifsc">IFSC Code<span class="text-danger">*</span></label>
+                <input class="form-control" id="ifsc" name="ifsc" type="text" placeholder="XXXX" required="required" />
+              </div>               
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-warning" onclick="updateBasicInfo()">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Update University Info Ends -->
+
+  <!-- Update Program Types Modal -->
+  <div class="modal fade" id="commissions-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Update Program Types </h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form class="row" id="commissionsForm">
+              <input class="form-control" id="universityId" name="universityId" type="text" hidden />
+              <div class="col-12 mb-3">
+                <label class="form-label" for="program_type">Program Type<span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm" id="program_type" name="program_type" required="required">
+                  <option hidden disabled selected value="">Select Program type</option>
+                </select>
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="payment_stage">Payment Stage</label>
+                <select class="form-select form-select-sm" id="payment_stage" name="payment_stage" required="required">
+                  <option hidden disabled selected value="">Select Payment stage</option>
+                </select>
+              </div>
+
+              <hr>
+              <h6 class="text-center mb-3">Payable Commissions</h6>
+              <div class="col-4 mb-3 text-center">
+                <label class="form-label" for="Ptype">Type</label>
+                <select class="form-select form-select-sm commission_type" id="Ptype" name="Ptype" required="required">
+                  <option value="fixed">Fixed</option>
+                  <option value="percentage">Percentage</option>
+                </select>
+              </div>
+              <div class="col-4 mb-3 text-center">
+                <label class="form-label" for="Pvalue">Commission</label>
+                <input class="form-control form-control-sm" type="number" id="Pvalue" name="Pvalue" required="required"/>
+              </div> 
+              <div class="col-4 mb-3 text-center">
+                <label class="form-label" for="email">Installment Days</label>
+                <input class="form-control form-control-sm" type="number" id="Pinstallment" name="Pinstallment" required="required"/>
+              </div> 
+              
+              <hr>
+              <h6 class="text-center mb-3">Receivable Commissions</h6>
+              <div class="col-4 mb-3 text-center">
+                <label class="form-label" for="Rtype">Type</label>
+                <select class="form-select form-select-sm commission_type" id="Rtype" name="Rtype" required="required">
+                  <option value="fixed">Fixed</option>
+                  <option value="percentage">Percentage</option>
+                </select>
+              </div>
+              <div class="col-4 mb-3 text-center">
+                <label class="form-label" for="Rvalue">Commission</label>
+                <input class="form-control form-control-sm" type="number" id="Rvalue" name="Rvalue" required="required"/>
+              </div> 
+              <div class="col-4 mb-3 text-center">
+                <label class="form-label" for="Rinstallment">Installment Days</label>
+                <input class="form-control form-control-sm" type="number" id="Rinstallment" name="Rinstallment" required="required"/>
+              </div> 
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-warning" onclick="updateCommission()">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Update Program Types Ends -->
+
 
   <!--    JavaScripts-->
   <script src="./vendors/popper/popper.min.js"></script>
@@ -241,7 +378,7 @@
 
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
-  <script src="./firebase/university.js" type="module"></script>
+  <script src="./firebase/university_details.js" type="module"></script>
 </body>
 
 </html>
