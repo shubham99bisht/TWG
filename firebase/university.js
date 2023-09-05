@@ -61,7 +61,9 @@ function listOne(id) {
   readData(`universities/${id}`)
     .then((data) => {
       console.log(data)
-      document.getElementById("agentId").innerHTML = id
+      document.getElementById("universityId").innerHTML = id
+      document.getElementById("poc").innerHTML = data?.poc || '-'
+      document.getElementById("email").innerHTML = data?.email || '-'
       document.getElementById("name").innerHTML = data?.name
       document.getElementById("accountName").innerHTML = data?.billing?.accountName
       document.getElementById("accountNumber").innerHTML = data?.billing?.accountNumber
@@ -89,7 +91,7 @@ function listOne(id) {
     .catch((error) => {
       console.error("Error reading Universities:", error);
       if (tableBody) 
-        tableBody.innerHTML = `<tr class="text-center"><td colspan="3">Error reading Universities</td></tr>`
+        tableBody.innerHTML = `<tr class="text-center"><td colspan="5">Error reading Universities</td></tr>`
     });
 }
 window.listOne = listOne

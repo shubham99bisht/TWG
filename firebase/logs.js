@@ -27,7 +27,7 @@ async function loadLogs() {
             new Date(log.timestamp)
         )
 
-        logList.innerHTML += row
+        logList.innerHTML = row + logList.innerHTML
     }
 }
 
