@@ -1,6 +1,6 @@
 import { readData, updateData, writeDataWithNewId } from "./helpers.js";
 
-let students = {}, universities = {}, agents = {}, payments = {}
+let students = {}, universities = {}, agents = {}, programs = {}, payments = {}
 let availablePaymentStages = {}
 
 const CommissionType = 'receivable'
@@ -123,6 +123,7 @@ function listAllReceivables() {
         <td class="align-middle white-space-nowrap student"><a href="student_details.html?id={}">{}</a></td>
         <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
         <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
+        <td class="align-middle program_type">{}</td>
         <td class="align-middle stage">{}</td>
         <td class="align-middle fees">{}</td>
         <td class="align-middle amount">{}</td>
@@ -146,6 +147,7 @@ function listAllReceivables() {
         const AgentName = agents[p.agent].name
         const StudentName = students[p.student].studentName
         const UniversityName = universities[p?.university].name
+        const ProgramName = programs[p?.program_type].name
 
         const stage = paymentStages.find(s => s.value == p.stage)
         let status = ''
@@ -174,7 +176,7 @@ function listAllReceivables() {
         }
 
         const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
-          p.agent, AgentName, stage.label, p.fees, p.amount, p.dueDate, status)
+          p.agent, AgentName, ProgramName, stage.label, p.fees, p.amount, p.dueDate, status)
         if (tableBody) tableBody.innerHTML += row
       });
 
@@ -185,7 +187,7 @@ function listAllReceivables() {
     .catch((error) => {
       console.error("Error reading program types:", error);
       if (tableBody)
-        tableBody.innerHTML = `<tr class="text-center"><td colspan="6">No Agent data found!</td></tr>`
+        tableBody.innerHTML = `<tr class="text-center"><td colspan="10">No Receivable data found!</td></tr>`
     });
 }
 window.listAllReceivables = listAllReceivables
@@ -222,6 +224,7 @@ window.onload = async () => {
   students = await readData("students")
   universities = await readData("universities")
   agents = await readData("agents")
+  programs = await readData("program_types")
   listAllReceivables()
 }
 

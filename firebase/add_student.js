@@ -59,8 +59,8 @@ async function createStudent() {
   }
 
   // Receivable and Payable enteries
-  await createReceivable(studentId, university, agent)
-  if (source == "Agent") await createPayable(studentId, university, agent)
+  await createReceivable(studentId, university, agent, program_type)
+  if (source == "Agent") await createPayable(studentId, university, agent, program_type)
 
   // Create Student
   const newStudent = {
@@ -83,17 +83,17 @@ async function createStudent() {
     });
 }
 
-async function createReceivable(student, university, agent) {
+async function createReceivable(student, university, agent, program_type) {
   const receivableFormData = Object.fromEntries(new FormData(receivableForm));
   writeDataWithNewId(`receivable`, {
-    ...receivableFormData, student, university, agent
+    ...receivableFormData, student, university, agent, program_type
   })
 }
 
-async function createPayable(student, university, agent) {
+async function createPayable(student, university, agent, program_type) {
   const payableFormData = Object.fromEntries(new FormData(payableForm));
   writeDataWithNewId('payable', {
-    ...payableFormData, student, university, agent
+    ...payableFormData, student, university, agent, program_type
   })
 }
 
