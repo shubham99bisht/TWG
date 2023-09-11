@@ -58,13 +58,13 @@ function listAllStudents() {
       });
 
       listInit()
-      closeSwal()
     })
     .catch((error) => {
       console.error("Error reading students:", error);
       if (tableBody)
         tableBody.innerHTML = `<tr class="text-center"><td colspan="6">Student data found!</td></tr>`
     });
+    closeSwal()
 }
 window.listAllStudents = listAllStudents
 

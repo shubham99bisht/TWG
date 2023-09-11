@@ -44,7 +44,9 @@
               <div class="fw-black lh-1 text-300 fs-error">403</div>
               <p class="lead mt-4 text-800 font-sans-serif fw-semi-bold w-md-75 w-xl-100 mx-auto">The page you're looking for is forbidden.</p>
               <hr />
-              <p>Make sure you have correct access rights to view the page. If you think this is a mistake, please discuss with Admin team.</p><a class="btn btn-primary mt-3" href="index.html"><span class="fas fa-home me-2"></span>Take me home</a>
+              <p>Make sure you have correct access rights to view the page. If you think this is a mistake, please discuss with Admin team.</p>
+              <!-- <a class="btn btn-primary mt-3" href="index.html"><span class="fas fa-home me-2"></span>Take me home</a> -->
+              <a class="btn btn-danger mt-3" onclick="logOut()" type="button">Sign Out</a>
             </div>
           </div>
         </div>
@@ -69,6 +71,9 @@
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
   <script src="./vendors/list.js/list.min.js"></script>
   <script src="./assets/js/theme.js"></script>
+
+  <!-- Firebase -->
+  <script src="./firebase/index.js" type="module"></script>  
 </body>
 
 </html>

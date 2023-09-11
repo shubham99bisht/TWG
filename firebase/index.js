@@ -20,6 +20,7 @@ export const db = getDatabase();
 export const PAGES = {
   HOME_PAGE: './index.html',
   LOGIN_PAGE: './auth.html',
+  403: './403.html',
 }
 
 // ------------------------
@@ -28,10 +29,19 @@ export const PAGES = {
 onAuthStateChanged(auth, async (user) => {
   const currentPage = location.pathname;
   const isAuthPage = currentPage.includes('auth')
+  const is403 = currentPage.includes('403')
   const preloader = document.querySelector('#preloader');
 
   if (user) {
     addUserProfile(user)
+    const dbRef = ref(db, `/users/${user.uid}/role`)
+    const snapshot = await get(dbRef)
+    const role = snapshot.val()
+
+    if (!['Admin', 'Finance', 'Agent'].includes(role) && !is403) {
+      location.href = PAGES[403]
+    }
+
     // Handle Auth Pages
     if (isAuthPage) {
       location.href = PAGES.HOME_PAGE;
