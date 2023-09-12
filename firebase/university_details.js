@@ -1,4 +1,5 @@
 import { readData, fetchPaymentDetails, updateData } from "./helpers.js";
+import { auth } from "./index.js";
 
 let programs = {}, students = {} = {}, agents = {}
 let university = {}
@@ -17,10 +18,12 @@ if (basicInfoModal) {
     basicInfoForm.querySelector('#name').value = university.name
     basicInfoForm.querySelector('#poc').value = university.poc
     basicInfoForm.querySelector('#email').value = university.email
-    basicInfoForm.querySelector('#accountName').value = university.billing.accountName
-    basicInfoForm.querySelector('#accountNumber').value = university.billing.accountNumber
-    basicInfoForm.querySelector('#bank').value = university.billing.bank
-    basicInfoForm.querySelector('#ifsc').value = university.billing.ifsc
+
+    for (let i=1; i <= 5; i++) {
+      basicInfoForm.querySelector(`#email${i}`).value = university.accounts?.[`email${i}`] || ''
+      basicInfoForm.querySelector(`#usage${i}`).value  = university.accounts?.[`usage${i}`] || ''
+    }
+
   })
 }
 
@@ -28,12 +31,14 @@ function updateBasicInfo() {
   try {
     const formProps = new FormData(basicInfoForm);
     const formData = Object.fromEntries(formProps);
-    const { universityId: id, name, poc, email, accountName, accountNumber, bank, ifsc } = formData
-    if (!name || !poc || !email || !accountName || !accountNumber || !bank || !ifsc) {
+    const { universityId: id, name, poc, email,
+      email1, usage1, email2, usage2, email3, usage3, email4, usage4, email5, usage5
+    } = formData
+    if (!name || !poc || !email) {
       failMessage("Enter all details"); return
     }
-    updateData(`universities/${id}`, { name, poc, email, billing: {
-      accountName, accountNumber, bank, ifsc
+    updateData(`universities/${id}`, { name, poc, email, accounts: {
+      email1, usage1, email2, usage2, email3, usage3, email4, usage4, email5, usage5
     }})
     successMessage("Updated University details").then(() => location.reload())
   } catch(e) {
@@ -180,10 +185,14 @@ function listOne(id) {
       document.getElementById("poc").innerHTML = data?.poc || '-'
       document.getElementById("email").innerHTML = data?.email || '-'
       document.getElementById("name").innerHTML = data?.name
-      document.getElementById("accountName").innerHTML = data?.billing?.accountName
-      document.getElementById("accountNumber").innerHTML = data?.billing?.accountNumber
-      document.getElementById("bank").innerHTML = data?.billing?.bank
-      document.getElementById("ifsc").innerHTML = data?.billing?.ifsc
+
+      for (let i=1; i <= 5; i++) {
+        const row = document.getElementById(`account${i}`)
+        const email = data.accounts?.[`email${i}`] || '-'
+        const usage = data.accounts?.[`usage${i}`] || '-'
+        row.innerHTML = `<td>${email}</td><td>${usage}</td>`
+      }
+
       data.programTypes.forEach(programType => {
         const programName = programs[programType.type]?.name
         programType.paymentStages.forEach(paymentStage => {
@@ -319,6 +328,11 @@ function updateSelectors() {
 
 window.onload = async function () {
   await fetchData()
+  const userRole = localStorage.getItem("userRole")
+  if (!['Admin', 'Finance'].includes(userRole)) {
+    location.href = 'universities.html'
+  }
+
   const params = new URLSearchParams(document.location.search);
   const id = params.get('id')
   if (!id) location.href = "universities.html"

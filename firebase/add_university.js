@@ -151,18 +151,24 @@ universityForm.addEventListener('submit', function (event) {
       name: inputsAndSelects[0].value,
       poc: inputsAndSelects[1].value || '-',
       email: inputsAndSelects[2].value || '-',
-      billing: {
-        accountName: inputsAndSelects[3].value,
-        accountNumber: inputsAndSelects[4].value,
-        bank: inputsAndSelects[5].value,
-        ifsc: inputsAndSelects[6].value,
+      accounts: {
+        email1: inputsAndSelects[3].value || '-',
+        usage1: inputsAndSelects[4].value || '-',
+        email2: inputsAndSelects[5].value || '-',
+        usage2: inputsAndSelects[6].value || '-',
+        email3: inputsAndSelects[7].value || '-',
+        usage3: inputsAndSelects[8].value || '-',
+        email4: inputsAndSelects[9].value || '-',
+        usage4: inputsAndSelects[10].value || '-',
+        email5: inputsAndSelects[11].value || '-',
+        usage5: inputsAndSelects[12].value || '-',
       },
       programTypes: []
     };
   
     let currentProgramType = null;
   
-    for (let i = 7; i < inputsAndSelects.length; i++) {
+    for (let i = 13; i < inputsAndSelects.length; i++) {
       const element = inputsAndSelects[i];
   
       if (element.classList.contains('program_type')) {

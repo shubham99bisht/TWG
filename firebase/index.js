@@ -61,8 +61,9 @@ function addUserProfile(user) {
     .then((snapshot) => {
       if (snapshot.exists()) {
         // User's entry exists, retrieve the user's role
-        // const userRole = snapshot.val().role;
+        const userRole = snapshot.val().role;
         // console.log("User's role:", userRole);
+        localStorage.setItem("userRole", userRole)
       } else {
         const name = user.displayName;
         const email = user.email;

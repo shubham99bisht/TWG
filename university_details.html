@@ -85,31 +85,23 @@
                 </div>
               </div>
               <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1 mb-3">
-                <h6 class="fw-semi-bold ls mb-3 text-uppercase">Billing Information</h6>
-                <div class="row">
-                  <div class="col">
-                    <p class="fw-semi-bold mb-1">Account Name</p>
-                  </div>
-                  <div class="col" id="accountName">-</div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <p class="fw-semi-bold mb-1">Account Number</p>
-                  </div>
-                  <div class="col" id="accountNumber">-</div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <p class="fw-semi-bold mb-1">Bank</p>
-                  </div>
-                  <div class="col" id="bank">-</div>
-                </div>
-                <div class="row">
-                  <div class="col">
-                    <p class="fw-semi-bold mb-1">IFSC</p>
-                  </div>
-                  <div class="col" id="ifsc">-</div>
-                </div>
+                <h6 class="fw-semi-bold ls mb-3 text-uppercase">Account Details</h6>
+                <table class="table table-sm table-bordered text-center">
+                  <thead class="table-dark">
+                    <tr>
+                      <th scope="col">Email</th>
+                      <th scope="col">Usage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr id="account1"></tr>
+                    <tr id="account2"></tr>
+                    <tr id="account3"></tr>
+                    <tr id="account4"></tr>
+                    <tr id="account5"></tr>
+                  </tbody>
+
+                </table>
               </div>
 
               <div class="col-12">
@@ -256,22 +248,49 @@
               </div>   
               
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="accountName">Account Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="accountName" name="accountName" type="text" placeholder="Account Name" required="required" />
+                <label class="form-label" for="email1">Account Email 1</label>
+                <input class="form-control" id="email1" name="email1" type="email"/>
               </div> 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="accountNumber">Account Number<span class="text-danger">*</span></label>
-                <input class="form-control" id="accountNumber" name="accountNumber" type="text" placeholder="XXXXXXXX1234" required="required" />
+                <label class="form-label" for="usage1">Account Email 1 Usage</label>
+                <input class="form-control" id="usage1" name="usage1" type="text"/>
               </div>
-              
+
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="bank">Bank Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="bank" name="bank" type="text" placeholder="Bank (Branch)" required="required" />
+                <label class="form-label" for="email2">Account Email 2</label>
+                <input class="form-control" id="email2" name="email2" type="email"/>
+              </div> 
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="usage2">Account Email 2 Usage</label>
+                <input class="form-control" id="usage2" name="usage2" type="text"/>
               </div>
+
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="ifsc">IFSC Code<span class="text-danger">*</span></label>
-                <input class="form-control" id="ifsc" name="ifsc" type="text" placeholder="XXXX" required="required" />
-              </div>               
+                <label class="form-label" for="email3">Account Email 3</label>
+                <input class="form-control" id="email3" name="email3" type="email"/>
+              </div> 
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="usage3">Account Email 3 Usage</label>
+                <input class="form-control" id="usage3" name="usage3" type="text"/>
+              </div>
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="email4">Account Email 4</label>
+                <input class="form-control" id="email4" name="email4" type="email"/>
+              </div> 
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="usage4">Account Email 4 Usage</label>
+                <input class="form-control" id="usage4" name="usage4" type="text"/>
+              </div>
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="email5">Account Email 5</label>
+                <input class="form-control" id="email5" name="email5" type="email"/>
+              </div> 
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="usage5">Account Email 5 Usage</label>
+                <input class="form-control" id="usage5" name="usage5" type="text"/>
+              </div>              
             </form>
           </div>
         </div>
