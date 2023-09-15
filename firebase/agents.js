@@ -107,9 +107,11 @@ function listAllAgents() {
         </tr>`
 
       Object.keys(agents).forEach(id => {
-        const a = agents[id]
-        const row = schema.format(id, id, a.name, a.email, a.email, a.phone, a.address, id, id, id)
-        if (tableBody) tableBody.innerHTML += row
+        try {          
+          const a = agents[id]
+          const row = schema.format(id, id, a.name, a.email, a.email, a.phone, a.address, id, id, id)
+          if (tableBody) tableBody.innerHTML += row
+        } catch {}
       });
 
       listInit()
@@ -153,11 +155,16 @@ function readAgentDetails(id) {
 window.readAgentDetails = readAgentDetails
 
 async function readPaymentDetails(id) {
+  const userRole = localStorage.getItem("userRole")
+  const isAgent = userRole == 'Agent' ? true : false
+
   const data = await fetchPaymentDetails('agent', id)
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
   await updatePayables(payableBody, data["Payable"])
-  await updatePayables(receivableBody, data["Receivable"])
+  if (!isAgent) {
+    await updatePayables(receivableBody, data["Receivable"])
+  }
   listInit()
 }
 window.readPaymentDetails = readPaymentDetails

@@ -89,9 +89,11 @@ function listAllProgramTypes() {
         </tr>`
 
       Object.keys(programTypes).forEach(pId => {
-        const p = programTypes[pId]
-        const row = schema.format(pId, p.name, pId)
-        if (tableBody) tableBody.innerHTML += row
+        try {
+          const p = programTypes[pId]
+          const row = schema.format(pId, p.name, pId)
+          if (tableBody) tableBody.innerHTML += row
+        } catch {}
       });
       
       listInit()

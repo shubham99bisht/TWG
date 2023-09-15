@@ -103,6 +103,10 @@ function updateCommission() {
       failMessage("Enter all details"); return
     }
 
+    if ((Ptype == 'Percentage' && (Pvalue < 1 || Pvalue > 100)) ||
+      (Rtype == 'Percentage' && (Rvalue < 1 || Rvalue > 100))
+    ) { failMessage("Percentage value should in range 1-100"); return }
+
     const commissions = [
       {type: Ptype, value: Pvalue, installmentDays: Pinstallment},
       {type: Rtype, value: Rvalue, installmentDays: Rinstallment}
@@ -140,6 +144,11 @@ function removeCommissionEntry(event) {
     const program_type = row.querySelector('.program').id
     const payment_stage = row.querySelector('.stage').id
     if (!row || !program_type || !payment_stage) return
+
+    if (university.programTypes.length <= 1) {
+      failMessage("University needs atleast one commission entry")
+      return
+    }
 
     if (confirm("Are you sure to remove this commission entry?")) {
     

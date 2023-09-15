@@ -206,6 +206,31 @@ universityForm.addEventListener('submit', function (event) {
         }
       }
     }
+
+    // Validate program types and stages
+    if (data.programTypes && data.programTypes.length) {
+      let types = []
+      for (let i=0; i < data.programTypes.length; i++) {
+        let p = data.programTypes[i]
+        if (types.includes(p.type)) {
+          failMessage(`Program Types can't be repeated`); return
+        } else { types.push(p.type) }
+
+        if (p?.paymentStages?.length) {
+          let stages = []
+          for (let j=0; j< p?.paymentStages.length; j++) {
+            let s = p?.paymentStages[j]
+            if (stages.includes(s.stage)) {
+              failMessage(`Program Stages can't be repeated`); return
+            } else { stages.push(s.stage) }
+          }
+        } else {
+          failMessage(`Program Stages can't be empty`); return
+        }
+      }
+    } else {
+      failMessage(`Program Types can't be empty`); return
+    }
   
     writeDataWithNewId('universities', data).then(() => {
       successMessage(`University added sucessfully!`).then(() => location.href = "universities.html")

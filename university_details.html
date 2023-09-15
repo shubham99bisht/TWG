@@ -132,43 +132,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Receivable -->
-        <div class="card mb-3" id="receivableHistoryTable" data-list='{"valueNames":["student","university","agent","stage","duedate","fees","amount","status"],"page":10,"pagination":true}'>
-          <div class="card-header d-flex flex-between-center">
-            <h5 class="mb-0 text-nowrap py-2 py-xl-0">Receivable</h5>
-            <div>
-              <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('receivableHistory')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
-              <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV('receivableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
-            </div>
-          </div>
-          <div class="card-body p-0">
-            <div class="table-responsive scrollbar">
-              <table class="table table-sm fs--1 mb-0 overflow-hidden">
-                <thead class="bg-200 text-900">
-                  <tr>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="student">Student</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="university">University</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="agent">Agent</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="stage">Payment Stage</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="fees">Fees</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="amount">Amount</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="duedate">Due Date</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="status">Status</th>
-                  </tr>
-                </thead>
-                <tbody class="list" id="table-receivable-body">
-                  <tr class="text-center"><td colspan="8">Loading...</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div class="card-footer">
-            <div class="d-flex justify-content-center mt-3"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
-              <ul class="pagination mb-0"></ul><button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"> </span></button>
-            </div>
-          </div>
-        </div>   
         
         <!-- Payable -->
         <div class="card mb-3" id="payableHistoryTable" data-list='{"valueNames":["student","university","agent","stage","duedate","fees","amount","status"],"page":10,"pagination":true}'>
@@ -207,6 +170,42 @@
           </div>
         </div> 
         
+        <!-- Receivable -->
+        <div class="card mb-3" id="receivableHistoryTable" data-list='{"valueNames":["student","university","agent","stage","duedate","fees","amount","status"],"page":10,"pagination":true}'>
+          <div class="card-header d-flex flex-between-center">
+            <h5 class="mb-0 text-nowrap py-2 py-xl-0">Receivable</h5>
+            <div>
+              <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('receivableHistory')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+              <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV('receivableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive scrollbar">
+              <table class="table table-sm fs--1 mb-0 overflow-hidden">
+                <thead class="bg-200 text-900">
+                  <tr>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="student">Student</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="university">University</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="agent">Agent</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="stage">Payment Stage</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="fees">Fees</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="amount">Amount</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="duedate">Due Date</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap text-center" data-sort="status">Status</th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="table-receivable-body">
+                  <tr class="text-center"><td colspan="8">No payment details</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-center mt-3"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+              <ul class="pagination mb-0"></ul><button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"> </span></button>
+            </div>
+          </div>
+        </div>  
       </div>
     </div>
   </main>

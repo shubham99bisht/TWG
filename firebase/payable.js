@@ -143,41 +143,43 @@ function listAllPayables() {
       </tr>`
 
       const promises = Object.keys(payables).map(async id => {
-        const p = payables[id]
-        const AgentName = agents[p.agent].name
-        const StudentName = students[p.student].studentName
-        const UniversityName = universities[p?.university].name
-        const ProgramName = programs[p?.program_type].name
-
-        const stage = paymentStages.find(s => s.value == p.stage)
-        let status = ''
-        switch (p?.status) {
-          case 'confirmed': {
-            status = '<span class="badge badge rounded-pill badge-soft-success">Confirmed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-            break
+        try {
+          const p = payables[id]
+          const AgentName = agents[p.agent].name
+          const StudentName = students[p.student].studentName
+          const UniversityName = universities[p?.university].name
+          const ProgramName = programs[p?.program_type].name
+  
+          const stage = paymentStages.find(s => s.value == p.stage)
+          let status = ''
+          switch (p?.status) {
+            case 'confirmed': {
+              status = '<span class="badge badge rounded-pill badge-soft-success">Confirmed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+              break
+            }
+            case 'invoiced': {
+              status = '<span class="badge badge rounded-pill badge-soft-warning">Invoiced<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+              break
+            }
+            case 'paid': {
+              status = '<span class="badge badge rounded-pill badge-soft-success">Paid<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+              break
+            }
+            case 'na': {
+              status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
+              break
+            }
+            case 'pending': 
+            default: {
+              status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
+              break
+            }
           }
-          case 'invoiced': {
-            status = '<span class="badge badge rounded-pill badge-soft-warning">Invoiced<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-            break
-          }
-          case 'paid': {
-            status = '<span class="badge badge rounded-pill badge-soft-success">Paid<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-            break
-          }
-          case 'na': {
-            status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
-            break
-          }
-          case 'pending': 
-          default: {
-            status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
-            break
-          }
-        }
-
-        const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
-          p.agent, AgentName, ProgramName, stage.label, p.fees, p.amount, p.dueDate, status)
-        if (tableBody) tableBody.innerHTML += row
+  
+          const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
+            p.agent, AgentName, ProgramName, stage.label, p.fees, p.amount, p.dueDate, status)
+          if (tableBody) tableBody.innerHTML += row
+        } catch {}
       });
 
       await Promise.all(promises)

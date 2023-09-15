@@ -192,7 +192,7 @@ function downloadCSV(downloadName='data') {
   }  
 
   var rows = table.querySelectorAll('tr');
-  var csvContent = "data:text/csv;charset=utf-8,";
+  var csvContent = "";
   
   rows.forEach(function(row) {
       var rowData = [];

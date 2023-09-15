@@ -45,16 +45,18 @@ function listAllStudents() {
         </tr>`
 
       Object.keys(students).forEach(id => {
-        const s = students[id]
-        const u = universities[s.university].name
-        const p = programs[s.program_type].name
-        let source = s.source
-        if (source == 'Agent') {
-          source += '<br>' + s.agent
-        }
-        
-        const row = schema.format(id, id, s.studentName, s.universityStudentId, u, p, source, id, id)
-        if (tableBody) tableBody.innerHTML += row
+        try {
+          const s = students[id]
+          const u = universities[s.university].name
+          const p = programs[s.program_type].name
+          let source = s.source
+          if (source == 'Agent') {
+            source += '<br>' + s.agent
+          }
+          
+          const row = schema.format(id, id, s.studentName, s.universityStudentId, u, p, source, id, id)
+          if (tableBody) tableBody.innerHTML += row
+        } catch {}
       });
 
       listInit()
@@ -62,7 +64,7 @@ function listAllStudents() {
     .catch((error) => {
       console.error("Error reading students:", error);
       if (tableBody)
-        tableBody.innerHTML = `<tr class="text-center"><td colspan="6">Student data found!</td></tr>`
+        tableBody.innerHTML = `<tr class="text-center"><td colspan="6">Student data not found!</td></tr>`
     });
     closeSwal()
 }
@@ -103,11 +105,16 @@ function readStudentDetails(id) {
 window.readStudentDetails = readStudentDetails
 
 async function readPaymentDetails(id) {
+  const userRole = localStorage.getItem("userRole")
+  const isAgent = userRole == 'Agent' ? true : false
+
   const data = await fetchPaymentDetails('student', id)
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
   await updatePayables(payableBody, data["Payable"])
-  await updatePayables(receivableBody, data["Receivable"])
+  if (!isAgent) {
+    await updatePayables(receivableBody, data["Receivable"])
+  }
   listInit()
 }
 window.readPaymentDetails = readPaymentDetails
@@ -128,40 +135,42 @@ async function updatePayables(tableBody, payables) {
   </tr>`
 
   const promises = Object.keys(payables).map(async id => {
-    const p = payables[id]
-    const AgentName = agents[p.agent].name
-    const StudentName = students[p.student].studentName
-    const UniversityName = universities[p?.university].name
-
-    const stage = paymentStages.find(s => s.value == p.stage)
-    let status = ''
-    switch (p?.status) {
-      case 'confirmed': {
-        status = '<span class="badge badge rounded-pill badge-soft-success">Confirmed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
+    try {
+      const p = payables[id]
+      const AgentName = agents[p.agent].name
+      const StudentName = students[p.student].studentName
+      const UniversityName = universities[p?.university].name
+  
+      const stage = paymentStages.find(s => s.value == p.stage)
+      let status = ''
+      switch (p?.status) {
+        case 'confirmed': {
+          status = '<span class="badge badge rounded-pill badge-soft-success">Confirmed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'invoiced': {
+          status = '<span class="badge badge rounded-pill badge-soft-warning">Invoiced<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'paid': {
+          status = '<span class="badge badge rounded-pill badge-soft-success">Paid<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'na': {
+          status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'pending': 
+        default: {
+          status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
       }
-      case 'invoiced': {
-        status = '<span class="badge badge rounded-pill badge-soft-warning">Invoiced<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-      case 'paid': {
-        status = '<span class="badge badge rounded-pill badge-soft-success">Paid<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-      case 'na': {
-        status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-      case 'pending': 
-      default: {
-        status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-    }
-
-    const row = schema.format(p.student, StudentName, p.university, UniversityName,
-        p.agent, AgentName, stage.label, p.fees, p.amount, p.dueDate, status)
-      if (tableBody) tableBody.innerHTML += row
+  
+      const row = schema.format(p.student, StudentName, p.university, UniversityName,
+          p.agent, AgentName, stage.label, p.fees, p.amount, p.dueDate, status)
+        if (tableBody) tableBody.innerHTML += row
+    } catch {}
   });
 
   if (!Object.keys(payables).length) {

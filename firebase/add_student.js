@@ -47,8 +47,19 @@ async function createStudent() {
     !studentId || !studentName || !joinMonth || !joinYear || !universityStudentId ||
     !source || !program_type || !university
   ) { failMessage("Please provide all data"); return }
+
+  let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(receivableForm));
+  if (!stage || !status || !fees || !amount || !dueDate) {
+    failMessage("Please provide enteries for Commission Receivable"); return
+  }
+
   if (source == "Agent") {
     if (!agent) {failMessage("Agent Info missing!"); return }
+
+    let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(payableForm));
+    if (!stage || !status || !fees || !amount || !dueDate) {
+      failMessage("Please provide enteries for Commission Payable"); return
+    }
   } else { agent = '' }
   
   // Verifying old entries
@@ -114,7 +125,7 @@ async function fetchData() {
 }
 
 function updateAgentList() {
-  agentSelect.innerHTML = '<option>Select an agent</option>'
+  agentSelect.innerHTML = '<option selected disabled>Select an agent</option>'
   for (const id in agents) {
     const option = document.createElement("option");
     option.id = id;
@@ -125,7 +136,7 @@ function updateAgentList() {
 }
 
 function updateProgramsList() {
-  programSelect.innerHTML = '<option>Select a program type</option>'
+  programSelect.innerHTML = '<option selected disabled>Select a program type</option>'
   for (const id in programs) {
     const option = document.createElement("option");
     option.id = id;
@@ -136,7 +147,7 @@ function updateProgramsList() {
 }
 
 function updateUniversityList(pId) {
-  universitySelect.innerHTML = '<option>Select a university</option>'
+  universitySelect.innerHTML = '<option selected disabled>Select a university</option>'
   for (const id in universities) {
     const programs = universities[id].programTypes.map(p => p.type)
     if (programs.includes(pId)) {
@@ -153,8 +164,8 @@ function updatePaymentStageList() {
   const uid = universitySelect.value
   const pid = programSelect.value
 
-  Pstage.innerHTML = '<option>Select stage</option>'
-  Rstage.innerHTML = '<option>Select stage</option>'
+  Pstage.innerHTML = '<option selected disabled>Select stage</option>'
+  Rstage.innerHTML = '<option selected disabled>Select stage</option>'
 
   const pType = universities[uid].programTypes.find(pt => pt.type == pid)
   if (!pType) return
@@ -283,3 +294,11 @@ universitySelect.addEventListener("change", () => {
 
 payableRecompute.addEventListener("click", computeComissionPayable)
 receivableRecompute.addEventListener("click", computeComissionReceivable)
+
+
+function discardChanges() {
+  if (confirm("Discard all changes?")) {
+    location.reload()
+  }
+}
+window.discardChanges = discardChanges

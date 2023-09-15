@@ -18,28 +18,30 @@ function listAll() {
     .then((university) => {
       console.log(university)
       Object.keys(university).forEach(uid => {
-        const data = university[uid]
-        data.programTypes?.forEach(programType => {
-          const programName = programs[programType.type]?.name
-          programType.paymentStages?.forEach(paymentStage => {
-            const newRow = tableBody.insertRow();
-            newRow.innerHTML = isAgent ? `<td class="name">${data.name}</td>` :
-              `<td class="name"><a href="university_details.html?id=${uid}">${data.name}</a></td>`
-            newRow.innerHTML += `
-              <td class="program_type">${programName}</td>
-              <td class="payment_stage">${paymentStage.stage}</td>
-              <td class="payable">
-                ${paymentStage.commissions[0].value}${paymentStage.commissions[0].type == 'percentage' ? '%' : ''}
-                <br> ${paymentStage.commissions[0].installmentDays} days
-              </td>`;
-            
-            newRow.innerHTML += isAgent ? `<td class="receivable">-</td>` :
-              `<td class="receivable">
-                ${paymentStage.commissions[1].value}${paymentStage.commissions[1].type == 'percentage' ? '%' : ''}
-                <br> ${paymentStage.commissions[1].installmentDays} days
-              </td>`;
+        try {
+          const data = university[uid]
+          data.programTypes?.forEach(programType => {
+            const programName = programs[programType.type]?.name
+            programType.paymentStages?.forEach(paymentStage => {
+              const newRow = tableBody.insertRow();
+              newRow.innerHTML = isAgent ? `<td class="name">${data.name}</td>` :
+                `<td class="name"><a href="university_details.html?id=${uid}">${data.name}</a></td>`
+              newRow.innerHTML += `
+                <td class="program_type">${programName}</td>
+                <td class="payment_stage">${paymentStage.stage}</td>
+                <td class="payable">
+                  ${paymentStage.commissions[0].value}${paymentStage.commissions[0].type == 'percentage' ? '%' : ''}
+                  <br> ${paymentStage.commissions[0].installmentDays} days
+                </td>`;
+              
+              newRow.innerHTML += isAgent ? `<td class="receivable">-</td>` :
+                `<td class="receivable">
+                  ${paymentStage.commissions[1].value}${paymentStage.commissions[1].type == 'percentage' ? '%' : ''}
+                  <br> ${paymentStage.commissions[1].installmentDays} days
+                </td>`;
+            });
           });
-        });
+        } catch {}
       })
       
       listInit()
