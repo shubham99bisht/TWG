@@ -137,7 +137,7 @@ async function updatePayables(tableBody, payables) {
   const promises = Object.keys(payables).map(async id => {
     try {
       const p = payables[id]
-      const AgentName = agents[p.agent].name
+      const AgentName = agents && agents[p.agent]?.name || ''
       const StudentName = students[p.student].studentName
       const UniversityName = universities[p?.university].name
   

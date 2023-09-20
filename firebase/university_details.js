@@ -1,8 +1,8 @@
 import { readData, fetchPaymentDetails, updateData } from "./helpers.js";
 import { auth } from "./index.js";
 
-let programs = {}, students = {} = {}, agents = {}
-let university = {}
+let programs = {}, students = {}, agents = {}, paymentStages = {}
+let university = {}, currencies = {}
 
 /**
  * --------------------------------------------------
@@ -205,23 +205,49 @@ function listOne(id) {
       data.programTypes.forEach(programType => {
         const programName = programs[programType.type]?.name
         programType.paymentStages.forEach(paymentStage => {
+          const stageName = paymentStages[paymentStage.stage].name
+
+          let payable = 'NA'
+          switch (paymentStage.commissions[0].type) {
+            case 'fixed': {
+              const currency = currencies[paymentStage.commissions[0]?.currency].name
+              payable = `${paymentStage.commissions[0]?.value || '0'} ${currency}`
+              break;
+            }
+            case 'percentage': {
+              payable = `${paymentStage.commissions[0]?.value || '0'}%`
+              break;
+            }
+          }
+
+          let receivable = 'NA'
+          switch (paymentStage.commissions[1].type) {
+            case 'fixed': {
+              const currency = currencies[paymentStage.commissions[1]?.currency].name
+              receivable = `${paymentStage.commissions[1]?.value || '0'} ${currency}`
+              break;
+            }
+            case 'percentage': {
+              receivable = `${paymentStage.commissions[1]?.value || '0'}%`
+              break;
+            }
+          }
+
           const newRow = tableBody.insertRow();
           newRow.innerHTML = `
-              <td class="university">${data.name}</td>
-              <td class="program" id="${programType.type}">${programName}</td>
-              <td class="stage" id="${paymentStage.stage}">${paymentStage.stage}</td>
-              <td>
-                ${paymentStage.commissions[0].value}${paymentStage.commissions[0].type == 'percentage' ? '%' : ''}
-                <br> ${paymentStage.commissions[0].installmentDays} days
-              </td>
-              <td>
-                ${paymentStage.commissions[1].value}${paymentStage.commissions[1].type == 'percentage' ? '%' : ''}
-                <br> ${paymentStage.commissions[1].installmentDays} days
-              </td>
-              <td>
-                <a data-bs-toggle="modal" data-bs-target="#commissions-modal" class="pe-2" type="button"><i class="fas fa-edit text-warning"></i></a>
-                <a onclick="removeCommissionEntry(event)" type="button"><i class="fas fa-trash text-danger"></i></a>
-              </td>`;
+            <td class="university">${data.name}</td>
+            <td class="program" id="${programType.type}">${programName}</td>
+            <td class="stage" id="${paymentStage.stage}">${stageName}</td>
+            <td class="payable">
+              ${payable} <br> ${paymentStage.commissions[0]?.installmentDays || 0} days
+            </td>
+            <td class="receivable">
+              ${receivable} <br> ${paymentStage.commissions[1]?.installmentDays || 0} days
+            </td>
+            <td>
+              <a data-bs-toggle="modal" data-bs-target="#commissions-modal" class="pe-2" type="button"><i class="fas fa-edit text-warning"></i></a>
+              <a onclick="removeCommissionEntry(event)" type="button"><i class="fas fa-trash text-danger"></i></a>
+            </td>`;
         });
       });
     })
@@ -260,11 +286,11 @@ async function updatePayables(tableBody, payables) {
 
   const promises = Object.keys(payables).map(async id => {
     const p = payables[id]
-    const AgentName = agents[p.agent].name
+    const AgentName = agents[p.agent]?.name || ''
     const StudentName = students[p.student].studentName
     const UniversityName = university.name
 
-    const stage = paymentStages.find(s => s.value == p.stage)
+    const stage = paymentStages[p.stage]
     let status = ''
     switch (p?.status) {
       case 'confirmed': {
@@ -291,7 +317,7 @@ async function updatePayables(tableBody, payables) {
     }
 
     const row = schema.format(p.student, StudentName, p.university, UniversityName,
-      p.agent, AgentName, stage.label, p.fees, p.amount, p.dueDate, status)
+      p.agent, AgentName, stage.name, p.fees, p.amount, p.dueDate, status)
     if (tableBody) tableBody.innerHTML += row
   });
 
@@ -312,6 +338,8 @@ async function fetchData() {
   programs = await readData("program_types")
   students = await readData("students")
   agents = await readData("agents")
+  paymentStages = await readData("payment_stages")
+  currencies = await readData("currency_types")
 
   updateSelectors()
   addProgramBtn.disabled = false
@@ -327,10 +355,10 @@ function updateSelectors() {
   });
 
   const paymentStageSelect = document.getElementById('payment_stage')
-  paymentStages.forEach(function (optionData) {
+  Object.keys(paymentStages).forEach(function (key) {
     const option = document.createElement('option');
-    option.value = optionData.value;
-    option.textContent = optionData.label;
+    option.value = key;
+    option.textContent = paymentStages[key].name;
     paymentStageSelect.appendChild(option);
   });  
 } 

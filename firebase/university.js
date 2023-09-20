@@ -1,7 +1,7 @@
 import { readData, fetchPaymentDetails } from "./helpers.js";
 
 // Global Variables
-let programs = {}
+let programs = {}, currencies = {}, paymentStages = {}
 
 /**
  * --------------------------------------------------
@@ -23,25 +23,53 @@ function listAll() {
           data.programTypes?.forEach(programType => {
             const programName = programs[programType.type]?.name
             programType.paymentStages?.forEach(paymentStage => {
+              const stageName = paymentStages[paymentStage.stage].name
+
+              let payable = 'NA'
+              switch (paymentStage.commissions[0].type) {
+                case 'fixed': {
+                  const currency = currencies[paymentStage.commissions[0]?.currency].name
+                  payable = `${paymentStage.commissions[0]?.value || '0'} ${currency}`
+                  break;
+                }
+                case 'percentage': {
+                  payable = `${paymentStage.commissions[0]?.value || '0'}%`
+                  break;
+                }
+              }
+
+              let receivable = 'NA'
+              switch (paymentStage.commissions[1].type) {
+                case 'fixed': {
+                  const currency = currencies[paymentStage.commissions[1]?.currency].name
+                  receivable = `${paymentStage.commissions[1]?.value || '0'} ${currency}`
+                  break;
+                }
+                case 'percentage': {
+                  receivable = `${paymentStage.commissions[1]?.value || '0'}%`
+                  break;
+                }
+              }
+
               const newRow = tableBody.insertRow();
               newRow.innerHTML = isAgent ? `<td class="name">${data.name}</td>` :
                 `<td class="name"><a href="university_details.html?id=${uid}">${data.name}</a></td>`
               newRow.innerHTML += `
                 <td class="program_type">${programName}</td>
-                <td class="payment_stage">${paymentStage.stage}</td>
+                <td class="payment_stage">${stageName}</td>
                 <td class="payable">
-                  ${paymentStage.commissions[0].value}${paymentStage.commissions[0].type == 'percentage' ? '%' : ''}
-                  <br> ${paymentStage.commissions[0].installmentDays} days
+                  ${payable} <br> ${paymentStage.commissions[0]?.installmentDays || 0} days
                 </td>`;
               
               newRow.innerHTML += isAgent ? `<td class="receivable">-</td>` :
                 `<td class="receivable">
-                  ${paymentStage.commissions[1].value}${paymentStage.commissions[1].type == 'percentage' ? '%' : ''}
-                  <br> ${paymentStage.commissions[1].installmentDays} days
+                  ${receivable} <br> ${paymentStage.commissions[1]?.installmentDays || 0} days
                 </td>`;
             });
           });
-        } catch {}
+        } catch (e) {
+          console.log(e)
+        }
       })
       
       listInit()
@@ -62,5 +90,7 @@ window.listAll = listAll
 
 window.onload = async () => {
   programs = await readData("program_types")
+  currencies = await readData("currency_types")
+  paymentStages = await readData("payment_stages")
   listAll()
 }

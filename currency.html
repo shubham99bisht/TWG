@@ -59,11 +59,11 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <div class="card mb-3" id="paymentStagesTable" data-list='{"valueNames":["id","name"],"page":50,"pagination":true}'>
+        <div class="card mb-3" id="programTable" data-list='{"valueNames":["id", "name"],"page":50,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-3">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
-                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Payment Stages</h5>
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Supported Currencies</h5>
               </div>
               <div class="col-8 col-sm-auto text-end ps-2">
                 <div id="table-program-replace-element">
@@ -91,11 +91,12 @@
               <table class="table table-striped fs--1 mb-0 overflow-hidden">
                 <thead class="bg-200 text-900">
                   <tr>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Payment Stage</th>
-                    <th class="align-middle no-sort"></th>                    
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Currency</th>
+                    <th class="align-middle no-sort"></th>
                   </tr>
                 </thead>
-                <tbody class="list" id="table-stages-body">
+                <tbody class="list" id="table-currency-body">
+                  <tr><td colspan="2">Loading Data...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -119,7 +120,7 @@
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
 
-  <!-- New Stage Modal -->
+  <!-- New Currency Modal -->
   <div class="modal fade" id="add-new-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
       <div class="modal-content position-relative">
@@ -128,14 +129,14 @@
         </div>
         <div class="modal-body p-0">
           <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
-            <h5 class="mb-1 modal-title">Add New Stage </h5>
+            <h5 class="mb-1 modal-title">Add New Currency </h5>
           </div>
           <div class="p-4 pb-0">
             <form>
               <div class="col-12 mb-3">
-                <label class="form-label" for="stage-name">Stage Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="stage-name" type="text" placeholder="Stage Name" required="required" />
-                <div class="form-text">Stage Id will be assigned automatically.</div>
+                <label class="form-label" for="currency-name">Currency<span class="text-danger">*</span></label>
+                <input class="form-control" id="currency-name" type="text" placeholder="Currency Name" required="required" />
+                <div class="form-text">Currency Id will be assigned automatically.</div>
               </div>
             </form>
           </div>
@@ -147,8 +148,7 @@
       </div>
     </div>
   </div>
-  <!-- Add New Stage Ends -->
-
+  <!-- Add New Currency Ends -->
 
   <!--    JavaScripts-->
   <script src="./vendors/popper/popper.min.js"></script>
@@ -168,13 +168,9 @@
   <script src="./vendors/jspdf/index.js"></script>
   <script src="./vendors/jspdf/autotable.js"></script>
 
-  <script>
-    listInit()
-  </script>
-  
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
-  <script src="./firebase/stages.js" type="module"></script>
+  <script src="./firebase/currency.js" type="module"></script>
 </body>
 
 </html>

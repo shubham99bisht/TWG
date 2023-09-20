@@ -1,6 +1,6 @@
 import { readData, updateData, writeDataWithNewId } from "./helpers.js";
 
-let students = {}, universities = {}, agents = {}, programs = {}, payments = {}
+let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, paymentStages = {}
 let availablePaymentStages = {}
 
 const CommissionType = 'receivable'
@@ -145,12 +145,12 @@ function listAllReceivables() {
       const promises = Object.keys(payables).map(async id => {
         try {
           const p = payables[id]
-          const AgentName = agents[p.agent].name
+          const AgentName = agents && agents[p.agent]?.name || ''
           const StudentName = students[p.student].studentName
           const UniversityName = universities[p?.university].name
           const ProgramName = programs[p?.program_type].name
   
-          const stage = paymentStages.find(s => s.value == p.stage)
+          const stage = paymentStages[p.stage]
           let status = ''
           switch (p?.status) {
             case 'confirmed': {
@@ -177,9 +177,11 @@ function listAllReceivables() {
           }
   
           const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
-            p.agent, AgentName, ProgramName, stage.label, p.fees, p.amount, p.dueDate, status)
+            p.agent, AgentName, ProgramName, stage.name, p.fees, p.amount, p.dueDate, status)
           if (tableBody) tableBody.innerHTML += row
-        } catch {}
+        } catch (e) {
+          console.log("ERRROR:", e)
+        }
       });
 
       await Promise.all(promises)
@@ -212,11 +214,11 @@ function updatePaymentStageList(paymentId, stageSelector) {
 
   const stageIds = pType.paymentStages.map(pst => pst.stage)
   stageIds.forEach(stageId => {
-    let paymentStage = paymentStages.find(x => x.value == stageId)
-    if (paymentStage) {
+    let stage = paymentStages[stageId]
+    if (stage) {
       let option = document.createElement("option");
-      option.value = paymentStage.value;
-      option.textContent = paymentStage.label;
+      option.value = stage;
+      option.textContent = stage.name;
       stageSelector.appendChild(option);
     }
   });
@@ -227,6 +229,7 @@ window.onload = async () => {
   universities = await readData("universities")
   agents = await readData("agents")
   programs = await readData("program_types")
+  paymentStages = await readData("payment_stages")
   listAllReceivables()
 }
 

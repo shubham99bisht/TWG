@@ -1,10 +1,17 @@
 import { readData, writeDataWithNewId } from "./helpers.js";
 
-let program_types = {}
+let program_types = {}, currencies = {}, paymentStages = {}
+let currency_options = ''
 
 window.onload = async function () {
   // Load Program Types
   program_types = await readData("program_types")
+  currencies = await readData("currency_types")
+  paymentStages = await readData("payment_stages")
+
+  Object.keys(currencies).forEach(key => {
+    currency_options += `<option value='${key}'>${currencies[key]?.name}</option>`
+  })
 
   // Enable adding programs
   const addProgramBtn = document.getElementById("addProgram")
@@ -30,25 +37,33 @@ function addPaymentStage(event) {
         </td>
         <td>Payable</td>
         <td>
-          <select class="form-select form-select-sm commission_type" required="required">
+          <select class="form-select form-select-sm commission_type mb-1" required="required" onchange="commissionTypeChange(event)">
             <option value="fixed">Fixed</option>
             <option value="percentage">Percentage</option>
+            <option value="na">NA</option>
+          </select>
+          <select class="form-select form-select-sm currency">
+            ${currency_options}
           </select>
         </td>
-        <td><input class="form-control form-control-sm" type="number" required="required"/></td>
-        <td><input class="form-control form-control-sm" type="number" required="required"/></td>
+        <td><input class="form-control form-control-sm rate" type="number" required="required"/></td>
+        <td><input class="form-control form-control-sm days" type="number" required="required"/></td>
         <td rowspan="2" class="text-center align-middle"><button class="btn btn-link btn-sm" type="button" onclick="removePaymentStage(event)"><span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span></button></td>`
 
   const paymentStage2 = `
         <td>Receivable</td>
         <td>
-          <select class="form-select form-select-sm commission_type" required="required">
+          <select class="form-select form-select-sm commission_type mb-1" required="required" onchange="commissionTypeChange(event)">
             <option value="fixed">Fixed</option>
             <option value="percentage">Percentage</option>
+            <option value="na">NA</option>
+          </select>
+          <select class="form-select form-select-sm currency">
+            ${currency_options}
           </select>
         </td>
-        <td><input class="form-control form-control-sm" type="number" required="required"/></td>
-        <td><input class="form-control form-control-sm" type="number" required="required"/></td>`
+        <td><input class="form-control form-control-sm rate" type="number" required="required"/></td>
+        <td><input class="form-control form-control-sm days" type="number" required="required"/></td>`
   const button = event.target;
 
   const tablePair = button.closest('.programType');
@@ -56,21 +71,52 @@ function addPaymentStage(event) {
     const table = tablePair.querySelector('table');
     if (table) {
       const newRow = table.insertRow();
+      newRow.classList.add('align-middle')
       newRow.innerHTML += paymentStage1
       const newRow2 = table.insertRow();
+      newRow2.classList.add('align-middle')
       newRow2.innerHTML += paymentStage2
 
       const newSelect = newRow.querySelector(".payment_stage")
-      paymentStages.forEach(function (optionData) {
+      Object.keys(paymentStages).forEach(function (key) {
         const option = document.createElement('option');
-        option.value = optionData.value;
-        option.textContent = optionData.label;
+        option.value = key;
+        option.textContent = paymentStages[key].name;
         newSelect.appendChild(option);
       });
     }
   }
 }
 window.addPaymentStage = addPaymentStage;
+
+function commissionTypeChange(event) {
+  const select = event.target
+  const row = select.closest('tr')
+  const currency = row.querySelector('.currency')
+  const rate = row.querySelector('.rate')
+  const days = row.querySelector('.days')
+
+  if (select.value == 'fixed') {
+    currency.required = true
+    currency.disabled = false
+    currency.hidden = false
+    rate.disabled = false
+    days.disabled = false
+  } else if (select.value == 'percentage') {
+    currency.required = false
+    currency.disabled = true
+    currency.hidden = true
+    rate.disabled = false
+    days.disabled = false
+  } else {
+    currency.required = false
+    currency.disabled = true
+    currency.hidden = true
+    rate.disabled = true
+    days.disabled = true
+  }
+}
+window.commissionTypeChange = commissionTypeChange
 
 // Remove Program Type
 function removeProgramType(event) {
@@ -180,13 +226,32 @@ universityForm.addEventListener('submit', function (event) {
       } else if (currentProgramType) {
         if (element.classList.contains('commission_type')) {
           const commissionType = element.value;
-          const commissionInput = inputsAndSelects[i + 1];
-          const commissionValue = commissionInput.value;
-          const installmentDays = inputsAndSelects[i + 2].value;
-  
-          if (commissionType === 'percentage' && (commissionValue < 0 || commissionValue > 100)) {
-            alert('Percentage commission value must be between 0 and 100');
-            return;
+          const currencyValue = inputsAndSelects[i + 1].value;
+          const commissionValue = inputsAndSelects[i + 2].value;
+          const installmentDays = inputsAndSelects[i + 3].value;
+
+          let data = {
+            type: commissionType,
+            value: commissionValue,
+            installmentDays
+          }
+
+          switch (commissionType) {
+            case 'fixed': {
+              data['currency'] = currencyValue
+              break;
+            }
+            case 'percentage': {
+              if (commissionValue < 0 || commissionValue > 100) {
+                failMessage('Percentage commission value must be between 0 and 100');
+                return;
+              }
+              break;
+            }
+            case 'na': {
+              data = { type: commissionType, installmentDays: 0 }
+              break;
+            }
           }
 
           if (installmentDays < 0) {
@@ -195,14 +260,10 @@ universityForm.addEventListener('submit', function (event) {
           }
   
           // 0: Payable, 1: Receivable
-          currentProgramType.paymentStages[currentProgramType.paymentStages.length - 1].commissions.push({
-            type: commissionType,
-            value: commissionValue,
-            installmentDays
-          });
+          currentProgramType.paymentStages[currentProgramType.paymentStages.length - 1].commissions.push(data);
   
           // Skip the next iteration as it's already processed
-          i+=2;
+          i+=3;
         }
       }
     }
