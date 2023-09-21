@@ -65,11 +65,11 @@
           </div>
           <div class="card-body bg-light">
             <form class="row gx-2" id="basic-info">
-              <div class="col-lg-6 col-12 mb-3">
+              <div class="col-lg-4 col-12 mb-3">
                 <label class="form-label" for="studentId">Lead Id (LSQ)<span class="text-danger">*</span></label>
                 <input class="form-control" id="studentId" name="studentId" type="text" placeholder="Lead Id" required="required" />
               </div>
-              <div class="col-lg-3 col-6 mb-3">
+              <div class="col-lg-4 col-6 mb-3">
                 <label class="form-label" for="joinMonth">Commencing Term (Month)<span class="text-danger">*</span></label>
                 <select class="form-select" id="joinMonth" name="joinMonth">
                   <option value="0">Jan</option>
@@ -86,7 +86,7 @@
                   <option value="11">Dec</option>
                 </select>
               </div>
-              <div class="col-lg-3 col-6 mb-3">
+              <div class="col-lg-4 col-6 mb-3">
                 <label class="form-label" for="joinYear">Commencing Term (Year)<span class="text-danger">*</span></label>
                 <select class="form-select" id="joinYear" name="joinYear">
                   <option value="2015">2015</option>
@@ -185,19 +185,31 @@
                 </select>
               </div> 
 
-              <div class="col-lg-6 col-12 mb-3">
+              <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="Rfees">Fees Paid<span class="text-danger">*</span></label>
                 <input class="form-control" id="Rfees" name="fees" type="number" placeholder="10000" required="required" />
               </div>  
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="feesCurrency">Currency<span class="text-danger">*</span></label>
+                <select class="form-select" id="RfeesCurrency" name="feesCurrency">
+                  <!-- Auto populated -->
+                </select>
+              </div>
               
               <div class="col-lg-6 col-12 mb-3 d-grid my-auto">
                 <button class="btn btn-secondary" type="button" id="receivableRecompute">Compute Commission</button>
               </div>
 
-              <div class="col-lg-6 col-12 mb-3">
+              <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="Ramount">Commission Receivable<span class="text-danger">*</span></label>
                 <input class="form-control" id="Ramount" name="amount" type="number" placeholder="10000" required="required" />
               </div> 
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="Currency">Currency<span class="text-danger">*</span></label>
+                <select class="form-select" id="RCurrency" name="currency">
+                  <!-- Auto populated -->
+                </select>
+              </div>
               <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="RdueDate">Due Date (YYYY-MM-DD)<span class="text-danger">*</span></label>
                 <input class="form-control" id="RdueDate" name="dueDate" type="text" placeholder="YYYY-MM-DD" required="required" />
@@ -240,19 +252,31 @@
                 </select>
               </div> 
 
-              <div class="col-lg-6 col-12 mb-3">
+              <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="Pfees">Fees Paid<span class="text-danger">*</span></label>
                 <input class="form-control" id="Pfees" name="fees" type="number" placeholder="10000" required="required" />
               </div>  
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="feesCurrency">Currency<span class="text-danger">*</span></label>
+                <select class="form-select" id="PfeesCurrency" name="feesCurrency">
+                  <!-- Auto populated -->
+                </select>
+              </div>
               
               <div class="col-lg-6 col-12 mb-3 d-grid my-auto">
                 <button class="btn btn-secondary" type="button" id="payableRecompute">Compute Commission</button>
               </div>
 
-              <div class="col-lg-6 col-12 mb-3">
+              <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="Pamount">Commission Payable<span class="text-danger">*</span></label>
                 <input class="form-control" id="Pamount" name="amount" type="number" placeholder="10000" required="required" />
               </div> 
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="Currency">Currency<span class="text-danger">*</span></label>
+                <select class="form-select" id="PCurrency" name="currency">
+                  <!-- Auto populated -->
+                </select>
+              </div>
               <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="PdueDate">Due Date (YYYY-MM-DD)<span class="text-danger">*</span></label>
                 <input class="form-control" id="PdueDate" name="dueDate" type="text" placeholder="YYYY-MM-DD" required="required" />

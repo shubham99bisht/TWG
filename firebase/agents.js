@@ -1,13 +1,15 @@
 import { readData, writeData, deleteData, fetchPaymentDetails } from "./helpers.js";
 
 // Global Variables
-let programs = {}, students = {}, universities = {}, agents = {}
+let programs = {}, students = {}, universities = {}, agents = {}, currency = {}, paymentStages = {}
 
 async function fetchData() {
   programs = await readData("program_types")
   students = await readData("students")
   universities = await readData("universities")
   agents = await readData("agents")
+  currency = await readData("currency_types")
+  paymentStages = await readData("payment_stages")
 }
 
 /**
@@ -176,8 +178,8 @@ async function updatePayables(tableBody, payables) {
     <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
     <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
     <td class="align-middle stage">{}</td>
-    <td class="align-middle fees">{}</td>
-    <td class="align-middle amount">{}</td>
+    <td class="align-middle text-nowrap fees">{}</td>
+    <td class="align-middle text-nowrap amount">{}</td>
     <td class="align-middle text-nowrap duedate">{}</td>
     <td class="align-middle fs-0 white-space-nowrap status text-center">
       {}
@@ -190,7 +192,7 @@ async function updatePayables(tableBody, payables) {
     const StudentName = students[p.student].studentName
     const UniversityName = universities[p?.university].name
 
-    const stage = paymentStages.find(s => s.value == p.stage)
+    const stage = paymentStages[p.stage]
     let status = ''
     switch (p?.status) {
       case 'confirmed': {
@@ -216,8 +218,15 @@ async function updatePayables(tableBody, payables) {
       }
     }
 
+    let amount = 'na'
+    if (p.amount && p.currency) {
+      amount = `${p.amount} ${currency[p.currency].name}`
+    } else if (p.amount) {
+      amount = `${p.amount}%`
+    }
+
     const row = schema.format(p.student, StudentName, p.university, UniversityName,
-        p.agent, AgentName, stage.label, p.fees, p.amount, p.dueDate, status)
+        p.agent, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
       if (tableBody) tableBody.innerHTML += row
   });
 

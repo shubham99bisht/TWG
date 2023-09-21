@@ -1,7 +1,10 @@
 import { readData, updateData, writeDataWithNewId } from "./helpers.js";
 
 let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, paymentStages = {}
-let availablePaymentStages = {}
+let availablePaymentStages = {}, currency = {}
+let currency_options = ''
+
+const currencyInput =  document.getElementById("currency")
 
 const CommissionType = 'payable'
 const isReceivable = CommissionType == 'receivable' ? 1 : 0
@@ -89,15 +92,16 @@ async function updateStatus() {
     const dueDate = formData['dueDate']
     const amount = formData['amount']
     const newStatus = formData['newStatus']
+    const currency = formData['currency']
   
     if (!id || !status || !notes || !stage || !fees || !dueDate || !amount || !newStatus) 
       failMessage("Failed to update")
     
-    updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
     writeDataWithNewId(`${CommissionType}`, {
       ...payments[id],
-      stage, dueDate, amount, status: newStatus
+      stage, fees, dueDate, amount, status: newStatus, currency
     })
+    updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
     successMessage('Payment status updated!').then(() => location.reload())
   } catch (e) {
     failMessage('Failed to update payment status')
@@ -125,8 +129,8 @@ function listAllPayables() {
         <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
         <td class="align-middle program_type">{}</td>
         <td class="align-middle stage">{}</td>
-        <td class="align-middle fees">{}</td>
-        <td class="align-middle amount">{}</td>
+        <td class="align-middle text-nowrap fees">{}</td>
+        <td class="align-middle text-nowrap amount">{}</td>
         <td class="align-middle text-nowrap duedate">{}</td>
         <td class="align-middle fs-0 white-space-nowrap status text-center">
           {}
@@ -175,9 +179,16 @@ function listAllPayables() {
               break
             }
           }
+
+          let amount = 'na'
+          if (p.amount && p.currency) {
+            amount = `${p.amount} ${currency[p.currency].name}`
+          } else if (p.amount) {
+            amount = `${p.amount}%`
+          }          
   
           const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
-            p.agent, AgentName, ProgramName, stage.name, p.fees, p.amount, p.dueDate, status)
+            p.agent, AgentName, ProgramName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
           if (tableBody) tableBody.innerHTML += row
         } catch {}
       });
@@ -215,7 +226,7 @@ function updatePaymentStageList(paymentId, stageSelector) {
     let stage = paymentStages[stageId]
     if (stage) {
       let option = document.createElement("option");
-      option.value = stage;
+      option.value = stageId;
       option.textContent = stage.name;
       stageSelector.appendChild(option);
     }
@@ -228,6 +239,11 @@ window.onload = async () => {
   agents = await readData("agents")
   programs = await readData("program_types")
   paymentStages = await readData("payment_stages")
+  currency = await readData("currency_types")
+  Object.keys(currency).forEach(key => {
+    currency_options += `<option value='${key}'>${currency[key]?.name}</option>`
+  })
+  currencyInput.innerHTML = currency_options
   listAllPayables()
 }
 
@@ -247,6 +263,7 @@ computeCommission.addEventListener("click", (event) => {
   let dueDate = new Date()
   dueDate.setDate(dueDate.getDate() + parseInt(commissions[isReceivable].installmentDays));
 
+  currencyInput.value = commissions[isReceivable].currency
   switch (commissions[isReceivable].type) {
     case 'fixed': {
       amountInput.value = commissions[isReceivable].value

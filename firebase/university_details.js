@@ -276,8 +276,8 @@ async function updatePayables(tableBody, payables) {
     <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
     <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
     <td class="align-middle stage">{}</td>
-    <td class="align-middle fees">{}</td>
-    <td class="align-middle amount">{}</td>
+    <td class="align-middle text-nowrap fees">{}</td>
+    <td class="align-middle text-nowrap amount">{}</td>
     <td class="align-middle text-nowrap duedate">{}</td>
     <td class="align-middle fs-0 white-space-nowrap status text-center">
       {}
@@ -316,8 +316,15 @@ async function updatePayables(tableBody, payables) {
       }
     }
 
+    let amount = 'na'
+    if (p.amount && p.currency) {
+      amount = `${p.amount} ${currencies[p.currency].name}`
+    } else if (p.amount) {
+      amount = `${p.amount}%`
+    }
+
     const row = schema.format(p.student, StudentName, p.university, UniversityName,
-      p.agent, AgentName, stage.name, p.fees, p.amount, p.dueDate, status)
+      p.agent, AgentName, stage.name, `${p.fees} ${currencies[p.feesCurrency].name}`, amount, p.dueDate, status)
     if (tableBody) tableBody.innerHTML += row
   });
 

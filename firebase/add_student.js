@@ -23,7 +23,7 @@ const payableDueDateInput = document.getElementById("PdueDate")
 const payableAmountInput = document.getElementById("Pamount")
 
 // Global Variables
-let programs = {}, universities = {}, agents = {}
+let programs = {}, universities = {}, agents = {}, currency = {}, paymentStages = {}
 
 
 /**
@@ -96,6 +96,7 @@ async function createStudent() {
 
 async function createReceivable(student, university, agent, program_type) {
   const receivableFormData = Object.fromEntries(new FormData(receivableForm));
+  if (!receivableFormData.amount) return
   writeDataWithNewId(`receivable`, {
     ...receivableFormData, student, university, agent, program_type
   })
@@ -103,6 +104,7 @@ async function createReceivable(student, university, agent, program_type) {
 
 async function createPayable(student, university, agent, program_type) {
   const payableFormData = Object.fromEntries(new FormData(payableForm));
+  if (!payableFormData.amount) return
   writeDataWithNewId('payable', {
     ...payableFormData, student, university, agent, program_type
   })
@@ -122,6 +124,21 @@ async function fetchData() {
   programs = await readData("program_types")
   universities = await readData("universities")
   agents = await readData("agents")
+  currency = await readData("currency_types")
+  paymentStages = await readData("payment_stages")
+}
+
+function updateCurrencyList() {
+  let options = ''
+  for (const id in currency) {
+    options += `<option id=${id} value=${id}>${currency[id].name}</option>`;
+  }
+
+  let selectors = ['RfeesCurrency', 'RCurrency', 'PfeesCurrency', 'PCurrency']
+  selectors.forEach(s => {
+    const sl = document.getElementById(s)
+    sl.innerHTML = options
+  })
 }
 
 function updateAgentList() {
@@ -174,16 +191,16 @@ function updatePaymentStageList() {
 
   const stageIds = pType.paymentStages.map(pst => pst.stage)
   stageIds.forEach(stageId => {
-    let paymentStage = paymentStages.find(x => x.value == stageId)
+    let paymentStage = paymentStages[stageId]
     if (paymentStage) {
       let option = document.createElement("option");
-      option.value = paymentStage.value;
-      option.textContent = paymentStage.label;
+      option.value = stageId;
+      option.textContent = paymentStage.name;
       Pstage.appendChild(option);
 
       option = document.createElement("option");
-      option.value = paymentStage.value;
-      option.textContent = paymentStage.label;
+      option.value = stageId;
+      option.textContent = paymentStage.name;
       Rstage.appendChild(option);
     }
   });
@@ -212,11 +229,19 @@ function computeComissionReceivable() {
   switch (commissions[1].type) {
     case 'fixed': {
       receiveAmountInput.value = commissions[1].value
+      document.getElementById('RCurrency').value = commissions[1].currency
       break;
     }
     case 'percentage': {
       receiveAmountInput.value = parseInt(fees * (commissions[1].value/100))
+      document.getElementById('RCurrency').value = document.getElementById('RfeesCurrency').value
       break;
+    }
+    case 'na': {
+      receiveAmountInput.value = ''
+      receiveAmountInput.disabled = true
+      document.getElementById('RCurrency').disabled = true
+      receiveDueDateInput.disabled = true
     }
   }
   receiveDueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
@@ -245,11 +270,19 @@ function computeComissionPayable() {
   switch (commissions[0].type) {
     case 'fixed': {
       payableAmountInput.value = commissions[0].value
+      document.getElementById('PCurrency').value = commissions[0].currency
       break;
     }
     case 'percentage': {
       payableAmountInput.value = parseInt(fees * (commissions[0].value/100))
+      document.getElementById('PCurrency').value = document.getElementById('PfeesCurrency').value
       break;
+    }
+    case 'na': {
+      payableAmountInput.value = ''
+      payableAmountInput.disabled = true
+      document.getElementById('PCurrency').disabled = true
+      payableDueDateInput.disabled = true
     }
   }
 
@@ -266,6 +299,7 @@ window.onload = async () => {
   await fetchData()
   updateAgentList()
   updateProgramsList()
+  updateCurrencyList()
 }
 
 submitBtn.onclick = createStudent
