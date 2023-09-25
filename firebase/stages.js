@@ -55,6 +55,8 @@ function createStage() {
       if (result) {
         successMessage("Stage type added successfully!")
         .then(() => location.reload())
+      } else {
+        failMessage("Can't update payment stages");
       }
     })
     .catch((error) => {
@@ -122,6 +124,8 @@ function updateStage(pId) {
       if (result) {
         successMessage("Stage type updated successfully!")
         .then(() => location.reload())   
+      } else {
+        failMessage("Can't update payment stages");
       }
     })
     .catch((error) => {

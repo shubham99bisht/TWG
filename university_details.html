@@ -333,9 +333,13 @@
               <h6 class="text-center mb-3">Payable Commissions</h6>
               <div class="col-4 mb-3 text-center">
                 <label class="form-label" for="Ptype">Type</label>
-                <select class="form-select form-select-sm commission_type" id="Ptype" name="Ptype" required="required">
+                <select class="form-select form-select-sm commission_type" id="Ptype" name="Ptype" required="required" onchange="commissionTypeChange(event)">
                   <option value="fixed">Fixed</option>
                   <option value="percentage">Percentage</option>
+                  <option value="na">NA</option>
+                </select>
+                <select class="form-select form-select-sm Pcurrency" id="Pcurrency" name="Pcurrency">
+                  <option value="na">NA</option>
                 </select>
               </div>
               <div class="col-4 mb-3 text-center">
@@ -351,9 +355,13 @@
               <h6 class="text-center mb-3">Receivable Commissions</h6>
               <div class="col-4 mb-3 text-center">
                 <label class="form-label" for="Rtype">Type</label>
-                <select class="form-select form-select-sm commission_type" id="Rtype" name="Rtype" required="required">
+                <select class="form-select form-select-sm commission_type" id="Rtype" name="Rtype" required="required" onchange="commissionTypeChange(event)">
                   <option value="fixed">Fixed</option>
                   <option value="percentage">Percentage</option>
+                  <option value="na">NA</option>
+                </select>
+                <select class="form-select form-select-sm Rcurrency" id="Rcurrency" name="Rcurrency">
+                  <option value="na">NA</option>
                 </select>
               </div>
               <div class="col-4 mb-3 text-center">

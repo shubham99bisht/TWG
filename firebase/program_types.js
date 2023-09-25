@@ -57,6 +57,8 @@ function createProgram() {
       if (result) {
         successMessage("Program type added successfully!")
         .then(() => location.reload())
+      } else {
+        failMessage("Can't update program types");
       }
     })
     .catch((error) => {
@@ -126,6 +128,8 @@ function updateProgram(pId) {
       if (result) {
         successMessage("Program type updated successfully!")
         .then(() => location.reload())   
+      } else {
+        failMessage("Can't update program types");
       }
     })
     .catch((error) => {

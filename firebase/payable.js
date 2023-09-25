@@ -20,13 +20,17 @@ editDetailsModel.addEventListener('show.bs.modal', event => {
   const button = event.relatedTarget
   const row = button.closest('tr')
 
+  const pay_currency = editDetailsModel.querySelector('#pay_currency')
+  pay_currency.innerHTML = currency_options
+
   editDetailsModel.querySelector('#payment-id').value = row.id
   editDetailsModel.querySelector('#student-name').value = row?.querySelector('.student').textContent
   editDetailsModel.querySelector('#university-name').value = row?.querySelector('.university').textContent
   editDetailsModel.querySelector('#agent-name').value = row?.querySelector('.agent').textContent
   editDetailsModel.querySelector('#stage').value = row?.querySelector('.stage').textContent
   editDetailsModel.querySelector('#duedate').value = row?.querySelector('.duedate').textContent
-  editDetailsModel.querySelector('#amount').value = row?.querySelector('.amount').textContent
+  editDetailsModel.querySelector('#amount').value = payments[row.id]?.amount || ''
+  pay_currency.value = payments[row.id]?.currency || ''
   editDetailsModel.querySelector('#fees').value = row?.querySelector('.fees').textContent
   editDetailsModel.querySelector('#notes').value = payments[row.id]?.notes || ''
   editDetailsModel.querySelector('#status').value = row?.querySelector('.status').textContent.trim()
@@ -40,9 +44,10 @@ async function updateDetails() {
     const dueDate = formData['dueDate']
     const amount = formData['amount']
     const notes = formData['notes']
+    const currency = formData['currency']
   
-    if (!id || !dueDate || !amount) failMessage("Failed to update payment details")
-    updateData(`${CommissionType}/${id}`, {dueDate, amount, notes})
+    if (!id || !dueDate || !amount || !currency) failMessage("Failed to update payment details")
+    updateData(`${CommissionType}/${id}`, {dueDate, amount, notes, currency})
     successMessage("Payment details updated!").then(() => location.reload())
   } catch (e) {
     failMessage("Failed to update payment details")

@@ -57,6 +57,13 @@ window.updateBasicInfo = updateBasicInfo
 const commissionsModal = document.getElementById('commissions-modal')
 const commissionsForm = document.getElementById('commissionsForm')
 if (commissionsModal) {
+  const Pcurrency = commissionsForm.querySelector('#Pcurrency')
+  const Pvalue = commissionsForm.querySelector('#Pvalue')
+  const Pinstallment = commissionsForm.querySelector('#Pinstallment')
+  const Rcurrency = commissionsForm.querySelector('#Rcurrency')
+  const Rvalue = commissionsForm.querySelector('#Rvalue')
+  const Rinstallment = commissionsForm.querySelector('#Rinstallment')
+
   commissionsModal.addEventListener('show.bs.modal', event => {
     const button = event.relatedTarget
     const row = button.closest('tr')
@@ -75,14 +82,38 @@ if (commissionsModal) {
       commissionsForm.querySelector('#payment_stage').disabled = true
 
       commissionsForm.querySelector('#Ptype').value = commissions[0].type
-      commissionsForm.querySelector('#Pvalue').value = commissions[0].value
-      commissionsForm.querySelector('#Pinstallment').value = commissions[0].installmentDays
+      Pvalue.value = commissions[0].value
+      Pinstallment.value = commissions[0].installmentDays
+      if (commissions[0].type == 'fixed') {
+        Pcurrency.required = true; Pcurrency.disabled = false; Pcurrency.hidden = false;
+        Pcurrency.value = commissions[0].currency
+        Pvalue.disabled = false; Pinstallment.disabled = false  
+      } else if (commissions[0].type == 'percentage') {
+        Pcurrency.required = false; Pcurrency.disabled = true; Pcurrency.hidden = true;
+        Pvalue.disabled = false; Pinstallment.disabled = false  
+      } else {
+        Pcurrency.required = false; Pcurrency.disabled = true; Pcurrency.hidden = true;
+        Pvalue.disabled = true; Pinstallment.disabled = true  
+      }
 
       commissionsForm.querySelector('#Rtype').value = commissions[1].type
-      commissionsForm.querySelector('#Rvalue').value = commissions[1].value
-      commissionsForm.querySelector('#Rinstallment').value = commissions[1].installmentDays
+      Rvalue.value = commissions[1].value
+      Rinstallment.value = commissions[1].installmentDays
+      if (commissions[1].type == 'fixed') {
+        Rcurrency.required = true; Rcurrency.disabled = false; Rcurrency.hidden = false;
+        Rcurrency.value = commissions[1].currency
+        Rvalue.disabled = false; Rinstallment.disabled = false  
+      } else if (commissions[1].type == 'percentage') {
+        Rcurrency.required = false; Rcurrency.disabled = true; Rcurrency.hidden = true;
+        Rvalue.disabled = false; Rinstallment.disabled = false  
+      } else {
+        Rcurrency.required = false; Rcurrency.disabled = true; Rcurrency.hidden = true;
+        Rvalue.disabled = true; Rinstallment.disabled = true  
+      }    
     } else {
       commissionsForm.reset()
+      Pcurrency.required = true; Pcurrency.disabled = false; Pcurrency.hidden = false;
+      Rcurrency.required = true; Rcurrency.disabled = false; Rcurrency.hidden = false;
       commissionsForm.querySelector('#universityId').value = university.id
     }
   })
@@ -92,7 +123,7 @@ function updateCommission() {
   try {
     const formProps = new FormData(commissionsForm);
     const formData = Object.fromEntries(formProps);
-    const { Ptype, Pvalue, Pinstallment, Rtype, Rvalue, Rinstallment } = formData
+    const { Ptype, Pvalue, Pcurrency, Pinstallment, Rtype, Rvalue, Rcurrency, Rinstallment } = formData
     const id = commissionsForm.querySelector('#universityId').value
     const program_type = commissionsForm.querySelector('#program_type').value 
     const payment_stage = commissionsForm.querySelector('#payment_stage').value
@@ -111,6 +142,9 @@ function updateCommission() {
       {type: Ptype, value: Pvalue, installmentDays: Pinstallment},
       {type: Rtype, value: Rvalue, installmentDays: Rinstallment}
     ]
+
+    if (commissions[0].type == 'fixed') commissions[0]['currency'] = Pcurrency
+    if (commissions[1].type == 'fixed') commissions[1]['currency'] = Rcurrency
 
     // Find the programType with the matching "type" value
     const programType = university.programTypes.find(pt => pt.type === program_type);
@@ -174,6 +208,37 @@ function removeCommissionEntry(event) {
   }
 }
 window.removeCommissionEntry = removeCommissionEntry
+
+function commissionTypeChange(event) {
+  const select = event.target 
+  const selectId = select.id[0]
+  const row = select.closest('.row')
+  console.log(select, selectId, row)
+  const currency = row.querySelector(`#${selectId}currency`)
+  const rate = row.querySelector(`#${selectId}value`)
+  const days = row.querySelector(`#${selectId}installment`)
+
+  if (select.value == 'fixed') {
+    currency.required = true
+    currency.disabled = false
+    currency.hidden = false
+    rate.disabled = false
+    days.disabled = false    
+  } else if (select.value == 'percentage') {
+    currency.required = false
+    currency.disabled = true
+    currency.hidden = true
+    rate.disabled = false
+    days.disabled = false    
+  } else {
+    currency.required = false
+    currency.disabled = true
+    currency.hidden = true
+    rate.disabled = true
+    days.disabled = true    
+  }
+}
+window.commissionTypeChange = commissionTypeChange
 
 /**
  * --------------------------------------------------
@@ -347,6 +412,7 @@ async function fetchData() {
   agents = await readData("agents")
   paymentStages = await readData("payment_stages")
   currencies = await readData("currency_types")
+  console.log(currencies)
 
   updateSelectors()
   addProgramBtn.disabled = false
@@ -368,6 +434,15 @@ function updateSelectors() {
     option.textContent = paymentStages[key].name;
     paymentStageSelect.appendChild(option);
   });  
+
+  const Rcurrency = document.getElementById('Rcurrency')
+  const Pcurrency = document.getElementById('Pcurrency')
+  let currency_options = ''
+  Object.keys(currencies).forEach(key => {
+    currency_options += `<option value='${key}'>${currencies[key]?.name}</option>`
+  })
+  Pcurrency.innerHTML = currency_options
+  Rcurrency.innerHTML = currency_options
 } 
 
 window.onload = async function () {

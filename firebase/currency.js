@@ -57,6 +57,8 @@ function createCurrency() {
       if (result) {
         successMessage("Currency type added successfully!")
         .then(() => location.reload())
+      } else {
+        failMessage("Can't update currency types");
       }
     })
     .catch((error) => {
@@ -126,6 +128,8 @@ function updateCurrency(pId) {
       if (result) {
         successMessage("Currency type updated successfully!")
         .then(() => location.reload())   
+      } else {
+        failMessage("Can't update currency types");
       }
     })
     .catch((error) => {
