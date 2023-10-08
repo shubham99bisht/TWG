@@ -48,9 +48,18 @@ async function createStudent() {
     !source || !program_type || !university
   ) { failMessage("Please provide all data"); return }
 
+  // Verifying old entries
+  const oldStudent = await readData(`students/${studentId}`)
+  if (oldStudent) {
+    failMessage("Student Id already exists!")
+    return
+  }
+
   let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(receivableForm));
   if (!stage || !status || !fees || !amount || !dueDate) {
     failMessage("Please provide enteries for Commission Receivable"); return
+  } else if (document.getElementById("Rtype").value != 'na') {
+    await createReceivable(studentId, university, agent, program_type)
   }
 
   if (source == "Agent") {
@@ -60,18 +69,10 @@ async function createStudent() {
     if (!stage || !status || !fees || !amount || !dueDate) {
       failMessage("Please provide enteries for Commission Payable"); return
     }
+    if (document.getElementById("Ptype").value != 'na') {
+      await createPayable(studentId, university, agent, program_type)
+    }
   } else { agent = '' }
-  
-  // Verifying old entries
-  const oldStudent = await readData(`students/${studentId}`)
-  if (oldStudent) {
-    failMessage("Student Id already exists!")
-    return
-  }
-
-  // Receivable and Payable enteries
-  await createReceivable(studentId, university, agent, program_type)
-  if (source == "Agent") await createPayable(studentId, university, agent, program_type)
 
   // Create Student
   const newStudent = {
@@ -211,6 +212,8 @@ function computeComissionReceivable() {
   const pid = programSelect.value
   const sid = Rstage.value
   const fees = Rfees.value || 0
+  const Rcurrency = document.getElementById('RCurrency')
+  const Rnotes = document.getElementById('Rnotes')
 
   if (!uid || !pid || !sid || !fees) return
   const university = universities[uid]
@@ -226,25 +229,34 @@ function computeComissionReceivable() {
   if (dueDate == 'Invalid Date') dueDate = new Date()
   dueDate.setDate(dueDate.getDate() + parseInt(commissions[1].installmentDays));
 
+  document.getElementById("Rtype").value = commissions[1].type
+
+  receiveDueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
   switch (commissions[1].type) {
     case 'fixed': {
       receiveAmountInput.value = commissions[1].value
       document.getElementById('RCurrency').value = commissions[1].currency
+      Rnotes.disabled = false; Rnotes.value = ''
       break;
     }
     case 'percentage': {
       receiveAmountInput.value = parseInt(fees * (commissions[1].value/100))
       document.getElementById('RCurrency').value = document.getElementById('RfeesCurrency').value
+      Rnotes.disabled = false; Rnotes.value = ''
       break;
     }
     case 'na': {
       receiveAmountInput.value = ''
       receiveAmountInput.disabled = true
-      document.getElementById('RCurrency').disabled = true
+      Rcurrency.disabled = true
+      Rcurrency.value = ''
+      receiveDueDateInput.value = ''
       receiveDueDateInput.disabled = true
+      Rnotes.disabled = true
+      Rnotes.value = 'No commission entry will be added'      
+      
     }
   }
-  receiveDueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
 }
 
 function computeComissionPayable() {
@@ -266,27 +278,34 @@ function computeComissionPayable() {
   let dueDate = new Date(joinYear.value, joinMonth.value)
   if (dueDate == 'Invalid Date') dueDate = new Date()
   dueDate.setDate(dueDate.getDate() + parseInt(commissions[0].installmentDays));
+
+  document.getElementById("Ptype").value = commissions[0].type
   
+  payableDueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
   switch (commissions[0].type) {
     case 'fixed': {
       payableAmountInput.value = commissions[0].value
       document.getElementById('PCurrency').value = commissions[0].currency
+      Pnotes.disabled = false; Pnotes.value = ''
       break;
     }
     case 'percentage': {
       payableAmountInput.value = parseInt(fees * (commissions[0].value/100))
       document.getElementById('PCurrency').value = document.getElementById('PfeesCurrency').value
+      Pnotes.disabled = false; Pnotes.value = ''
       break;
     }
     case 'na': {
       payableAmountInput.value = ''
       payableAmountInput.disabled = true
       document.getElementById('PCurrency').disabled = true
+      document.getElementById('PCurrency').value = ''
+      payableDueDateInput.value = ''
       payableDueDateInput.disabled = true
+      document.getElementById('Pnotes').disabled = true
+      document.getElementById('Pnotes').value = 'No commission entry will be added'
     }
   }
-
-  payableDueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
 }
 
 /**

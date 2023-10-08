@@ -167,7 +167,8 @@
             </div>            
           </div>
           <div class="card-body bg-light">
-            <form class="row gx-2" id="receivable">     
+            <form class="row gx-2" id="receivable">    
+              <input class="form-control" id="Rtype" name="type" type="text" required="required" hidden/> 
               <div class="col-sm-6 mb-3">
                 <label class="form-label" for="stage">Payment stage<span class="text-danger">*</span></label>
                 <select class="form-select" id="Rstage" name="stage">
@@ -217,7 +218,7 @@
               
               <div class="col-12 mb-3">
                 <label class="form-label" for="notes">Notes</label>
-                <textarea class="form-control" id="notes" name="notes" placeholder="Notes/Comments" rows="2"></textarea>
+                <textarea class="form-control" id="Rnotes" name="notes" placeholder="Notes/Comments" rows="2"></textarea>
               </div>  
             </form>
           </div>
@@ -235,6 +236,7 @@
           </div>
           <div class="card-body bg-light">
             <form class="row gx-2" id="payable">     
+              <input class="form-control" id="Ptype" name="type" type="text" required="required" hidden/>
               <div class="col-sm-6 mb-3">
                 <label class="form-label" for="Pstage">Payment stage<span class="text-danger">*</span></label>
                 <select class="form-select" id="Pstage" name="stage">
@@ -284,7 +286,7 @@
               
               <div class="col-12 mb-3">
                 <label class="form-label" for="notes">Notes</label>
-                <textarea class="form-control" id="notes" name="notes" placeholder="Notes/Comments" rows="2"></textarea>
+                <textarea class="form-control" id="Pnotes" name="notes" placeholder="Notes/Comments" rows="2"></textarea>
               </div> 
             </form>
           </div>

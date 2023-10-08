@@ -93,7 +93,8 @@ if (commissionsModal) {
         Pvalue.disabled = false; Pinstallment.disabled = false  
       } else {
         Pcurrency.required = false; Pcurrency.disabled = true; Pcurrency.hidden = true;
-        Pvalue.disabled = true; Pinstallment.disabled = true  
+        Pvalue.disabled = true; Pinstallment.disabled = true
+        Pvalue.value = ''; Pinstallment.value = ''
       }
 
       commissionsForm.querySelector('#Rtype').value = commissions[1].type
@@ -109,6 +110,7 @@ if (commissionsModal) {
       } else {
         Rcurrency.required = false; Rcurrency.disabled = true; Rcurrency.hidden = true;
         Rvalue.disabled = true; Rinstallment.disabled = true  
+        Rvalue.value = ''; Rinstallment.value = ''  
       }    
     } else {
       commissionsForm.reset()

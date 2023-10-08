@@ -46,7 +46,7 @@ function addPaymentStage(event) {
             ${currency_options}
           </select>
         </td>
-        <td><input class="form-control form-control-sm rate" type="number" required="required"/></td>
+        <td><input class="form-control form-control-sm rate" type="number" step="0.01" required="required"/></td>
         <td><input class="form-control form-control-sm days" type="number" required="required"/></td>
         <td rowspan="2" class="text-center align-middle"><button class="btn btn-link btn-sm" type="button" onclick="removePaymentStage(event)"><span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span></button></td>`
 
@@ -62,7 +62,7 @@ function addPaymentStage(event) {
             ${currency_options}
           </select>
         </td>
-        <td><input class="form-control form-control-sm rate" type="number" required="required"/></td>
+        <td><input class="form-control form-control-sm rate" type="number" step="0.01" required="required"/></td>
         <td><input class="form-control form-control-sm days" type="number" required="required"/></td>`
   const button = event.target;
 
@@ -293,8 +293,10 @@ universityForm.addEventListener('submit', function (event) {
       failMessage(`Program Types can't be empty`); return
     }
   
-    writeDataWithNewId('universities', data).then(() => {
+    writeDataWithNewId('universities', data).then((success) => {
+      if (success)
       successMessage(`University added sucessfully!`).then(() => location.href = "universities.html")
+      else throw "Permission denied"
     }).catch(e => failMessage(`Failed to save university: ${e}`))
   } catch (e) {
     failMessage(`Failed to save university: ${e}`)
