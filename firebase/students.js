@@ -1,7 +1,12 @@
-import { readData, deleteData, fetchPaymentDetails, updateData } from "./helpers.js";
+import { readData, deleteData, fetchPaymentDetails, updateData, writeDataWithNewId } from "./helpers.js";
 
 // Global Variables
-let programs = {}, students = {}, universities = {}, agents = {}, currency = {}, paymentStages = {}
+let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, paymentStages = {}
+let availablePaymentStages = {}, currency = {}
+let currency_options = ''
+
+const currencyInput =  document.getElementById("currency")
+const feesCurrencyInput =  document.getElementById("fees_currency")
 
 async function fetchData() {
   programs = await readData("program_types")
@@ -10,6 +15,13 @@ async function fetchData() {
   agents = await readData("agents")
   currency = await readData("currency_types")
   paymentStages = await readData("payment_stages")
+  Object.keys(currency).forEach(key => {
+    currency_options += `<option value='${key}'>${currency[key]?.name}</option>`
+  })
+  if (currencyInput) {
+    currencyInput.innerHTML = currency_options
+    feesCurrencyInput.innerHTML = currency_options
+  }
 }
 
 /**
@@ -111,11 +123,12 @@ async function readPaymentDetails(id) {
   const isAgent = userRole == 'Agent' ? true : false
 
   const data = await fetchPaymentDetails('student', id)
+  payments = data
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
-  await updatePayables(payableBody, data["Payable"])
+  await updatePayables(payableBody, data["payable"])
   if (!isAgent) {
-    await updatePayables(receivableBody, data["Receivable"])
+    await updatePayables(receivableBody, data["receivable"])
   }
   listInit()
 }
@@ -123,7 +136,7 @@ window.readPaymentDetails = readPaymentDetails
 
 async function updatePayables(tableBody, payables) {
   tableBody.innerHTML = ''
-  const schema = `<tr class="btn-reveal-trigger">
+  const schema = `<tr class="btn-reveal-trigger" id="{}">
     <td class="align-middle white-space-nowrap student"><a href="student_details.html?id={}">{}</a></td>
     <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
     <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
@@ -134,6 +147,15 @@ async function updatePayables(tableBody, payables) {
     <td class="align-middle fs-0 white-space-nowrap status text-center">
       {}
     </td>
+    <td class="align-middle white-space-nowrap text-end">
+      <div class="dropstart font-sans-serif position-static d-inline-block">
+        <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
+        <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-1">
+          <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-details" style="cursor:pointer">Edit</a>
+          <a class="dropdown-item text-warning" data-bs-toggle="modal" data-bs-target="#update-status" style="cursor:pointer">Update Status</a>
+        </div>
+      </div>
+    </td>    
   </tr>`
 
   const promises = Object.keys(payables).map(async id => {
@@ -176,7 +198,7 @@ async function updatePayables(tableBody, payables) {
         amount = `${p.amount}%`
       }
   
-      const row = schema.format(p.student, StudentName, p.university, UniversityName,
+      const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
           p.agent, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
         if (tableBody) tableBody.innerHTML += row
     } catch (e) {
@@ -293,3 +315,190 @@ window.onload = async () => {
 }
 const updateBtn = document.getElementById("updateBtn")
 if (updateBtn) updateBtn.onclick = updateStudent
+
+/**
+ * --------------------------------------------------
+ * Update Payment Details
+ * --------------------------------------------------
+ */
+
+const editDetailsModel = document.getElementById('edit-details')
+editDetailsModel.addEventListener('show.bs.modal', event => {
+  const button = event.relatedTarget
+  const row = button.closest('tr')
+  const CommissionType = button.closest('table').id
+
+  const pay_currency = editDetailsModel.querySelector('#pay_currency')
+  pay_currency.innerHTML = currency_options  
+
+  editDetailsModel.querySelector('#payment-id').value = row.id
+  editDetailsModel.querySelector('#commissionType').value = CommissionType
+  editDetailsModel.querySelector('#student-name').value = row?.querySelector('.student').textContent
+  editDetailsModel.querySelector('#university-name').value = row?.querySelector('.university').textContent
+  editDetailsModel.querySelector('#agent-name').value = row?.querySelector('.agent').textContent
+  editDetailsModel.querySelector('#stage').value = row?.querySelector('.stage').textContent
+  editDetailsModel.querySelector('#duedate').value = row?.querySelector('.duedate').textContent
+  editDetailsModel.querySelector('#amount').value = payments[CommissionType][row.id]?.amount || ''
+  pay_currency.value = payments[CommissionType][row.id]?.currency || ''
+  editDetailsModel.querySelector('#fees').value = row?.querySelector('.fees').textContent
+  editDetailsModel.querySelector('#notes').value = payments[CommissionType][row.id]?.notes || ''
+  editDetailsModel.querySelector('#status').value = row?.querySelector('.status').textContent.trim()
+})
+
+async function updateDetails() {
+  try {
+    const formProps = new FormData(updatePaymentDetailsForm);
+    const formData = Object.fromEntries(formProps);
+    const CommissionType = formData['commissionType']
+    const id = formData['payment-id']
+    const dueDate = formData['dueDate']
+    const amount = formData['amount']
+    const notes = formData['notes']
+    const currency = formData['currency']    
+  
+    if (!id || !dueDate || !amount || !currency) { 
+      failMessage("Failed to update payment details"); 
+      return 
+    }
+    updateData(`${CommissionType}/${id}`, {dueDate, amount, notes, currency})
+    successMessage("Payment details updated!").then(() => location.reload())
+  } catch (e) {
+    failMessage("Failed to update payment details")
+  }
+}
+window.updateDetails = updateDetails
+
+/**
+ * --------------------------------------------------
+ * Update Status
+ * --------------------------------------------------
+ */
+
+const morePaymentsSelect = document.getElementById("morePayments")
+morePaymentsSelect.addEventListener("change", () => {
+  if (morePaymentsSelect.value == "1") {
+    nextPaymentDetails.classList.remove("d-none")
+  } else {
+    nextPaymentDetails.classList.add("d-none")
+  }
+})
+
+const updateStatusModal = document.getElementById("update-status")
+updateStatusModal.addEventListener('show.bs.modal', event => {
+  const button = event.relatedTarget
+  const row = button.closest('tr')
+  const CommissionType = button.closest('table').id
+
+  updateStatusForm.reset();
+  updateStatusModal.querySelector('#payment-id').value = row.id
+  updateStatusModal.querySelector('#commissionType').value = CommissionType
+  updateStatusModal.querySelector('#notes').value = payments[CommissionType][row.id]?.notes || ''
+  updateStatusModal.querySelector('#status').value = payments[CommissionType][row.id].status
+  
+  const stageSelector = updateStatusModal.querySelector('#stage')
+  updatePaymentStageList(row.id, CommissionType, stageSelector)
+})
+
+async function updateStatus() {
+  try {
+    const formProps = new FormData(updateStatusForm);
+    const formData = Object.fromEntries(formProps);
+    const CommissionType = formData['commissionType']
+    const id = formData['payment-id']
+    const status = formData['status']
+    const notes = formData['notes']
+    const morePayments = parseInt(formData['morePayments'])
+    const stage = formData['stage']
+    const fees = formData['fees']
+    const feesCurrency = formData['feesCurrency']
+    const dueDate = formData['dueDate']
+    const amount = formData['amount']
+    const newStatus = formData['newStatus']
+    const currency = formData['currency']
+
+    if (!id || !status) {
+      failMessage("Please provide all inputs")
+      return
+    }
+
+    if (morePayments && (!stage || !fees || !feesCurrency || !dueDate || !amount || !newStatus)) {
+      failMessage("Please provide all inputs")
+      return
+    }
+    
+    writeDataWithNewId(`${CommissionType}`, {
+      ...payments[CommissionType][id],
+      stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency
+    })
+    updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
+    successMessage('Payment status updated!').then(() => location.reload())
+  } catch (e) {
+    failMessage('Failed to update payment status')
+    console.error(e)
+  }
+} 
+window.updateStatus = updateStatus
+
+function updatePaymentStageList(paymentId, CommissionType, stageSelector) {
+  stageSelector.innerHTML = '<option>Select stage</option>'
+  const uid = payments[CommissionType][paymentId].university
+  const studentId = payments[CommissionType][paymentId].student
+  const pid = students[studentId].program_type
+
+  const pType = universities[uid].programTypes.find(pt => pt.type == pid)
+  if (!pType) return
+  availablePaymentStages = pType.paymentStages
+
+  const stageIds = pType.paymentStages.map(pst => pst.stage)
+  stageIds.forEach(stageId => {
+    let stage = paymentStages[stageId]
+    if (stage) {
+      let option = document.createElement("option");
+      option.value = stageId;
+      option.textContent = stage.name;
+      stageSelector.appendChild(option);
+    }
+  });
+}
+
+computeCommission.addEventListener("click", (event) => {
+  const button = event.target
+  console.log("Clicked", button)
+  const form = button.closest('form')
+  const CommissionType= form.querySelector('#commissionType').value
+  const selectedStage= form.querySelector('#stage').value
+  console.log(selectedStage)
+  const stageConfig = availablePaymentStages.find(s => s.stage == selectedStage)
+  const commissions = stageConfig?.commissions
+  console.log(stageConfig)
+  if (!commissions) return
+
+  const isReceivable = CommissionType == 'receivable' ? 1 : 0
+
+  let amountInput = form.querySelector('#amount')
+  let dueDateInput = form.querySelector('#dueDate')
+  let currencyInput = form.querySelector('#currency')
+  let feesCurrencyInput = form.querySelector('#fees_currency')
+  const fees = form.querySelector('#fees').value
+  if (!fees) return
+
+  let dueDate = new Date()
+  dueDate.setDate(dueDate.getDate() + parseInt(commissions[isReceivable].installmentDays || 0));
+
+  dueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
+  switch (commissions[isReceivable].type) {
+    case 'fixed': {
+      amountInput.value = commissions[isReceivable].value
+      currencyInput.value = commissions[isReceivable].currency
+      break;
+    }
+    case 'percentage': {
+      amountInput.value = parseInt(fees * (commissions[isReceivable].value/100))
+      currencyInput.value = feesCurrencyInput.value
+      break;
+    }
+    case 'na': {
+      failMessage("Commission for this stage is NA. Please select No further payments.")
+    }
+  }
+})

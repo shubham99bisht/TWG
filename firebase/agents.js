@@ -163,9 +163,9 @@ async function readPaymentDetails(id) {
   const data = await fetchPaymentDetails('agent', id)
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
-  await updatePayables(payableBody, data["Payable"])
+  await updatePayables(payableBody, data["payable"])
   if (!isAgent) {
-    await updatePayables(receivableBody, data["Receivable"])
+    await updatePayables(receivableBody, data["receivable"])
   }
   listInit()
 }

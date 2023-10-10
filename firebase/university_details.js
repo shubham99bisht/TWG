@@ -130,10 +130,20 @@ function updateCommission() {
     const program_type = commissionsForm.querySelector('#program_type').value 
     const payment_stage = commissionsForm.querySelector('#payment_stage').value
     
-    if (!id || !program_type || !payment_stage ||
-      !Ptype || !Pvalue || !Pinstallment || !Rtype || !Rvalue || !Rinstallment
-    ) {
+    if (!id || !program_type || !payment_stage || !Ptype || !Rtype) {
       failMessage("Enter all details"); return
+    }
+    switch (Ptype) {
+      case 'fixed':
+      case 'percentage': {
+        if (!Pvalue || !Pinstallment) { failMessage("Enter all details"); return }
+      }
+    }
+    switch (Rtype) {
+      case 'fixed':
+      case 'percentage': {
+        if (!Rvalue || !Rinstallment) { failMessage("Enter all details"); return }
+      }
     }
 
     if ((Ptype == 'Percentage' && (Pvalue < 1 || Pvalue > 100)) ||
@@ -147,6 +157,9 @@ function updateCommission() {
 
     if (commissions[0].type == 'fixed') commissions[0]['currency'] = Pcurrency
     if (commissions[1].type == 'fixed') commissions[1]['currency'] = Rcurrency
+
+    if (commissions[0].type == 'na') commissions[0] = {type: Ptype}
+    if (commissions[1].type == 'na') commissions[1] = {type: Ptype}
 
     // Find the programType with the matching "type" value
     const programType = university.programTypes.find(pt => pt.type === program_type);
@@ -330,8 +343,8 @@ async function readPaymentDetails(id) {
   const data = await fetchPaymentDetails('university', id)
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
-  await updatePayables(payableBody, data["Payable"])
-  await updatePayables(receivableBody, data["Receivable"])
+  await updatePayables(payableBody, data["payable"])
+  await updatePayables(receivableBody, data["receivable"])
   listInit()
 }
 window.readPaymentDetails = readPaymentDetails

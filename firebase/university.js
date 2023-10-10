@@ -1,4 +1,4 @@
-import { readData, fetchPaymentDetails } from "./helpers.js";
+import { readData } from "./helpers.js";
 
 // Global Variables
 let programs = {}, currencies = {}, paymentStages = {}

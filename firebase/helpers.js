@@ -138,7 +138,7 @@ export async function fetchPaymentDetails(type, id) {
       PEntries[childSnapshot.key] = childSnapshot.val()
     });
     
-    return {"Receivable": REntries, "Payable": PEntries}
+    return {"receivable": REntries, "payable": PEntries}
   } catch (error) {
     throw error;
   }
