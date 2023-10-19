@@ -1,9 +1,8 @@
-import { readData} from "./helpers.js";
+import { readData } from "./helpers.js";
 
 let students = {}, universities = {}, agents = {}, programs = {}, paymentStages = {}, currency = {}
-let currency_options = ''
 
-const currencyInput =  document.getElementById("currency")
+const CommissionType =  'receivable'
 
 
 /**
@@ -17,7 +16,6 @@ function listAllReceivables() {
   tableBody.innerHTML = ''
   readData(`${CommissionType}`)
     .then(async (payables) => {
-      payments = payables
       const schema = `<tr class="btn-reveal-trigger" id="{}">
         <td class="align-middle student"><a href="student_details.html?id={}">{}</a></td>
         <td class="align-middle university"><a href="university_details.html?id={}">{}</a></td>
@@ -107,10 +105,6 @@ window.onload = async () => {
   programs = await readData("program_types")
   paymentStages = await readData("payment_stages")
   currency = await readData("currency_types")
-  Object.keys(currency).forEach(key => {
-    currency_options += `<option value='${key}'>${currency[key]?.name}</option>`
-  })
-  currencyInput.innerHTML = currency_options
   listAllReceivables()
 }
 

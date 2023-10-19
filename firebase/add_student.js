@@ -56,9 +56,10 @@ async function createStudent() {
   }
 
   let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(receivableForm));
-  if (!stage || !status || !fees || !amount || !dueDate) {
+  if (document.getElementById("Rtype").value == 'na') {}
+  else if (!stage || !status || !fees || !amount || !dueDate) {
     failMessage("Please provide enteries for Commission Receivable"); return
-  } else if (document.getElementById("Rtype").value != 'na') {
+  } else {
     await createReceivable(studentId, university, agent, program_type)
   }
 
@@ -66,10 +67,11 @@ async function createStudent() {
     if (!agent) {failMessage("Agent Info missing!"); return }
 
     let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(payableForm));
-    if (!stage || !status || !fees || !amount || !dueDate) {
+    if (document.getElementById("Ptype").value == 'na') {}
+    else if (!stage || !status || !fees || !amount || !dueDate) {
       failMessage("Please provide enteries for Commission Payable"); return
     }
-    if (document.getElementById("Ptype").value != 'na') {
+    else {
       await createPayable(studentId, university, agent, program_type)
     }
   } else { agent = '' }

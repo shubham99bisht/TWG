@@ -51,7 +51,6 @@ function listAllStudents() {
                     <div class="dropdown-menu dropdown-menu-end border py-0" aria-labelledby="customer-dropdown-0">
                         <div class="py-2">
                           <a class="dropdown-item" href="student_details.html?id={}">More Details</a>
-                          <a class="dropdown-item text-warning" href="add_student.html?id={}">Edit Student</a>
                         </div>
                     </div>
                 </div>
@@ -397,6 +396,16 @@ updateStatusModal.addEventListener('show.bs.modal', event => {
   
   const stageSelector = updateStatusModal.querySelector('#stage')
   updatePaymentStageList(row.id, CommissionType, stageSelector)
+
+  let isMorePayment = 0
+  try {
+    isMorePayment = parseInt(payments[CommissionType][row.id].morePayments)
+  } catch { isMorePayment = 0 }
+  if (isMorePayment) {
+    morePaymentsSelect.value = 1; morePaymentsSelect.disabled = true
+  } else { 
+    morePaymentsSelect.value = 0; morePaymentsSelect.disabled = false 
+  }
 })
 
 async function updateStatus() {
