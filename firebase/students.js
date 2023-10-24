@@ -190,7 +190,7 @@ async function updatePayables(tableBody, payables) {
         }
       }
 
-      let amount = 'na'
+      let amount = 'N/A'
       if (p.amount && p.currency) {
         amount = `${p.amount} ${currency[p.currency].name}`
       } else if (p.amount) {
@@ -416,7 +416,6 @@ async function updateStatus() {
     const id = formData['payment-id']
     const status = formData['status']
     const notes = formData['notes']
-    const morePayments = parseInt(formData['morePayments'])
     const stage = formData['stage']
     const fees = formData['fees']
     const feesCurrency = formData['feesCurrency']
@@ -430,17 +429,32 @@ async function updateStatus() {
       return
     }
 
+    let morePayments = ''
+    if (formData['morePayments']) {
+      morePayments = parseInt(formData['morePayments'])
+    }
+
     if (morePayments && (!stage || !fees || !feesCurrency || !dueDate || !amount || !newStatus)) {
       failMessage("Please provide all inputs")
       return
     }
+
+    let res = 0
+    if (morePayments) {
+      writeDataWithNewId(`${CommissionType}`, {
+        ...payments[CommissionType][id],
+        stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency
+      })
+      res = updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
+    } else if (morePayments == 0) {
+      res = updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
+    } else {
+      res = updateData(`${CommissionType}/${id}`, {status, notes})
+    }
     
-    writeDataWithNewId(`${CommissionType}`, {
-      ...payments[CommissionType][id],
-      stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency
-    })
-    updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
-    successMessage('Payment status updated!').then(() => location.reload())
+    if (res) {
+      successMessage('Payment status updated!').then(() => location.reload())
+    } else { throw "Not saved" }
   } catch (e) {
     failMessage('Failed to update payment status')
     console.error(e)

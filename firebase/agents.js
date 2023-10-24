@@ -218,7 +218,7 @@ async function updatePayables(tableBody, payables) {
       }
     }
 
-    let amount = 'na'
+    let amount = 'N/A'
     if (p.amount && p.currency) {
       amount = `${p.amount} ${currency[p.currency].name}`
     } else if (p.amount) {

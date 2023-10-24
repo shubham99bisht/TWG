@@ -55,26 +55,32 @@ async function createStudent() {
     return
   }
 
-  let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(receivableForm));
-  if (document.getElementById("Rtype").value == 'na') {}
-  else if (!stage || !status || !fees || !amount || !dueDate) {
-    failMessage("Please provide enteries for Commission Receivable"); return
-  } else {
-    await createReceivable(studentId, university, agent, program_type)
-  }
-
   if (source == "Agent") {
     if (!agent) {failMessage("Agent Info missing!"); return }
+  } else { agent = '' }  
 
+  if (source == "Agent") {
     let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(payableForm));
-    if (document.getElementById("Ptype").value == 'na') {}
-    else if (!stage || !status || !fees || !amount || !dueDate) {
+    if (document.getElementById("Ptype").value != 'na' && (!stage || !status || !fees || !amount || !dueDate)) {
       failMessage("Please provide enteries for Commission Payable"); return
     }
     else {
-      await createPayable(studentId, university, agent, program_type)
+      const res = await createPayable(studentId, university, agent, program_type)
+      if (!res) {
+        failMessage("Failed adding Payable"); return;
+      }
     }
-  } else { agent = '' }
+  }
+
+  let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(receivableForm));
+  if (document.getElementById("Rtype").value != 'na' && (!stage || !status || !fees || !amount || !dueDate)) {
+    failMessage("Please provide enteries for Commission Receivable"); return
+  } else {
+    const res = await createReceivable(studentId, university, agent, program_type)
+    if (!res) {
+      failMessage("Failed adding Receivable"); return;
+    }
+  }
 
   // Create Student
   const newStudent = {
@@ -89,6 +95,8 @@ async function createStudent() {
       if (result) {
         successMessage("Student added successfully!")
           .then(() => location.reload())
+      } else {
+        failMessage("Error adding student"); return;
       }
     })
     .catch((error) => {
@@ -99,16 +107,30 @@ async function createStudent() {
 
 async function createReceivable(student, university, agent, program_type) {
   const receivableFormData = Object.fromEntries(new FormData(receivableForm));
+
+  if (document.getElementById("Rtype").value == 'na') { 
+    return writeDataWithNewId('receivable', {
+      ...receivableFormData, amount: 0, dueDate: '', student, university, agent, program_type
+    })
+  }
+
   if (!receivableFormData.amount) return
-  writeDataWithNewId(`receivable`, {
+  return writeDataWithNewId(`receivable`, {
     ...receivableFormData, student, university, agent, program_type
   })
 }
 
 async function createPayable(student, university, agent, program_type) {
   const payableFormData = Object.fromEntries(new FormData(payableForm));
+  
+  if (document.getElementById("Ptype").value == 'na') { 
+    return writeDataWithNewId('payable', {
+      ...payableFormData, amount: 0, dueDate: '', student, university, agent, program_type
+    })
+  }
+  
   if (!payableFormData.amount) return
-  writeDataWithNewId('payable', {
+  return writeDataWithNewId('payable', {
     ...payableFormData, student, university, agent, program_type
   })
 }
@@ -248,14 +270,14 @@ function computeComissionReceivable() {
       break;
     }
     case 'na': {
-      receiveAmountInput.value = ''
+      receiveAmountInput.value = '0'
       receiveAmountInput.disabled = true
       Rcurrency.disabled = true
       Rcurrency.value = ''
       receiveDueDateInput.value = ''
       receiveDueDateInput.disabled = true
       Rnotes.disabled = true
-      Rnotes.value = 'No commission entry will be added'      
+      Rnotes.value = 'N/A commission entry'      
       
     }
   }
@@ -298,14 +320,14 @@ function computeComissionPayable() {
       break;
     }
     case 'na': {
-      payableAmountInput.value = ''
+      payableAmountInput.value = '0'
       payableAmountInput.disabled = true
       document.getElementById('PCurrency').disabled = true
       document.getElementById('PCurrency').value = ''
       payableDueDateInput.value = ''
       payableDueDateInput.disabled = true
       document.getElementById('Pnotes').disabled = true
-      document.getElementById('Pnotes').value = 'No commission entry will be added'
+      document.getElementById('Pnotes').value = 'N/A commission entry'
     }
   }
 }
