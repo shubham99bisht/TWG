@@ -72,11 +72,14 @@ async function createStudent() {
     }
   }
 
+  console.log("outside")
   let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(receivableForm));
   if (document.getElementById("Rtype").value != 'na' && (!stage || !status || !fees || !amount || !dueDate)) {
     failMessage("Please provide enteries for Commission Receivable"); return
   } else {
+    console.log("inside")
     const res = await createReceivable(studentId, university, agent, program_type)
+    console.log("returned", res)
     if (!res) {
       failMessage("Failed adding Receivable"); return;
     }
@@ -106,15 +109,22 @@ async function createStudent() {
 }
 
 async function createReceivable(student, university, agent, program_type) {
+  console.log("function called")
   const receivableFormData = Object.fromEntries(new FormData(receivableForm));
 
+  console.log(receivableFormData, document.getElementById("Rtype").value)
+
   if (document.getElementById("Rtype").value == 'na') { 
+    console.log("Writting data")
     return writeDataWithNewId('receivable', {
       ...receivableFormData, amount: 0, dueDate: '', student, university, agent, program_type
     })
   }
 
+  console.log("Not NA")
+  
   if (!receivableFormData.amount) return
+  console.log("No amount")
   return writeDataWithNewId(`receivable`, {
     ...receivableFormData, student, university, agent, program_type
   })
