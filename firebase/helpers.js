@@ -115,6 +115,7 @@ export async function removeProgramFromUniversity(pId) {
     console.log(`Removed ${pId} from all universities`);
   } catch (error) {
     console.error('Error:', error);
+    throw error
   }
 }
 window.removeProgramFromUniversity = removeProgramFromUniversity

@@ -257,6 +257,9 @@ async function updateStudent() {
           successMessage("Student added successfully!")
             .then(() => location.reload())
         }
+        else {
+          failMessage("Failed to update student")
+        }
       })
   }
   catch(error) {
@@ -279,6 +282,8 @@ function deleteStudent(id) {
       if (result) {
         successMessage("Agent deleted successfully!")
         .then(() => location.reload())
+      } else {
+        failMessage("Failed deleting student");
       }
     })
     .catch((error) => {
@@ -359,8 +364,11 @@ async function updateDetails() {
       failMessage("Failed to update payment details"); 
       return 
     }
-    updateData(`${CommissionType}/${id}`, {dueDate, amount, notes, currency})
-    successMessage("Payment details updated!").then(() => location.reload())
+    if (updateData(`${CommissionType}/${id}`, {dueDate, amount, notes, currency})) {
+      successMessage("Payment details updated!").then(() => location.reload())
+    } else {
+      failMessage("Payment update failed.")
+    }
   } catch (e) {
     failMessage("Failed to update payment details")
   }

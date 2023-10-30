@@ -1,4 +1,4 @@
-import { readData, writeDataWithNewId, updateData, deleteData } from "./helpers.js";
+import { readData, writeDataWithNewId, updateData } from "./helpers.js";
 
 const addNewCurrencyModel = document.getElementById('add-new-modal')
 const modalTitle = addNewCurrencyModel.querySelector('.modal-title')

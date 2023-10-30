@@ -153,6 +153,8 @@ async function deleteProgram(pId) {
     if (result) {
       successMessage("Program type deleted successfully!")
       .then(() => location.reload())
+    } else {
+      failMessage("Failed deleting program type");
     }
   } catch (error) {
     failMessage("Error deleting program type:", error);

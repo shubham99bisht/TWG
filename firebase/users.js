@@ -65,8 +65,11 @@ async function updateUser() {
     const role = formData['role']
 
     if (!id || !role) failMessage("Failed to update user details")
-    updateData(`users/${id}`, { role })
-    successMessage("User role updated!").then(() => location.reload())
+    if (updateData(`users/${id}`, { role })) {
+      successMessage("User role updated!").then(() => location.reload())
+    } else {
+      failMessage("Failed to update user role")
+    }
   } catch (e) {
     console.log(e)
     failMessage("Failed to update User role")

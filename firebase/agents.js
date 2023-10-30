@@ -65,6 +65,8 @@ async function createAgent(data) {
       if (result) {
         successMessage("Agent added successfully!")
           .then(() => location.href = "agents.html")
+      } else {
+        failMessage("Failed adding agent");
       }
     })
     .catch((error) => {

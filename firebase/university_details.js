@@ -37,10 +37,13 @@ function updateBasicInfo() {
     if (!name || !poc || !email) {
       failMessage("Enter all details"); return
     }
-    updateData(`universities/${id}`, { name, poc, email, accounts: {
+    if (updateData(`universities/${id}`, { name, poc, email, accounts: {
       email1, usage1, email2, usage2, email3, usage3, email4, usage4, email5, usage5
-    }})
-    successMessage("Updated University details").then(() => location.reload())
+    }})) {
+      successMessage("Updated University details").then(() => location.reload())
+    } else {
+      failMessage("Failed updating University details")
+    }
   } catch(e) {
     console.log(e);
     failMessage("Failed to updated university details.");
@@ -177,8 +180,11 @@ function updateCommission() {
       });
     }
 
-    updateData(`universities/${id}`, university)
-    successMessage("Updated University commission details").then(() => location.reload())
+    if (updateData(`universities/${id}`, university)) {
+      successMessage("Updated University commission details").then(() => location.reload())
+    } else {
+      failMessage("Failed updating University commissions")
+    }
   } catch(e) {
     console.log(e);
     failMessage("Failed to updated university commission details.");
@@ -214,8 +220,11 @@ function removeCommissionEntry(event) {
           }
         }
       }
-      updateData(`universities/${university.id}`, university)
-      successMessage("Removed University commission details").then(() => location.reload())
+      if (updateData(`universities/${university.id}`, university)) {
+        successMessage("Removed University commission details").then(() => location.reload())
+      } else {
+        failMessage("Failed to remove University commission")
+      }
     }
   } catch(e) {
     console.log(e);
