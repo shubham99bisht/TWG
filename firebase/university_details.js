@@ -294,49 +294,54 @@ function listOne(id) {
       data.programTypes.forEach(programType => {
         const programName = programs[programType.type]?.name
         programType.paymentStages.forEach(paymentStage => {
-          const stageName = paymentStages[paymentStage.stage].name
+          try {
+            const stageName = paymentStages[paymentStage.stage].name
 
-          let payable = 'NA'
-          switch (paymentStage.commissions[0].type) {
-            case 'fixed': {
-              const currency = currencies[paymentStage.commissions[0]?.currency].name
-              payable = `${paymentStage.commissions[0]?.value || '0'} ${currency}`
-              break;
+            let payable = 'NA'
+            switch (paymentStage.commissions[0].type) {
+              case 'fixed': {
+                const currency = currencies[paymentStage.commissions[0]?.currency].name
+                payable = `${paymentStage.commissions[0]?.value || '0'} ${currency}`
+                break;
+              }
+              case 'percentage': {
+                payable = `${paymentStage.commissions[0]?.value || '0'}%`
+                break;
+              }
             }
-            case 'percentage': {
-              payable = `${paymentStage.commissions[0]?.value || '0'}%`
-              break;
+  
+            let receivable = 'NA'
+            switch (paymentStage.commissions[1].type) {
+              case 'fixed': {
+                const currency = currencies[paymentStage.commissions[1]?.currency].name
+                receivable = `${paymentStage.commissions[1]?.value || '0'} ${currency}`
+                break;
+              }
+              case 'percentage': {
+                receivable = `${paymentStage.commissions[1]?.value || '0'}%`
+                break;
+              }
             }
+  
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `
+              <td class="university">${data.name}</td>
+              <td class="program" id="${programType.type}">${programName}</td>
+              <td class="stage" id="${paymentStage.stage}">${stageName}</td>
+              <td class="payable">
+                ${payable} <br> ${paymentStage.commissions[0]?.installmentDays || 0} days
+              </td>
+              <td class="receivable">
+                ${receivable} <br> ${paymentStage.commissions[1]?.installmentDays || 0} days
+              </td>
+              <td>
+                <a data-bs-toggle="modal" data-bs-target="#commissions-modal" class="pe-2" type="button"><i class="fas fa-edit text-warning"></i></a>
+                <a onclick="removeCommissionEntry(event)" type="button"><i class="fas fa-trash text-danger"></i></a>
+              </td>`;
+          } catch (e) {
+            console.log(e)
+            console.log("Error occured while displaying program: ", programType.type, paymentStage.stage)
           }
-
-          let receivable = 'NA'
-          switch (paymentStage.commissions[1].type) {
-            case 'fixed': {
-              const currency = currencies[paymentStage.commissions[1]?.currency].name
-              receivable = `${paymentStage.commissions[1]?.value || '0'} ${currency}`
-              break;
-            }
-            case 'percentage': {
-              receivable = `${paymentStage.commissions[1]?.value || '0'}%`
-              break;
-            }
-          }
-
-          const newRow = tableBody.insertRow();
-          newRow.innerHTML = `
-            <td class="university">${data.name}</td>
-            <td class="program" id="${programType.type}">${programName}</td>
-            <td class="stage" id="${paymentStage.stage}">${stageName}</td>
-            <td class="payable">
-              ${payable} <br> ${paymentStage.commissions[0]?.installmentDays || 0} days
-            </td>
-            <td class="receivable">
-              ${receivable} <br> ${paymentStage.commissions[1]?.installmentDays || 0} days
-            </td>
-            <td>
-              <a data-bs-toggle="modal" data-bs-target="#commissions-modal" class="pe-2" type="button"><i class="fas fa-edit text-warning"></i></a>
-              <a onclick="removeCommissionEntry(event)" type="button"><i class="fas fa-trash text-danger"></i></a>
-            </td>`;
         });
       });
     })

@@ -66,10 +66,13 @@ function listAllStudents() {
           if (source == 'Agent') {
             source += '<br>' + s.agent
           }
-          
-          const row = schema.format(id, id, s.studentName, s.universityStudentId, u, p, source, id, id)
+
+          const row_id = `LSQ: ${id}<br>Univ: ${s.universityStudentId}`
+          const row = schema.format(row_id, id, s.studentName, s?.studentEmail || '-', u, p, source, id, id)
           if (tableBody) tableBody.innerHTML += row
-        } catch {}
+        } catch (e) {
+          console.log(e)
+        }
       });
 
       listInit()
@@ -102,6 +105,7 @@ function readStudentDetails(id) {
       document.getElementById("name").innerHTML = result?.studentName
       document.getElementById("university_id").innerHTML = result.universityStudentId
       document.getElementById("join_date").innerHTML = result?.joinDate
+      document.getElementById("student_email").innerHTML = result?.studentEmail || '-'
 
       document.getElementById("university").innerHTML = universityName || ''
       document.getElementById("program_type").innerHTML = programName || ''
@@ -229,6 +233,7 @@ updateStudentModal.addEventListener('show.bs.modal', event => {
   updateStudentModal.querySelector('#joinMonth').value = joinDate.getMonth()
   updateStudentModal.querySelector('#joinYear').value = joinDate.getFullYear()
   updateStudentModal.querySelector('#studentName').value = student.studentName
+  updateStudentModal.querySelector('#studentEmail').value = student?.studentEmail || ''
   updateStudentModal.querySelector('#universityStudentId').value = student.universityStudentId
 })
 
@@ -241,16 +246,16 @@ async function updateStudent() {
     const basicInfoData = Object.fromEntries(new FormData(updateStudentForm));
   
     const studentId = updateStudentForm.querySelector('#studentId').value
-    const { joinMonth, joinYear, universityStudentId, studentName } = basicInfoData
+    const { joinMonth, joinYear, universityStudentId, studentName, studentEmail } = basicInfoData
     const date = new Date(joinYear, joinMonth, 2)
     const joinDate = `${date.toISOString().slice(0,10)}`
   
     // Validation
     if (id != studentId) failMessage("Can't update student LSQ Id")
-    if (!studentId || !studentName || !joinMonth || !joinYear || !universityStudentId) 
+    if (!studentId || !studentName || !studentEmail || !joinMonth || !joinYear || !universityStudentId) 
       { failMessage("Please provide all data"); return }
   
-    const newStudent = { studentId, joinDate, universityStudentId, studentName }
+    const newStudent = { studentId, joinDate, universityStudentId, studentName, studentEmail }
     updateData(`students/${studentId}`, newStudent)
       .then((result) => {
         if (result) {

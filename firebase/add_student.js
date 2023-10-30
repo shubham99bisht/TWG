@@ -37,7 +37,7 @@ async function createStudent() {
   const basicInfoData = Object.fromEntries(new FormData(basicInfo));
   const enrollmentInfoData = Object.fromEntries(new FormData(enrollmentInfo));
 
-  const { studentId, joinMonth, joinYear, universityStudentId, studentName } = basicInfoData
+  const { studentId, joinMonth, joinYear, studentEmail, universityStudentId, studentName } = basicInfoData
   let { program_type, university, source, agent } = enrollmentInfoData
   const date = new Date(joinYear, joinMonth, 2)
   const joinDate = `${date.toISOString().slice(0,10)}`
@@ -45,7 +45,7 @@ async function createStudent() {
   // Validation
   if (
     !studentId || !studentName || !joinMonth || !joinYear || !universityStudentId ||
-    !source || !program_type || !university
+    !source || !program_type || !university || !studentEmail
   ) { failMessage("Please provide all data"); return }
 
   // Verifying old entries
@@ -72,14 +72,11 @@ async function createStudent() {
     }
   }
 
-  console.log("outside")
   let {stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(receivableForm));
   if (document.getElementById("Rtype").value != 'na' && (!stage || !status || !fees || !amount || !dueDate)) {
     failMessage("Please provide enteries for Commission Receivable"); return
   } else {
-    console.log("inside")
     const res = await createReceivable(studentId, university, agent, program_type)
-    console.log("returned", res)
     if (!res) {
       failMessage("Failed adding Receivable"); return;
     }
@@ -87,7 +84,7 @@ async function createStudent() {
 
   // Create Student
   const newStudent = {
-    studentId, joinDate, universityStudentId, studentName,
+    studentId, joinDate, universityStudentId, studentName, studentEmail,
     program_type, university, source
   }
   if (source == "Agent") newStudent["agent"] = agent
