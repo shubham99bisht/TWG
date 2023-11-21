@@ -149,8 +149,8 @@ function updateCommission() {
       }
     }
 
-    if ((Ptype == 'Percentage' && (Pvalue < 1 || Pvalue > 100)) ||
-      (Rtype == 'Percentage' && (Rvalue < 1 || Rvalue > 100))
+    if ((Ptype == 'percentage' && (Pvalue < 1 || Pvalue > 100)) ||
+      (Rtype == 'percentage' && (Rvalue < 1 || Rvalue > 100))
     ) { failMessage("Percentage value should in range 1-100"); return }
 
     const commissions = [
@@ -162,7 +162,7 @@ function updateCommission() {
     if (commissions[1].type == 'fixed') commissions[1]['currency'] = Rcurrency
 
     if (commissions[0].type == 'na') commissions[0] = {type: Ptype}
-    if (commissions[1].type == 'na') commissions[1] = {type: Ptype}
+    if (commissions[1].type == 'na') commissions[1] = {type: Rtype}
 
     // Find the programType with the matching "type" value
     const programType = university.programTypes.find(pt => pt.type === program_type);
