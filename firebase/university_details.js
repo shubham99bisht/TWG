@@ -359,7 +359,6 @@ async function readPaymentDetails(id) {
   const receivableBody = document.getElementById("table-receivable-body");
   await updatePayables(payableBody, data["payable"])
   await updatePayables(receivableBody, data["receivable"])
-  listInit()
 }
 window.readPaymentDetails = readPaymentDetails
 

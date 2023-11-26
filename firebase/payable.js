@@ -1,8 +1,42 @@
-import { readData } from "./helpers.js";
+import { readData, searchReports } from "./helpers.js";
 
 let students = {}, universities = {}, agents = {}, programs = {}, paymentStages = {}, currency = {}
 
 const CommissionType = 'payable'
+
+// Initialise filters
+function initialise() {
+  // Initialize Datepicker
+  const datepickerInstance = flatpickr("#datepicker", {
+    mode: 'range', dateFormat: 'M d Y', 'disableMobile':true,
+    'defaultDate': ['Nov 01 2023', 'Nov 10 2023'] 
+  });
+
+  document.getElementById('searchButton').addEventListener('click', function () {
+    const status = statusDropdown.selectedOptions[0].value;
+    const dateRange = datepickerInstance.selectedDates.map(date => date.toISOString().split('T')[0]);
+
+    const inputParams = {
+      status, startDate: dateRange[0], endDate: dateRange[1]
+    }
+    listAllPayables(inputParams)
+  });  
+}
+
+let csvContent = '';
+function downloadCSVData(downloadName = 'payable') {
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", blobUrl);
+  link.setAttribute("download", downloadName + ".csv");
+
+  link.click();
+
+  URL.revokeObjectURL(blobUrl);
+}
+window.downloadCSVData = downloadCSVData
 
 /**
  * --------------------------------------------------
@@ -10,11 +44,11 @@ const CommissionType = 'payable'
  * --------------------------------------------------
  */
 
-function listAllPayables() {
+function listAllPayables(inputParams) {
   const tableBody = document.getElementById("table-payable-body");
   if (!tableBody) return
   tableBody.innerHTML = ''
-  readData(`${CommissionType}`)
+  searchReports({...inputParams, reportType: `${CommissionType}`})
     .then(async (payables) => {
       const schema = `<tr class="btn-reveal-trigger" id="{}">
         <td class="align-middle student"><a href="student_details.html?id={}">{}</a></td>
@@ -29,6 +63,10 @@ function listAllPayables() {
           {}
         </td>
       </tr>`
+
+      csvContent = 'Student,University,Agent,Program Type,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+      // student, univ, agent, program type, stage, fees, amount, due date, status, notes
+      const csvRow = '{},{},{},{},{},{},{},{},{},{}\r\n'
 
       const promises = Object.keys(payables).map(async id => {
         try {
@@ -74,6 +112,8 @@ function listAllPayables() {
           const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
             p.agent, AgentName, ProgramName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
           if (tableBody) tableBody.innerHTML += row
+
+          csvContent += csvRow.format(StudentName, UniversityName,  AgentName, ProgramName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.status, p?.notes || '')
         } catch {}
       });
 
@@ -102,5 +142,5 @@ window.onload = async () => {
   programs = await readData("program_types")
   paymentStages = await readData("payment_stages")
   currency = await readData("currency_types")
-  listAllPayables()
+  initialise()
 }

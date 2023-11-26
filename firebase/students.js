@@ -129,33 +129,35 @@ async function readPaymentDetails(id) {
   payments = data
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
-  await updatePayables(payableBody, data["payable"])
+  await updatePayables(payableBody, data["payable"], "payable")
   if (!isAgent) {
-    await updatePayables(receivableBody, data["receivable"])
+    await updatePayables(receivableBody, data["receivable"], "receivable")
   }
   listInit()
 }
 window.readPaymentDetails = readPaymentDetails
 
-async function updatePayables(tableBody, payables) {
+async function updatePayables(tableBody, payables, type) {
   tableBody.innerHTML = ''
+  let deleteRow = localStorage.getItem("userRole") == 'Admin' ? 
+    `<a class="dropdown-item text-danger" onclick="deleteTransaction('{}', '${type}')" style="cursor:pointer">Delete</a>` :
+    ''
+
   const schema = `<tr class="btn-reveal-trigger" id="{}">
     <td class="align-middle white-space-nowrap student"><a href="student_details.html?id={}">{}</a></td>
-    <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
-    <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
-    <td class="align-middle stage">{}</td>
+    <td class="align-middle text-nowrap stage">{}</td>
     <td class="align-middle text-nowrap fees">{}</td>
     <td class="align-middle text-nowrap amount">{}</td>
     <td class="align-middle text-nowrap duedate">{}</td>
-    <td class="align-middle fs-0 white-space-nowrap status text-center">
-      {}
-    </td>
+    <td class="align-middle notes">{}</td>
+    <td class="align-middle fs-0 white-space-nowrap status text-center">{}</td>
     <td class="align-middle white-space-nowrap text-end">
       <div class="dropstart font-sans-serif position-static d-inline-block">
         <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal float-end" type="button" id="dropdown-recent-purchase-table-1" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false" data-bs-reference="parent"><span class="fas fa-ellipsis-h fs--1"></span></button>
         <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="dropdown-recent-purchase-table-1">
           <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit-details" style="cursor:pointer">Edit</a>
           <a class="dropdown-item text-warning" data-bs-toggle="modal" data-bs-target="#update-status" style="cursor:pointer">Update Status</a>
+          ${deleteRow}
         </div>
       </div>
     </td>    
@@ -201,8 +203,8 @@ async function updatePayables(tableBody, payables) {
         amount = `${p.amount}%`
       }
   
-      const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
-          p.agent, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
+      const row = schema.format(id, p.student, StudentName, 
+        stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.notes || '', status, id)
         if (tableBody) tableBody.innerHTML += row
     } catch (e) {
       console.log(e)
@@ -396,12 +398,22 @@ morePaymentsSelect.addEventListener("change", () => {
 })
 
 const updateStatusModal = document.getElementById("update-status")
+updateStatusModal.querySelector('#status').addEventListener('change', e => {
+  if (e.target.value == 'pending') {
+    morePaymentsSelect.value = 0; morePaymentsSelect.disabled = true
+    nextPaymentDetails.classList.add("d-none")
+  } else {
+    morePaymentsSelect.value = 0; morePaymentsSelect.disabled = false
+    nextPaymentDetails.classList.add("d-none")
+  }
+})
 updateStatusModal.addEventListener('show.bs.modal', event => {
   const button = event.relatedTarget
   const row = button.closest('tr')
   const CommissionType = button.closest('table').id
 
   updateStatusForm.reset();
+  nextPaymentDetails.classList.add("d-none")
   updateStatusModal.querySelector('#payment-id').value = row.id
   updateStatusModal.querySelector('#commissionType').value = CommissionType
   updateStatusModal.querySelector('#notes').value = payments[CommissionType][row.id]?.notes || ''
@@ -410,15 +422,20 @@ updateStatusModal.addEventListener('show.bs.modal', event => {
   const stageSelector = updateStatusModal.querySelector('#stage')
   updatePaymentStageList(row.id, CommissionType, stageSelector)
 
-  let isMorePayment = 0
-  try {
-    isMorePayment = parseInt(payments[CommissionType][row.id].morePayments)
-  } catch { isMorePayment = 0 }
-  if (isMorePayment) {
-    morePaymentsSelect.value = 1; morePaymentsSelect.disabled = true
-  } else { 
-    morePaymentsSelect.value = 0; morePaymentsSelect.disabled = false 
+  if (updateStatusModal.querySelector('#status').value == 'pending') {
+    morePaymentsSelect.value = 0; morePaymentsSelect.disabled = true
+  } else {
+    let isMorePayment = 0
+    try {
+      isMorePayment = parseInt(payments[CommissionType][row.id].morePayments)
+    } catch { isMorePayment = 0 }
+    if (isMorePayment) {
+      morePaymentsSelect.value = 1; morePaymentsSelect.disabled = true
+    } else { 
+      morePaymentsSelect.value = 0; morePaymentsSelect.disabled = false 
+    }
   }
+
 })
 
 async function updateStatus() {
@@ -456,7 +473,7 @@ async function updateStatus() {
     if (morePayments) {
       writeDataWithNewId(`${CommissionType}`, {
         ...payments[CommissionType][id],
-        stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency
+        stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency, notes: ''
       })
       res = updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
     } else if (morePayments == 0) {
@@ -538,3 +555,17 @@ computeCommission.addEventListener("click", (event) => {
     }
   }
 })
+
+async function deleteTransaction(id, type) {
+  if (confirm("Confirm delete transaction?")) {      
+    try {
+      if (await deleteData(`${type}/${id}`)) {
+        successMessage('Commission deleted successfully!').then(() => location.reload())
+      } else { throw "Not deleted" }
+    } catch (e) {
+      failMessage('Failed to delete commission')
+      console.error(e)
+    }
+  }
+}
+window.deleteTransaction = deleteTransaction

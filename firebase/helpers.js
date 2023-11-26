@@ -1,4 +1,4 @@
-import { ref, get, set, update, push, remove, child, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
+import { ref, get, set, update, push, remove, child, query, orderByChild, equalTo, startAt, endAt, onValue } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
 import { auth, db } from "./index.js";
 
 const logsRef = ref(db, "logs");
@@ -143,4 +143,42 @@ export async function fetchPaymentDetails(type, id) {
   } catch (error) {
     throw error;
   }
+}
+
+export async function searchReports({ status, startDate, endDate, reportType }) {
+  if (!reportType || !['payable', 'receivable'].includes(reportType)) return
+
+  // Start with the base query
+  let queryRef = ref(db, reportType);
+
+  // Add filter based on status
+  if (status) {
+    queryRef = query(queryRef, orderByChild('status'), equalTo(status));
+  }
+
+  // If status is not provided, use endDate if available, otherwise use startDate
+  if (!status && endDate) {
+    queryRef = query(queryRef, orderByChild('dueDate'), endAt(endDate));
+  } else if (!status && startDate) {
+    queryRef = query(queryRef, orderByChild('dueDate'), startAt(startDate));
+  }
+
+  // Execute the query
+  const snapshot = await get(queryRef);
+
+  // Handle the snapshot data here
+  const data = snapshot.val();
+
+  // Perform additional filtering based on startDate and endDate
+  let filteredData = data;
+
+  if (startDate) {
+    filteredData = Object.values(filteredData).filter(item => item.dueDate >= startDate);
+  }
+
+  if (endDate) {
+    filteredData = Object.values(filteredData).filter(item => item.dueDate <= endDate);
+  }
+
+  return filteredData;
 }

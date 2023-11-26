@@ -12,6 +12,7 @@
   <script src="./assets/js/config.js"></script>
   <script src="./vendors/simplebar/simplebar.min.js"></script>
   <!-- Stylesheets-->
+  <link href="./vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
   <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
@@ -60,13 +61,13 @@
 
         <div class="card z-index-1" id="payableCommissions" data-list='{"valueNames":["student","university","agent","program_type","stage","duedate","fees","amount","status"],"page":50,"pagination":true}'>
           <div class="card-header">
-            <div class="row flex-between-center">
+            <div class="row flex-between-center mb-3">
               <div class="col-6 col-md-auto d-flex align-items-center">
                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Commissions Payable</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
                 <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF()"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
-                <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV()"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+                <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSVData()"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
               </div>
               <div class="col-12 col-md-5 mt-1 mt-md-0 ms-auto text-end">
                 <form>
@@ -75,7 +76,38 @@
                     <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
                   </div>
                 </form>
-              </div>              
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Status Dropdown Column -->
+              <div class="col-md-4 mb-3">
+                <label for="statusDropdown">Payment Status</label>
+                <select id="statusDropdown" class="form-control form-control-sm">
+                  <option value="pending" selected>Pending</option>
+                  <option value="confirmed">Confirmed</option>
+                  <option value="invoiced">Invoiced</option>
+                  <option value="paid">Paid</option>
+                  <option value="na">Not Applicable</option>
+                  <option value="">All Statuses</option>
+                </select>
+              </div>
+          
+              <!-- Date Range Column -->
+              <div class="col-md-4">
+                <label for="datepicker">Date Range</label>
+                <div class="position-relative">
+                  <input class="form-control form-control-sm datetimepicker ps-4" id="datepicker" type="text" />
+                  <span class="fas fa-calendar-alt text-primary position-absolute top-50 translate-middle-y ms-2"> </span>
+                </div>
+              </div>
+          
+              <!-- Search Button Column -->
+              <div class="col-md-4 mt-md-4 mt-2">
+                <div class="d-grid">
+                  <button id="searchButton" class="btn btn-primary btn-sm">Search</button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card-body px-0 py-0">
@@ -95,7 +127,7 @@
                   </tr>
                 </thead>
                 <tbody class="list" id="table-payable-body">
-                  <tr class="text-center"><td colspan="10">Loading...</td></tr>
+                  <tr class="text-center"><td colspan="10">Search using filter params</td></tr>
                 </tbody>
               </table>
             </div>
@@ -129,6 +161,7 @@
   <script src="./vendors/countup/countUp.umd.js"></script>
   <script src="./vendors/echarts/echarts.min.js"></script>
   <script src="./vendors/dayjs/dayjs.min.js"></script>
+  <script src="./assets/js/flatpickr.js"></script>
   <script src="./vendors/fontawesome/all.min.js"></script>
   <script src="./vendors/lodash/lodash.min.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
@@ -136,7 +169,7 @@
   <script src="./assets/js/theme.js"></script>
   <script src="./vendors/jspdf/index.js"></script>
   <script src="./vendors/jspdf/autotable.js"></script>
-  
+
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
   <script src="./firebase/payable.js" type="module"></script>
