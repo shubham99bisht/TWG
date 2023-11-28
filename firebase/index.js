@@ -200,6 +200,20 @@ function downloadCSV(downloadName='data') {
   URL.revokeObjectURL(blobUrl);
 }
 
+function downloadCSVData(downloadName = 'data') {
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", blobUrl);
+  link.setAttribute("download", downloadName + ".csv");
+
+  link.click();
+
+  URL.revokeObjectURL(blobUrl);
+}
+window.downloadCSVData = downloadCSVData
+
 const { jsPDF } = window.jspdf;
 const pdf = new jsPDF();
 function downloadPDF(downloadName='data') {

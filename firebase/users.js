@@ -23,6 +23,9 @@ async function loadUsers() {
   const users = await readData('users')
   usersList.innerHTML = ''
 
+  let csvContent = 'Name,Email,Team\r\n'
+  const csvRow = '{},{},{}\r\n'
+
   let count = 0
   for (let userId in users) {
     count += 1
@@ -34,7 +37,9 @@ async function loadUsers() {
     )
 
     usersList.innerHTML += row
+    csvContent += csvRow.format(u?.name || 'Anonymous', u?.email, u?.role)
   }
+  window.csvContent = csvContent
   listInit()
 }
 

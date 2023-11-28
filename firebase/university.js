@@ -1,7 +1,7 @@
-import { readData } from "./helpers.js";
+import { readData, searchReports } from "./helpers.js";
 
 // Global Variables
-let programs = {}, currencies = {}, paymentStages = {}
+let programs = {}, university_summary = {}
 
 /**
  * --------------------------------------------------
@@ -14,70 +14,40 @@ function listAll() {
   const userRole = localStorage.getItem("userRole")
   const isAgent = userRole == 'Agent' ? true : false
   tableBody.innerHTML = ''
+
+  let csvContent = 'University,Pending Payables, Pending Receivables\r\n';
+  const csvRow = '{},{},{}\r\n';
+  
   readData("universities")
     .then((university) => {
-      console.log(university)
+      // console.log(university)
       Object.keys(university).forEach(uid => {
         try {
           const data = university[uid]
-          data.programTypes?.forEach(programType => {
-            const programName = programs[programType.type]?.name
-            programType.paymentStages?.forEach(paymentStage => {
-              const stageName = paymentStages[paymentStage.stage].name
+          let payable = university_summary[uid]?.payable || 0
+          let receivable = university_summary[uid]?.receivable || 0;
 
-              let payable = 'NA'
-              switch (paymentStage.commissions[0].type) {
-                case 'fixed': {
-                  const currency = currencies[paymentStage.commissions[0]?.currency].name
-                  payable = `${paymentStage.commissions[0]?.value || '0'} ${currency}`
-                  break;
-                }
-                case 'percentage': {
-                  payable = `${paymentStage.commissions[0]?.value || '0'}%`
-                  break;
-                }
-              }
+          const newRow = tableBody.insertRow();
+          newRow.innerHTML = `<td class="name white-space-nowrap">${data.name}</td>
+            <td class="payable">${payable}</td>
+            <td class="receivable">${receivable}</td>`;
+          newRow.innerHTML += isAgent ? `` :
+            `<td class="text-end white-space-nowrap"><a class="btn btn-primary btn-sm" href="university_details.html?id=${uid}">More Details</a></td>`
 
-              let receivable = 'NA'
-              switch (paymentStage.commissions[1].type) {
-                case 'fixed': {
-                  const currency = currencies[paymentStage.commissions[1]?.currency].name
-                  receivable = `${paymentStage.commissions[1]?.value || '0'} ${currency}`
-                  break;
-                }
-                case 'percentage': {
-                  receivable = `${paymentStage.commissions[1]?.value || '0'}%`
-                  break;
-                }
-              }
-
-              const newRow = tableBody.insertRow();
-              newRow.innerHTML = isAgent ? `<td class="name">${data.name}</td>` :
-                `<td class="name"><a href="university_details.html?id=${uid}">${data.name}</a></td>`
-              newRow.innerHTML += `
-                <td class="program_type">${programName}</td>
-                <td class="payment_stage">${stageName}</td>
-                <td class="payable">
-                  ${payable} <br> ${paymentStage.commissions[0]?.installmentDays || 0} days
-                </td>`;
-              
-              newRow.innerHTML += isAgent ? `<td class="receivable">-</td>` :
-                `<td class="receivable">
-                  ${receivable} <br> ${paymentStage.commissions[1]?.installmentDays || 0} days
-                </td>`;
-            });
-          });
+          const name =  data.name.includes(',') ? `"${data.name}"` : data.name
+          csvContent += csvRow.format(name, payable, receivable)
         } catch (e) {
           console.log(e)
         }
       })
-      
+
+      window.csvContent = csvContent
       listInit()
     })
     .catch((error) => {
       console.error("Error reading Universities:", error);
       if (tableBody) 
-        tableBody.innerHTML = `<tr class="text-center"><td colspan="5">Error reading Universities</td></tr>`
+        tableBody.innerHTML = `<tr class="text-center"><td colspan="4">Error reading Universities</td></tr>`
     });
 }
 window.listAll = listAll
@@ -90,7 +60,24 @@ window.listAll = listAll
 
 window.onload = async () => {
   programs = await readData("program_types")
-  currencies = await readData("currency_types")
-  paymentStages = await readData("payment_stages")
+
+  const payables = await searchReports({status: 'pending', reportType: 'payable'})
+  const receivables = await searchReports({status: 'pending', reportType: 'receivable'})
+
+  payables.map(tr => {
+    const uid = tr.university
+    if (!university_summary[uid]) {
+      university_summary[uid] = { payable: 0, receivable: 0 };
+    }
+    university_summary[uid].payable += 1;
+  })
+  receivables.map(tr => {
+    const uid = tr.university
+    if (!university_summary[uid]) {
+      university_summary[uid] = { payable: 0, receivable: 0 };
+    }
+    university_summary[uid].receivable += 1;
+  })
+  console.log(university_summary)
   listAll()
 }

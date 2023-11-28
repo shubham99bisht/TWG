@@ -37,9 +37,11 @@ function listAllStudents() {
     .then((students) => {
       tableBody.innerHTML = ''
       const schema = `<tr class="btn-reveal-trigger">
-            <td class="id align-middle white-space-nowrap py-2">{}</td>
+            <td class="id align-middle white-space-nowrap py-2">
+              <a href="student_details.html?id={}">{}</a>
+            </td>
             <td class="name align-middle white-space-nowrap py-2">
-              <h5 class="mb-0 fs--1"><a href="student_details.html?id={}">{}</a></h5>
+              <h5 class="mb-0 fs--1">{}</h5>
               {}
             </td>
             <td class="university align-middle white-space-nowrap py-2">{}</td>
@@ -57,6 +59,9 @@ function listAllStudents() {
             </td>
         </tr>`
 
+      let csvContent = 'Student,Email,University,Program,Source\r\n'
+      const csvRow = '{},{},{},{},{}\r\n'
+
       Object.keys(students).forEach(id => {
         try {
           const s = students[id]
@@ -68,13 +73,16 @@ function listAllStudents() {
           }
 
           const row_id = `LSQ: ${id}<br>Univ: ${s.universityStudentId}`
-          const row = schema.format(row_id, id, s.studentName, s?.studentEmail || '-', u, p, source, id, id)
+          const row = schema.format(id, row_id, s.studentName, s?.studentEmail || '-', u, p, source, id, id)
           if (tableBody) tableBody.innerHTML += row
+
+          csvContent += csvRow.format(s.studentName, s?.studentEmail || '-', u, p, source)
         } catch (e) {
           console.log(e)
         }
       });
 
+      window.csvContent = csvContent
       listInit()
     })
     .catch((error) => {
@@ -204,7 +212,7 @@ async function updatePayables(tableBody, payables, type) {
       }
   
       const row = schema.format(id, p.student, StudentName, 
-        stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.notes || '', status, id)
+        stage?.name || '', `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.notes || '', status, id)
         if (tableBody) tableBody.innerHTML += row
     } catch (e) {
       console.log(e)
@@ -493,7 +501,7 @@ async function updateStatus() {
 window.updateStatus = updateStatus
 
 function updatePaymentStageList(paymentId, CommissionType, stageSelector) {
-  stageSelector.innerHTML = '<option>Select stage</option>'
+  stageSelector.innerHTML = '<option value="">Select stage</option>'
   const uid = payments[CommissionType][paymentId].university
   const studentId = payments[CommissionType][paymentId].student
   const pid = students[studentId].program_type

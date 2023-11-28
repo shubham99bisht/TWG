@@ -378,47 +378,49 @@ async function updatePayables(tableBody, payables) {
   </tr>`
 
   const promises = Object.keys(payables).map(async id => {
-    const p = payables[id]
-    const AgentName = agents[p.agent]?.name || ''
-    const StudentName = students[p.student].studentName
-    const UniversityName = university.name
-
-    const stage = paymentStages[p.stage]
-    let status = ''
-    switch (p?.status) {
-      case 'confirmed': {
-        status = '<span class="badge badge rounded-pill badge-soft-success">Confirmed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
+    try {
+      const p = payables[id]
+      const AgentName = agents[p.agent]?.name || ''
+      const StudentName = students[p.student].studentName
+      const UniversityName = university.name
+  
+      const stage = paymentStages[p.stage]
+      let status = ''
+      switch (p?.status) {
+        case 'confirmed': {
+          status = '<span class="badge badge rounded-pill badge-soft-success">Confirmed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'invoiced': {
+          status = '<span class="badge badge rounded-pill badge-soft-warning">Invoiced<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'paid': {
+          status = '<span class="badge badge rounded-pill badge-soft-success">Paid<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'na': {
+          status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'pending':
+        default: {
+          status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
       }
-      case 'invoiced': {
-        status = '<span class="badge badge rounded-pill badge-soft-warning">Invoiced<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
+  
+      let amount = 'N/A'
+      if (p.amount && p.currency) {
+        amount = `${p.amount} ${currencies[p.currency].name}`
+      } else if (p.amount) {
+        amount = `${p.amount}%`
       }
-      case 'paid': {
-        status = '<span class="badge badge rounded-pill badge-soft-success">Paid<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-      case 'na': {
-        status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-      case 'pending':
-      default: {
-        status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-    }
-
-    let amount = 'N/A'
-    if (p.amount && p.currency) {
-      amount = `${p.amount} ${currencies[p.currency].name}`
-    } else if (p.amount) {
-      amount = `${p.amount}%`
-    }
-
-    const row = schema.format(p.student, StudentName, p.university, UniversityName,
-      p.agent, AgentName, stage.name, `${p.fees} ${currencies[p.feesCurrency].name}`, amount, p.dueDate, status)
-    if (tableBody) tableBody.innerHTML += row
+  
+      const row = schema.format(p.student, StudentName, p.university, UniversityName,
+        p.agent, AgentName, stage.name, `${p.fees} ${currencies[p.feesCurrency].name}`, amount, p.dueDate, status)
+      if (tableBody) tableBody.innerHTML += row
+    } catch (e) { console.log(e); console.log(id) }
   });
 
   if (!Object.keys(payables).length) {

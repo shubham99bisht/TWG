@@ -59,7 +59,7 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <div class="card mb-3" id="programTable" data-list='{"valueNames":["id", "name"],"page":50,"pagination":true}'>
+        <div class="card mb-3" id="programTable" data-list='{"valueNames":["id", "name"],"page":25,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-3">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
@@ -70,8 +70,8 @@
                   <button class="btn btn-falcon-default btn-sm me-2" type="button" data-bs-toggle="modal" data-bs-target="#add-new-modal">
                     <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span>
                   </button>
-                  <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF()"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
-                  <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV()"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+                  <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('program_types')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+                  <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSVData('program_types')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
                 </div>
               </div>
             </div>

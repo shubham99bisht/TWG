@@ -59,7 +59,7 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <div class="card mb-3" id="universityTable" data-list='{"valueNames":["name","program_type","payment_stage","payable","receivable"],"page":25,"pagination":true}'>
+        <div class="card mb-3" id="universityTable" data-list='{"valueNames":["name","payable","receivable"],"page":25,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
@@ -71,7 +71,7 @@
                     <span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span>
                   </a>
                   <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('universities')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
-                  <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV('universities')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+                  <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSVData('universities')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
                 </div>
               </div>
             </div>
@@ -92,14 +92,13 @@
                 <thead class="bg-200 text-900">
                   <tr>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Name</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program_type">Program Type</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="payment_stage">Payment Stages</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="payable">Payable</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="receivable">Receivable</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="payable">Pending Payable</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="receivable">Pending Receivable</th>
+                    <th class="white-space-nowrap"></th>
                   </tr>
                 </thead>
                 <tbody class="list" id="table-body">
-                  <tr class="text-center"><td colspan="5">Loading Universities...</td></tr>
+                  <tr class="text-center"><td colspan="4">Loading Universities...</td></tr>
                 </tbody>
               </table>
             </div>

@@ -90,9 +90,9 @@ function listAllAgents() {
     .then((agents) => {
       const schema = `
           <tr class="btn-reveal-trigger">
-          <td class="id align-middle white-space-nowrap py-2">{}</td>
+          <td class="id align-middle white-space-nowrap py-2"><a href="agent.html?id={}">{}</a></td>
           <td class="name align-middle white-space-nowrap py-2">
-              <h5 class="mb-0 fs--1"><a href="agent.html?id={}">{}</a></h5>
+              <h5 class="mb-0 fs--1">{}</h5>
           </td>
           <td class="email align-middle py-2"><a href="mailto:{}">{}</a></td>
           <td class="phone align-middle white-space-nowrap py-2">{}</td>
@@ -110,14 +110,21 @@ function listAllAgents() {
           </td>
         </tr>`
 
+      let csvContent = 'Name,Email,Phone,Address\r\n'
+      const csvRow = '{},{},{},{}\r\n'  
+
       Object.keys(agents).forEach(id => {
         try {          
           const a = agents[id]
           const row = schema.format(id, id, a.name, a.email, a.email, a.phone, a.address, id, id, id)
           if (tableBody) tableBody.innerHTML += row
+
+          const name =  a.name.includes(',') ? `"${a.name}"` : a.name
+          csvContent += csvRow.format(name, a.email, a.phone, a.address)
         } catch {}
       });
 
+      window.csvContent = csvContent
       listInit()
     })
     .catch((error) => {
@@ -189,47 +196,49 @@ async function updatePayables(tableBody, payables) {
   </tr>`
 
   const promises = Object.keys(payables).map(async id => {
-    const p = payables[id]
-    const AgentName = agents[p.agent].name
-    const StudentName = students[p.student].studentName
-    const UniversityName = universities[p?.university].name
-
-    const stage = paymentStages[p.stage]
-    let status = ''
-    switch (p?.status) {
-      case 'confirmed': {
-        status = '<span class="badge badge rounded-pill badge-soft-success">Confirmed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
+    try {
+      const p = payables[id]
+      const AgentName = agents[p.agent].name
+      const StudentName = students[p.student].studentName
+      const UniversityName = universities[p?.university].name
+  
+      const stage = paymentStages[p.stage]
+      let status = ''
+      switch (p?.status) {
+        case 'confirmed': {
+          status = '<span class="badge badge rounded-pill badge-soft-success">Confirmed<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'invoiced': {
+          status = '<span class="badge badge rounded-pill badge-soft-warning">Invoiced<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'paid': {
+          status = '<span class="badge badge rounded-pill badge-soft-success">Paid<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'na': {
+          status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
+        case 'pending': 
+        default: {
+          status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
+          break
+        }
       }
-      case 'invoiced': {
-        status = '<span class="badge badge rounded-pill badge-soft-warning">Invoiced<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
+  
+      let amount = 'N/A'
+      if (p.amount && p.currency) {
+        amount = `${p.amount} ${currency[p.currency].name}`
+      } else if (p.amount) {
+        amount = `${p.amount}%`
       }
-      case 'paid': {
-        status = '<span class="badge badge rounded-pill badge-soft-success">Paid<span class="ms-1 fas fa-check" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-      case 'na': {
-        status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-      case 'pending': 
-      default: {
-        status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
-        break
-      }
-    }
-
-    let amount = 'N/A'
-    if (p.amount && p.currency) {
-      amount = `${p.amount} ${currency[p.currency].name}`
-    } else if (p.amount) {
-      amount = `${p.amount}%`
-    }
-
-    const row = schema.format(p.student, StudentName, p.university, UniversityName,
-        p.agent, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
-      if (tableBody) tableBody.innerHTML += row
+  
+      const row = schema.format(p.student, StudentName, p.university, UniversityName,
+          p.agent, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
+        if (tableBody) tableBody.innerHTML += row
+    } catch (e) { console.log(e); console.log(id) }
   });
 
   if (!Object.keys(payables).length) {

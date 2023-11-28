@@ -23,21 +23,6 @@ function initialise() {
   });  
 }
 
-let csvContent = '';
-function downloadCSVData(downloadName = 'payable') {
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
-  const blobUrl = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.setAttribute("href", blobUrl);
-  link.setAttribute("download", downloadName + ".csv");
-
-  link.click();
-
-  URL.revokeObjectURL(blobUrl);
-}
-window.downloadCSVData = downloadCSVData
-
 /**
  * --------------------------------------------------
  * Read All
@@ -64,7 +49,7 @@ function listAllPayables(inputParams) {
         </td>
       </tr>`
 
-      csvContent = 'Student,University,Agent,Program Type,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+      let csvContent = 'Student,University,Agent,Program Type,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
       // student, univ, agent, program type, stage, fees, amount, due date, status, notes
       const csvRow = '{},{},{},{},{},{},{},{},{},{}\r\n'
 
@@ -119,6 +104,7 @@ function listAllPayables(inputParams) {
 
       await Promise.all(promises)
 
+      window.csvContent = csvContent
       listInit()
     })
     .catch((error) => {

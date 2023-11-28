@@ -90,14 +90,18 @@ function listAllProgramTypes() {
           </td>
         </tr>`
 
+      let csvContent = 'Program Name\r\n';
+
       Object.keys(programTypes).forEach(pId => {
         try {
           const p = programTypes[pId]
           const row = schema.format(pId, p.name, pId)
+          csvContent += `${p.name}\r\n`
           if (tableBody) tableBody.innerHTML += row
         } catch {}
       });
       
+      window.csvContent = csvContent
       listInit()
     })
     .catch((error) => {

@@ -170,7 +170,7 @@ export async function searchReports({ status, startDate, endDate, reportType }) 
   const data = snapshot.val();
 
   // Perform additional filtering based on startDate and endDate
-  let filteredData = data;
+  let filteredData = Object.values(data).filter(item => item);
 
   if (startDate) {
     filteredData = Object.values(filteredData).filter(item => item.dueDate >= startDate);
