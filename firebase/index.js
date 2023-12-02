@@ -215,9 +215,9 @@ function downloadCSVData(downloadName = 'data') {
 window.downloadCSVData = downloadCSVData
 
 const { jsPDF } = window.jspdf;
-const pdf = new jsPDF();
-function downloadPDF(downloadName='data') {
-  const table = document.querySelector('.table');  
+function downloadPDF(downloadName='data', selector = '.table') {
+  const pdf = new jsPDF();
+  const table = document.querySelector(selector);  
   if (!table) {
       console.error("Table element not found.");
       return;

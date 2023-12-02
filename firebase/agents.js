@@ -1,7 +1,8 @@
-import { readData, writeData, deleteData, fetchPaymentDetails } from "./helpers.js";
+import { readData, writeData, searchReports, deleteData, fetchPaymentDetails } from "./helpers.js";
 
 // Global Variables
 let programs = {}, students = {}, universities = {}, agents = {}, currency = {}, paymentStages = {}
+let agent_summary = {}
 
 async function fetchData() {
   programs = await readData("program_types")
@@ -11,6 +12,33 @@ async function fetchData() {
   currency = await readData("currency_types")
   paymentStages = await readData("payment_stages")
 }
+
+/**
+ * --------------------------------------------------
+ * Download CSV
+ * --------------------------------------------------
+ */
+
+let downloadData = {
+  "payable": {}, "receivable": {}
+}
+
+function downloadCommissions(type, downloadName = 'data') {
+  if (!Object.keys(downloadData).includes(type)) return;
+  
+  let data = downloadData[type];
+  const blob = new Blob([data], { type: "text/csv;charset=utf-8" });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", blobUrl);
+  link.setAttribute("download", downloadName + ".csv");
+
+  link.click();
+
+  URL.revokeObjectURL(blobUrl);
+}
+window.downloadCommissions = downloadCommissions
 
 /**
  * --------------------------------------------------
@@ -90,13 +118,13 @@ function listAllAgents() {
     .then((agents) => {
       const schema = `
           <tr class="btn-reveal-trigger">
-          <td class="id align-middle white-space-nowrap py-2"><a href="agent.html?id={}">{}</a></td>
           <td class="name align-middle white-space-nowrap py-2">
               <h5 class="mb-0 fs--1">{}</h5>
           </td>
           <td class="email align-middle py-2"><a href="mailto:{}">{}</a></td>
           <td class="phone align-middle white-space-nowrap py-2">{}</td>
-          <td class="address align-middle ps-5 py-2">{}</td>
+          <td class="payable align-middle text-center py-2">{}</td>
+          <td class="receivable align-middle text-center py-2">{}</td>
           <td class="align-middle white-space-nowrap py-2 text-end">
             <div class="dropdown font-sans-serif position-static">
               <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-0" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
@@ -110,17 +138,20 @@ function listAllAgents() {
           </td>
         </tr>`
 
-      let csvContent = 'Name,Email,Phone,Address\r\n'
-      const csvRow = '{},{},{},{}\r\n'  
+      let csvContent = 'Name,Email,Phone,Payable,Receivable\r\n'
+      const csvRow = '{},{},{},{},{}\r\n'  
 
       Object.keys(agents).forEach(id => {
         try {          
           const a = agents[id]
-          const row = schema.format(id, id, a.name, a.email, a.email, a.phone, a.address, id, id, id)
+          let payable = agent_summary[id]?.payable || 0
+          let receivable = agent_summary[id]?.receivable || 0;
+
+          const row = schema.format(a.name, a.email, a.email, a.phone, payable, receivable, id, id, id)
           if (tableBody) tableBody.innerHTML += row
 
           const name =  a.name.includes(',') ? `"${a.name}"` : a.name
-          csvContent += csvRow.format(name, a.email, a.phone, a.address)
+          csvContent += csvRow.format(name, a.email, a.phone, payable, receivable)
         } catch {}
       });
 
@@ -172,20 +203,19 @@ async function readPaymentDetails(id) {
   const data = await fetchPaymentDetails('agent', id)
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
-  await updatePayables(payableBody, data["payable"])
+  await updatePayables(payableBody, data["payable"], "payable")
   if (!isAgent) {
-    await updatePayables(receivableBody, data["receivable"])
+    await updatePayables(receivableBody, data["receivable"], "receivable")
   }
   listInit()
 }
 window.readPaymentDetails = readPaymentDetails
 
-async function updatePayables(tableBody, payables) {
+async function updatePayables(tableBody, payables, type) {
   tableBody.innerHTML = ''
   const schema = `<tr class="btn-reveal-trigger">
-    <td class="align-middle white-space-nowrap student"><a href="student_details.html?id={}">{}</a></td>
-    <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
-    <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
+    <td class="align-middle white-space-nowrap student">{}<br><a href="student_details.html?id={}">Details</a></td>
+    <td class="align-middle university">{}<br><a href="university_details.html?id={}">Details</a></td>
     <td class="align-middle stage">{}</td>
     <td class="align-middle text-nowrap fees">{}</td>
     <td class="align-middle text-nowrap amount">{}</td>
@@ -194,6 +224,10 @@ async function updatePayables(tableBody, payables) {
       {}
     </td>
   </tr>`
+
+  let csvContent = 'Student,University,Agent,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+  // student, univ, agent, stage, fees, amount, due date, status, notes
+  const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'  
 
   const promises = Object.keys(payables).map(async id => {
     try {
@@ -235,15 +269,21 @@ async function updatePayables(tableBody, payables) {
         amount = `${p.amount}%`
       }
   
-      const row = schema.format(p.student, StudentName, p.university, UniversityName,
-          p.agent, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
+      const row = schema.format(StudentName, p.student, UniversityName, p.university,
+          stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
         if (tableBody) tableBody.innerHTML += row
+
+      csvContent += csvRow.format(StudentName, UniversityName, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.status, p?.notes || '')
     } catch (e) { console.log(e); console.log(id) }
   });
 
   if (!Object.keys(payables).length) {
     tableBody.innerHTML = `<tr class="text-center"><td colspan="8">No payments data</td></tr>`
   }
+
+  if (downloadData) {
+    downloadData[type] = csvContent;
+  }  
 
   await Promise.all(promises)
 }
@@ -309,6 +349,24 @@ window.onload = async () => {
   const pageName = window.location.pathname.split('/').pop().split(".html")[0];
   switch (pageName) {
     case "agents": {
+      const payables = await searchReports({status: 'pending', reportType: 'payable'})
+      const receivables = await searchReports({status: 'pending', reportType: 'receivable'})
+
+      payables.map(tr => {
+        const aid = tr.agent
+        if (!agent_summary[aid]) {
+          agent_summary[aid] = { payable: 0, receivable: 0 };
+        }
+        agent_summary[aid].payable += 1;
+      })
+      receivables.map(tr => {
+        const aid = tr.agent
+        if (!agent_summary[aid]) {
+          agent_summary[aid] = { payable: 0, receivable: 0 };
+        }
+        agent_summary[aid].receivable += 1;
+      })
+
       listAllAgents();
       break;
     }

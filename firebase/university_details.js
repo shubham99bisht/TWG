@@ -4,6 +4,34 @@ import { auth } from "./index.js";
 let programs = {}, students = {}, agents = {}, paymentStages = {}
 let university = {}, currencies = {}
 
+
+/**
+ * --------------------------------------------------
+ * Download CSV
+ * --------------------------------------------------
+ */
+
+let downloadData = {
+  "payable": {}, "receivable": {}
+}
+
+function downloadCommissions(type, downloadName = 'data') {
+  if (!Object.keys(downloadData).includes(type)) return;
+  
+  let data = downloadData[type];
+  const blob = new Blob([data], { type: "text/csv;charset=utf-8" });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", blobUrl);
+  link.setAttribute("download", downloadName + ".csv");
+
+  link.click();
+
+  URL.revokeObjectURL(blobUrl);
+}
+window.downloadCommissions = downloadCommissions
+
 /**
  * --------------------------------------------------
  * Update University Basic details
@@ -357,17 +385,16 @@ async function readPaymentDetails(id) {
   const data = await fetchPaymentDetails('university', id)
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
-  await updatePayables(payableBody, data["payable"])
-  await updatePayables(receivableBody, data["receivable"])
+  await updatePayables(payableBody, data["payable"], "payable")
+  await updatePayables(receivableBody, data["receivable"], "receivable")
 }
 window.readPaymentDetails = readPaymentDetails
 
-async function updatePayables(tableBody, payables) {
+async function updatePayables(tableBody, payables, type) {
   tableBody.innerHTML = ''
   const schema = `<tr class="btn-reveal-trigger">
-    <td class="align-middle white-space-nowrap student"><a href="student_details.html?id={}">{}</a></td>
-    <td class="align-middle white-space-nowrap university"><a href="university_details.html?id={}">{}</a></td>
-    <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
+    <td class="align-middle white-space-nowrap student">{}<br><a href="student_details.html?id={}">Details</a></td>
+    <td class="align-middle agent">{}<br><a href="agent.html?id={}">Details</a></td>
     <td class="align-middle stage">{}</td>
     <td class="align-middle text-nowrap fees">{}</td>
     <td class="align-middle text-nowrap amount">{}</td>
@@ -376,6 +403,10 @@ async function updatePayables(tableBody, payables) {
       {}
     </td>
   </tr>`
+
+  let csvContent = 'Student,University,Agent,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+  // student, univ, agent, program type, stage, fees, amount, due date, status, notes
+  const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'  
 
   const promises = Object.keys(payables).map(async id => {
     try {
@@ -417,16 +448,21 @@ async function updatePayables(tableBody, payables) {
         amount = `${p.amount}%`
       }
   
-      const row = schema.format(p.student, StudentName, p.university, UniversityName,
-        p.agent, AgentName, stage.name, `${p.fees} ${currencies[p.feesCurrency].name}`, amount, p.dueDate, status)
+      const row = schema.format(StudentName, p.student, AgentName, p.agent,
+        stage.name, `${p.fees} ${currencies[p.feesCurrency].name}`, amount, p.dueDate, status)
       if (tableBody) tableBody.innerHTML += row
+
+      csvContent += csvRow.format(StudentName, UniversityName, AgentName, stage.name, `${p.fees} ${currencies[p.feesCurrency].name}`, amount, p.dueDate, p?.status, p?.notes || '')
     } catch (e) { console.log(e); console.log(id) }
   });
 
   if (!Object.keys(payables).length) {
-    tableBody.innerHTML = `<tr class="text-center"><td colspan="8">No payments data</td></tr>`
+    tableBody.innerHTML = `<tr class="text-center"><td colspan="7">No payments data</td></tr>`
   }
 
+  if (downloadData) {
+    downloadData[type] = csvContent;
+  }
   await Promise.all(promises)
 }
 

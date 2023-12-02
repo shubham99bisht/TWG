@@ -26,6 +26,33 @@ async function fetchData() {
 
 /**
  * --------------------------------------------------
+ * Download CSV
+ * --------------------------------------------------
+ */
+
+let downloadData = {
+  "payable": {}, "receivable": {}
+}
+
+function downloadCommissions(type, downloadName = 'data') {
+  if (!Object.keys(downloadData).includes(type)) return;
+  
+  let data = downloadData[type];
+  const blob = new Blob([data], { type: "text/csv;charset=utf-8" });
+  const blobUrl = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.setAttribute("href", blobUrl);
+  link.setAttribute("download", downloadName + ".csv");
+
+  link.click();
+
+  URL.revokeObjectURL(blobUrl);
+}
+window.downloadCommissions = downloadCommissions
+
+/**
+ * --------------------------------------------------
  * Read All
  * --------------------------------------------------
  */
@@ -171,6 +198,10 @@ async function updatePayables(tableBody, payables, type) {
     </td>    
   </tr>`
 
+  let csvContent = 'Student,University,Agent,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+  // student, univ, agent, program type, stage, fees, amount, due date, status, notes
+  const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'
+
   const promises = Object.keys(payables).map(async id => {
     try {
       const p = payables[id]
@@ -214,6 +245,8 @@ async function updatePayables(tableBody, payables, type) {
       const row = schema.format(id, p.student, StudentName, 
         stage?.name || '', `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.notes || '', status, id)
         if (tableBody) tableBody.innerHTML += row
+
+      csvContent += csvRow.format(StudentName, UniversityName, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.status, p?.notes || '')
     } catch (e) {
       console.log(e)
     }
@@ -223,6 +256,9 @@ async function updatePayables(tableBody, payables, type) {
     tableBody.innerHTML = `<tr class="text-center"><td colspan="8">No payments data</td></tr>`
   }
 
+  if (downloadData) {
+    downloadData[type] = csvContent;
+  }
   await Promise.all(promises)
 }
 

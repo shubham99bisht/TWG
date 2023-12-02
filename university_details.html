@@ -134,21 +134,32 @@
         </div>
         
         <!-- Payable -->
-        <div class="card mb-3" id="payableHistoryTable" data-list='{"valueNames":["student","university","agent","stage","duedate","fees","amount","status"],"page":10,"pagination":true}'>
-          <div class="card-header d-flex flex-between-center">
-            <h5 class="mb-0 text-nowrap py-2 py-xl-0">Payable</h5>
-            <div>
-              <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('payableHistory')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
-              <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV('payableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+        <div class="card mb-3" id="payableHistoryTable" data-list='{"valueNames":["student","agent","stage","duedate","fees","amount","status"],"page":10,"pagination":true}'>
+          <div class="card-header">            
+            <div class="row flex-between-center mb-3">
+              <div class="col-6 col-md-auto d-flex align-items-center">
+                <h5 class="mb-0 text-nowrap py-2 py-xl-0">Payable</h5>
+              </div>
+              <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
+                <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('payable', '#payable')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+                <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCommissions('payable', 'payableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+              </div>
+              <div class="col-12 col-md-5 mt-1 mt-md-0 ms-auto text-end">
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for a page" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                  </div>
+                </form>
+              </div>              
             </div>
           </div>
           <div class="card-body p-0">
             <div class="table-responsive scrollbar">
-              <table class="table table-sm fs--1 mb-0 overflow-hidden">
+              <table class="table table-sm fs--1 mb-0 overflow-hidden" id="payable">
                 <thead class="bg-200 text-900">
                   <tr>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="student">Student</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="university">University</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="agent">Agent</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="stage">Payment Stage</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="fees">Fees</th>
@@ -158,7 +169,7 @@
                   </tr>
                 </thead>
                 <tbody class="list" id="table-payable-body">
-                  <tr class="text-center"><td colspan="8">Loading...</td></tr>
+                  <tr class="text-center"><td colspan="7">Loading...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -171,21 +182,32 @@
         </div> 
         
         <!-- Receivable -->
-        <div class="card mb-3" id="receivableHistoryTable" data-list='{"valueNames":["student","university","agent","stage","duedate","fees","amount","status"],"page":10,"pagination":true}'>
-          <div class="card-header d-flex flex-between-center">
-            <h5 class="mb-0 text-nowrap py-2 py-xl-0">Receivable</h5>
-            <div>
-              <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('receivableHistory')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
-              <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSV('receivableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+        <div class="card mb-3" id="receivableHistoryTable" data-list='{"valueNames":["student","agent","stage","duedate","fees","amount","status"],"page":10,"pagination":true}'>
+          <div class="card-header">            
+            <div class="row flex-between-center mb-3">
+              <div class="col-6 col-md-auto d-flex align-items-center">
+                <h5 class="mb-0 text-nowrap py-2 py-xl-0">Receivable</h5>
+              </div>
+              <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
+                <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('receivableHistory', '#receivable')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+                <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCommissions('receivable', 'receivableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+              </div>
+              <div class="col-12 col-md-5 mt-1 mt-md-0 ms-auto text-end">
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for a page" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                  </div>
+                </form>
+              </div>              
             </div>
           </div>
           <div class="card-body p-0">
             <div class="table-responsive scrollbar">
-              <table class="table table-sm fs--1 mb-0 overflow-hidden">
+              <table class="table table-sm fs--1 mb-0 overflow-hidden" id="receivable">
                 <thead class="bg-200 text-900">
                   <tr>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="student">Student</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="university">University</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="agent">Agent</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="stage">Payment Stage</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="fees">Fees</th>
@@ -195,7 +217,7 @@
                   </tr>
                 </thead>
                 <tbody class="list" id="table-receivable-body">
-                  <tr class="text-center"><td colspan="8">No payment details</td></tr>
+                  <tr class="text-center"><td colspan="7">Loading...</td></tr>
                 </tbody>
               </table>
             </div>
