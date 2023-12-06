@@ -12,6 +12,7 @@
   <script src="./assets/js/config.js"></script>
   <script src="./vendors/simplebar/simplebar.min.js"></script>
   <!-- Stylesheets-->
+  <link href="./vendors/choices/choices.min.css" rel="stylesheet">
   <link href="./vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
@@ -83,13 +84,12 @@
               <!-- Status Dropdown Column -->
               <div class="col-md-4 mb-3">
                 <label for="statusDropdown">Payment Status</label>
-                <select id="statusDropdown" class="form-control form-control-sm">
+                <select class="form-select form-select-sm js-choice" id="statusDropdown" multiple="multiple" size="1" name="statusDropdown" data-options='{"removeItemButton":true}'>
                   <option value="pending" selected>Pending</option>
                   <option value="confirmed">Confirmed</option>
                   <option value="invoiced">Invoiced</option>
                   <option value="paid">Paid</option>
                   <option value="na">Not Applicable</option>
-                  <option value="">All Statuses</option>
                 </select>
               </div>
           
@@ -157,6 +157,7 @@
   <script src="./vendors/bootstrap/bootstrap.min.js"></script>
   <script src="./vendors/anchorjs/anchor.min.js"></script>
   <script src="./vendors/is/is.min.js"></script>
+  <script src="./vendors/choices/choices.min.js"></script>
   <script src="./vendors/chart/chart.min.js"></script>
   <script src="./vendors/countup/countUp.umd.js"></script>
   <script src="./vendors/echarts/echarts.min.js"></script>

@@ -13,7 +13,11 @@ function initialise() {
   });
 
   document.getElementById('searchButton').addEventListener('click', function () {
-    const status = statusDropdown.selectedOptions[0].value;
+    let status = [];
+    for(let i = 0; i < statusDropdown.options.length; i++) {
+      const value = statusDropdown.options[i]?.value;
+      status.push(value)
+    }
     const dateRange = datepickerInstance.selectedDates.map(date => date.toISOString().split('T')[0]);
 
     const inputParams = {

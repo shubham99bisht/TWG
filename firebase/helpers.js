@@ -1,4 +1,7 @@
-import { ref, get, set, update, push, remove, child, query, orderByChild, equalTo, startAt, endAt, onValue } from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
+import { ref, get, set, update, push, remove, child, query, 
+  orderByChild, equalTo, startAt, startAfter, endAt, 
+  endBefore, orderByKey, limitToFirst, limitToLast 
+} from "https://www.gstatic.com/firebasejs/9.16.0/firebase-database.js";
 import { auth, db } from "./index.js";
 
 const logsRef = ref(db, "logs");
@@ -151,15 +154,12 @@ export async function searchReports({ status, startDate, endDate, reportType }) 
   // Start with the base query
   let queryRef = ref(db, reportType);
 
-  // Add filter based on status
-  if (status) {
-    queryRef = query(queryRef, orderByChild('status'), equalTo(status));
-  }
-
-  // If status is not provided, use endDate if available, otherwise use startDate
-  if (!status && endDate) {
+  // Add filters
+  if (status && status?.length == 1) {
+    queryRef = query(queryRef, orderByChild('status'), equalTo(status[0]));
+  } else if (endDate) {
     queryRef = query(queryRef, orderByChild('dueDate'), endAt(endDate));
-  } else if (!status && startDate) {
+  } else if (startDate) {
     queryRef = query(queryRef, orderByChild('dueDate'), startAt(startDate));
   }
 
@@ -172,13 +172,39 @@ export async function searchReports({ status, startDate, endDate, reportType }) 
   // Perform additional filtering based on startDate and endDate
   let filteredData = Object.values(data).filter(item => item);
 
+  if (status && status?.length != 1) {
+    filteredData = filteredData.filter(item => status.includes(item.status));
+  }
+
   if (startDate) {
-    filteredData = Object.values(filteredData).filter(item => item.dueDate >= startDate);
+    filteredData = filteredData.filter(item => item.dueDate >= startDate);
   }
 
   if (endDate) {
-    filteredData = Object.values(filteredData).filter(item => item.dueDate <= endDate);
+    filteredData = filteredData.filter(item => item.dueDate <= endDate);
   }
 
   return filteredData;
+}
+
+// Function to fetch paginated data
+export async function fetchPaginatedData(dbPath, pageSize, startAtKey='', endAtKey='') {
+  let queryRef = ref(db, dbPath)
+  queryRef = query(queryRef, orderByKey());
+
+  if (startAtKey) {
+    queryRef = query(queryRef, startAfter(startAtKey));
+    queryRef = query(queryRef, limitToFirst(pageSize));
+  } else if (endAtKey) {
+    queryRef = query(queryRef, endBefore(endAtKey));
+    queryRef = query(queryRef, limitToLast(pageSize));
+  } else {
+    queryRef = query(queryRef, limitToLast(pageSize));
+  }
+
+  const snapshot = await get(queryRef)
+  const data = snapshot.val();
+  const startKey = Object.keys(data)[0];
+  const endKey = Object.keys(data).pop();
+  return { data, startKey, endKey };
 }

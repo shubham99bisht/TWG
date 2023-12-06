@@ -13,7 +13,11 @@ function initialise() {
   });
 
   document.getElementById('searchButton').addEventListener('click', function () {
-    const status = statusDropdown.selectedOptions[0].value;
+    let status = [];
+    for(let i = 0; i < statusDropdown.options.length; i++) {
+      const value = statusDropdown.options[i]?.value;
+      status.push(value)
+    }
     const dateRange = datepickerInstance.selectedDates.map(date => date.toISOString().split('T')[0]);
   
     // Perform the search with the selected values (you can call your search function here)
@@ -33,6 +37,13 @@ function initialise() {
  * --------------------------------------------------
  */
 function listAllReceivables(inputParams) {
+  const userRole = localStorage.getItem("userRole")
+  const isAgent = userRole == 'Agent' ? true : false
+  if (isAgent) {
+    tableBody.innerHTML = `<tr class="text-center"><td colspan="10">No Receivable data found!</td></tr>`
+    return
+  }
+
   const tableBody = document.getElementById("table-payable-body");
   if (!tableBody) return
   tableBody.innerHTML = ''
