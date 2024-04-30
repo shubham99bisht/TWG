@@ -1,8 +1,8 @@
 import { readData, deleteData, fetchPaymentDetails, updateData, writeDataWithNewId } from "./helpers.js";
 
 // Global Variables
-let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, paymentStages = {}
-let availablePaymentStages = {}, currency = {}
+let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, studyStages = {}
+let availablestudyStages = {}, currency = {}
 let currency_options = ''
 
 const currencyInput =  document.getElementById("currency")
@@ -14,7 +14,7 @@ async function fetchData() {
   universities = await readData("universities")
   agents = await readData("agents")
   currency = await readData("currency_types")
-  paymentStages = await readData("payment_stages")
+  studyStages = await readData("study_stages")
   Object.keys(currency).forEach(key => {
     currency_options += `<option value='${key}'>${currency[key]?.name}</option>`
   })
@@ -198,7 +198,7 @@ async function updatePayables(tableBody, payables, type) {
     </td>    
   </tr>`
 
-  let csvContent = 'Student,University,Agent,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+  let csvContent = 'Student,University,Agent,Study Stage,Fees,Amount,Due Date,Status,Notes\r\n';
   // student, univ, agent, program type, stage, fees, amount, due date, status, notes
   const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'
 
@@ -209,7 +209,7 @@ async function updatePayables(tableBody, payables, type) {
       const StudentName = students[p.student].studentName
       const UniversityName = universities[p?.university].name
   
-      const stage = paymentStages[p.stage]
+      const stage = studyStages[p.stage]
       let status = ''
       switch (p?.status) {
         case 'confirmed': {
@@ -464,7 +464,7 @@ updateStatusModal.addEventListener('show.bs.modal', event => {
   updateStatusModal.querySelector('#status').value = payments[CommissionType][row.id].status
   
   const stageSelector = updateStatusModal.querySelector('#stage')
-  updatePaymentStageList(row.id, CommissionType, stageSelector)
+  updatestudyStageList(row.id, CommissionType, stageSelector)
 
   if (updateStatusModal.querySelector('#status').value == 'pending') {
     morePaymentsSelect.value = 0; morePaymentsSelect.disabled = true
@@ -536,7 +536,7 @@ async function updateStatus() {
 } 
 window.updateStatus = updateStatus
 
-function updatePaymentStageList(paymentId, CommissionType, stageSelector) {
+function updatestudyStageList(paymentId, CommissionType, stageSelector) {
   stageSelector.innerHTML = '<option value="">Select stage</option>'
   const uid = payments[CommissionType][paymentId].university
   const studentId = payments[CommissionType][paymentId].student
@@ -544,11 +544,11 @@ function updatePaymentStageList(paymentId, CommissionType, stageSelector) {
 
   const pType = universities[uid].programTypes.find(pt => pt.type == pid)
   if (!pType) return
-  availablePaymentStages = pType.paymentStages
+  availablestudyStages = pType.studyStages
 
-  const stageIds = pType.paymentStages.map(pst => pst.stage)
+  const stageIds = pType.studyStages.map(pst => pst.stage)
   stageIds.forEach(stageId => {
-    let stage = paymentStages[stageId]
+    let stage = studyStages[stageId]
     if (stage) {
       let option = document.createElement("option");
       option.value = stageId;
@@ -565,7 +565,7 @@ computeCommission.addEventListener("click", (event) => {
   const CommissionType= form.querySelector('#commissionType').value
   const selectedStage= form.querySelector('#stage').value
   console.log(selectedStage)
-  const stageConfig = availablePaymentStages.find(s => s.stage == selectedStage)
+  const stageConfig = availablestudyStages.find(s => s.stage == selectedStage)
   const commissions = stageConfig?.commissions
   console.log(stageConfig)
   if (!commissions) return

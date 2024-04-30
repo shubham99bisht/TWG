@@ -23,7 +23,7 @@ const payableDueDateInput = document.getElementById("PdueDate")
 const payableAmountInput = document.getElementById("Pamount")
 
 // Global Variables
-let programs = {}, universities = {}, agents = {}, currency = {}, paymentStages = {}
+let programs = {}, universities = {}, agents = {}, currency = {}, studyStages = {}
 
 
 /**
@@ -157,7 +157,7 @@ async function fetchData() {
   universities = await readData("universities")
   agents = await readData("agents")
   currency = await readData("currency_types")
-  paymentStages = await readData("payment_stages")
+  studyStages = await readData("study_stages")
 }
 
 function updateCurrencyList() {
@@ -209,7 +209,7 @@ function updateUniversityList(pId) {
   }
 }
 
-function updatePaymentStageList() {
+function updatestudyStageList() {
   const uid = universitySelect.value
   const pid = programSelect.value
 
@@ -221,18 +221,18 @@ function updatePaymentStageList() {
 
   console.log(pType)
 
-  const stageIds = pType.paymentStages.map(pst => pst.stage)
+  const stageIds = pType.studyStages.map(pst => pst.stage)
   stageIds.forEach(stageId => {
-    let paymentStage = paymentStages[stageId]
-    if (paymentStage) {
+    let studyStage = studyStages[stageId]
+    if (studyStage) {
       let option = document.createElement("option");
       option.value = stageId;
-      option.textContent = paymentStage.name;
+      option.textContent = studyStage.name;
       Pstage.appendChild(option);
 
       option = document.createElement("option");
       option.value = stageId;
-      option.textContent = paymentStage.name;
+      option.textContent = studyStage.name;
       Rstage.appendChild(option);
     }
   });
@@ -251,7 +251,7 @@ function computeComissionReceivable() {
   if (!university) return
   const programType = university.programTypes.find(p => p.type == pid)
   if (!programType) return
-  const stage = programType.paymentStages.find(s => s.stage == sid)
+  const stage = programType.studyStages.find(s => s.stage == sid)
   if (!stage) return
   const commissions = stage.commissions
   if (!commissions) return
@@ -301,7 +301,7 @@ function computeComissionPayable() {
   if (!university) return
   const programType = university.programTypes.find(p => p.type == pid)
   if (!programType) return
-  const stage = programType.paymentStages.find(s => s.stage == sid)
+  const stage = programType.studyStages.find(s => s.stage == sid)
   if (!stage) return
   const commissions = stage.commissions
   if (!commissions) return
@@ -373,7 +373,7 @@ programSelect.addEventListener("change", () => {
 })
 
 universitySelect.addEventListener("change", () => {
-  updatePaymentStageList()
+  updatestudyStageList()
 })
 
 payableRecompute.addEventListener("click", computeComissionPayable)

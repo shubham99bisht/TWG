@@ -208,3 +208,22 @@ export async function fetchPaginatedData(dbPath, pageSize, startAtKey='', endAtK
   const endKey = Object.keys(data).pop();
   return { data, startKey, endKey };
 }
+
+
+// Generates dates for Report default search  ['Jan 01 2023', 'Nov 10 2023'] 
+export function getDates() {
+  const currentYear = new Date().getFullYear();
+  const startOfYear = new Date(currentYear, 0, 1);
+  const currentDate = new Date();
+  
+  // Format dates
+  const formatDate = date => {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = months[date.getMonth()];
+      const year = date.getFullYear();
+      return `${month} ${day} ${year}`;
+  };
+  
+  return [formatDate(startOfYear), formatDate(currentDate)];
+}

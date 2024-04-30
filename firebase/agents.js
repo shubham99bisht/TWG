@@ -1,7 +1,7 @@
 import { readData, writeData, searchReports, deleteData, fetchPaymentDetails } from "./helpers.js";
 
 // Global Variables
-let programs = {}, students = {}, universities = {}, agents = {}, currency = {}, paymentStages = {}
+let programs = {}, students = {}, universities = {}, agents = {}, currency = {}, studyStages = {}
 let agent_summary = {}
 
 async function fetchData() {
@@ -10,7 +10,7 @@ async function fetchData() {
   universities = await readData("universities")
   agents = await readData("agents")
   currency = await readData("currency_types")
-  paymentStages = await readData("payment_stages")
+  studyStages = await readData("study_stages")
 }
 
 /**
@@ -225,7 +225,7 @@ async function updatePayables(tableBody, payables, type) {
     </td>
   </tr>`
 
-  let csvContent = 'Student,University,Agent,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+  let csvContent = 'Student,University,Agent,Study Stage,Fees,Amount,Due Date,Status,Notes\r\n';
   // student, univ, agent, stage, fees, amount, due date, status, notes
   const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'  
 
@@ -236,7 +236,7 @@ async function updatePayables(tableBody, payables, type) {
       const StudentName = students[p.student].studentName
       const UniversityName = universities[p?.university].name
   
-      const stage = paymentStages[p.stage]
+      const stage = studyStages[p.stage]
       let status = ''
       switch (p?.status) {
         case 'confirmed': {

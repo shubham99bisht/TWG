@@ -50,13 +50,13 @@ function createStage() {
     failMessage("Please provide valid stage name"); return
   }
 
-  writeDataWithNewId(`payment_stages`, newStageType)
+  writeDataWithNewId(`study_stages`, newStageType)
     .then((result) => {
       if (result) {
         successMessage("Stage type added successfully!")
         .then(() => location.reload())
       } else {
-        failMessage("Can't update payment stages");
+        failMessage("Can't update Study Stages");
       }
     })
     .catch((error) => {
@@ -84,7 +84,7 @@ function listAllStageTypes() {
         </a>
       </td>
     </tr>`  
-  readData("payment_stages")
+  readData("study_stages")
     .then((stages) => {
       Object.keys(stages).forEach(pId => {
         try {
@@ -119,13 +119,13 @@ function updateStage(pId) {
     failMessage("Please provide valid stage name"); return
   }
 
-  updateData(`payment_stages/${pId}`, updatedStageType)
+  updateData(`study_stages/${pId}`, updatedStageType)
     .then((result) => {
       if (result) {
         successMessage("Stage type updated successfully!")
         .then(() => location.reload())   
       } else {
-        failMessage("Can't update payment stages");
+        failMessage("Can't update Study Stages");
       }
     })
     .catch((error) => {

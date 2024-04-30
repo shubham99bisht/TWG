@@ -1,7 +1,7 @@
 import { readData, fetchPaymentDetails, updateData } from "./helpers.js";
 import { auth } from "./index.js";
 
-let programs = {}, students = {}, agents = {}, paymentStages = {}
+let programs = {}, students = {}, agents = {}, studyStages = {}
 let university = {}, currencies = {}
 
 
@@ -100,17 +100,17 @@ if (commissionsModal) {
     const row = button.closest('tr')
     if (row) {
       const program_type_id = row.querySelector('.program').id
-      const payment_stage_id = row.querySelector('.stage').id
+      const study_stage_id = row.querySelector('.stage').id
 
       const programType = university.programTypes.find(pt => pt.type === program_type_id);
-      const paymentStage = programType.paymentStages.find(ps => ps.stage === payment_stage_id);
-      const commissions = paymentStage.commissions
+      const studyStage = programType.studyStages.find(ps => ps.stage === study_stage_id);
+      const commissions = studyStage.commissions
 
       commissionsForm.querySelector('#universityId').value = university.id
       commissionsForm.querySelector('#program_type').value = program_type_id
       commissionsForm.querySelector('#program_type').disabled = true
-      commissionsForm.querySelector('#payment_stage').value = payment_stage_id
-      commissionsForm.querySelector('#payment_stage').disabled = true
+      commissionsForm.querySelector('#study_stage').value = study_stage_id
+      commissionsForm.querySelector('#study_stage').disabled = true
 
       commissionsForm.querySelector('#Ptype').value = commissions[0].type
       Pvalue.value = commissions[0].value
@@ -159,9 +159,9 @@ function updateCommission() {
     const { Ptype, Pvalue, Pcurrency, Pinstallment, Rtype, Rvalue, Rcurrency, Rinstallment } = formData
     const id = commissionsForm.querySelector('#universityId').value
     const program_type = commissionsForm.querySelector('#program_type').value 
-    const payment_stage = commissionsForm.querySelector('#payment_stage').value
+    const study_stage = commissionsForm.querySelector('#study_stage').value
     
-    if (!id || !program_type || !payment_stage || !Ptype || !Rtype) {
+    if (!id || !program_type || !study_stage || !Ptype || !Rtype) {
       failMessage("Enter all details"); return
     }
     switch (Ptype) {
@@ -195,16 +195,16 @@ function updateCommission() {
     // Find the programType with the matching "type" value
     const programType = university.programTypes.find(pt => pt.type === program_type);
     if (programType) {
-      // Find the paymentStage with the matching "stage" value within the programType
-      const paymentStage = programType.paymentStages.find(ps => ps.stage === payment_stage);
-      if (paymentStage) {
-        paymentStage.commissions = commissions
+      // Find the studyStage with the matching "stage" value within the programType
+      const studyStage = programType.studyStages.find(ps => ps.stage === study_stage);
+      if (studyStage) {
+        studyStage.commissions = commissions
       } else {
-        programType.paymentStages.push({ stage: payment_stage, commissions });
+        programType.studyStages.push({ stage: study_stage, commissions });
       }
     } else {
       university.programTypes.push({
-        type: program_type, paymentStages: [{ stage: payment_stage, commissions }]
+        type: program_type, studyStages: [{ stage: study_stage, commissions }]
       });
     }
 
@@ -225,8 +225,8 @@ function removeCommissionEntry(event) {
     const button = event.target
     const row = button.closest('tr')
     const program_type = row.querySelector('.program').id
-    const payment_stage = row.querySelector('.stage').id
-    if (!row || !program_type || !payment_stage) return
+    const study_stage = row.querySelector('.stage').id
+    if (!row || !program_type || !study_stage) return
 
     if (university.programTypes.length <= 1) {
       failMessage("University needs atleast one commission entry")
@@ -238,12 +238,12 @@ function removeCommissionEntry(event) {
       const programTypeIndex = university.programTypes.findIndex(pt => pt.type === program_type);
       if (programTypeIndex !== -1) {
         const programType = university.programTypes[programTypeIndex];
-        const paymentStageIndex = programType.paymentStages.findIndex(ps => ps.stage === payment_stage);
-        if (paymentStageIndex !== -1) {
-          programType.paymentStages.splice(paymentStageIndex, 1);
+        const studyStageIndex = programType.studyStages.findIndex(ps => ps.stage === study_stage);
+        if (studyStageIndex !== -1) {
+          programType.studyStages.splice(studyStageIndex, 1);
     
-          // If there are no more paymentStages under the programType, remove the programType as well
-          if (programType.paymentStages.length === 0) {
+          // If there are no more studyStages under the programType, remove the programType as well
+          if (programType.studyStages.length === 0) {
             university.programTypes.splice(programTypeIndex, 1);
           }
         }
@@ -321,32 +321,32 @@ function listOne(id) {
 
       data.programTypes.forEach(programType => {
         const programName = programs[programType.type]?.name
-        programType.paymentStages.forEach(paymentStage => {
+        programType.studyStages.forEach(studyStage => {
           try {
-            const stageName = paymentStages[paymentStage.stage].name
+            const stageName = studyStages[studyStage.stage].name
 
             let payable = 'NA'
-            switch (paymentStage.commissions[0].type) {
+            switch (studyStage.commissions[0].type) {
               case 'fixed': {
-                const currency = currencies[paymentStage.commissions[0]?.currency].name
-                payable = `${paymentStage.commissions[0]?.value || '0'} ${currency}`
+                const currency = currencies[studyStage.commissions[0]?.currency].name
+                payable = `${studyStage.commissions[0]?.value || '0'} ${currency}`
                 break;
               }
               case 'percentage': {
-                payable = `${paymentStage.commissions[0]?.value || '0'}%`
+                payable = `${studyStage.commissions[0]?.value || '0'}%`
                 break;
               }
             }
   
             let receivable = 'NA'
-            switch (paymentStage.commissions[1].type) {
+            switch (studyStage.commissions[1].type) {
               case 'fixed': {
-                const currency = currencies[paymentStage.commissions[1]?.currency].name
-                receivable = `${paymentStage.commissions[1]?.value || '0'} ${currency}`
+                const currency = currencies[studyStage.commissions[1]?.currency].name
+                receivable = `${studyStage.commissions[1]?.value || '0'} ${currency}`
                 break;
               }
               case 'percentage': {
-                receivable = `${paymentStage.commissions[1]?.value || '0'}%`
+                receivable = `${studyStage.commissions[1]?.value || '0'}%`
                 break;
               }
             }
@@ -355,12 +355,12 @@ function listOne(id) {
             newRow.innerHTML = `
               <td class="university">${data.name}</td>
               <td class="program" id="${programType.type}">${programName}</td>
-              <td class="stage" id="${paymentStage.stage}">${stageName}</td>
+              <td class="stage" id="${studyStage.stage}">${stageName}</td>
               <td class="payable">
-                ${payable} <br> ${paymentStage.commissions[0]?.installmentDays || 0} days
+                ${payable} <br> ${studyStage.commissions[0]?.installmentDays || 0} days
               </td>
               <td class="receivable">
-                ${receivable} <br> ${paymentStage.commissions[1]?.installmentDays || 0} days
+                ${receivable} <br> ${studyStage.commissions[1]?.installmentDays || 0} days
               </td>
               <td>
                 <a data-bs-toggle="modal" data-bs-target="#commissions-modal" class="pe-2" type="button"><i class="fas fa-edit text-warning"></i></a>
@@ -368,7 +368,7 @@ function listOne(id) {
               </td>`;
           } catch (e) {
             console.log(e)
-            console.log("Error occured while displaying program: ", programType.type, paymentStage.stage)
+            console.log("Error occured while displaying program: ", programType.type, studyStage.stage)
           }
         });
       });
@@ -404,7 +404,7 @@ async function updatePayables(tableBody, payables, type) {
     </td>
   </tr>`
 
-  let csvContent = 'Student,University,Agent,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+  let csvContent = 'Student,University,Agent,Study Stage,Fees,Amount,Due Date,Status,Notes\r\n';
   // student, univ, agent, program type, stage, fees, amount, due date, status, notes
   const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'  
 
@@ -415,7 +415,7 @@ async function updatePayables(tableBody, payables, type) {
       const StudentName = students[p.student].studentName
       const UniversityName = university.name
   
-      const stage = paymentStages[p.stage]
+      const stage = studyStages[p.stage]
       let status = ''
       switch (p?.status) {
         case 'confirmed': {
@@ -476,7 +476,7 @@ async function fetchData() {
   programs = await readData("program_types")
   students = await readData("students")
   agents = await readData("agents")
-  paymentStages = await readData("payment_stages")
+  studyStages = await readData("study_stages")
   currencies = await readData("currency_types")
   console.log(currencies)
 
@@ -493,12 +493,12 @@ function updateSelectors() {
     programTypeSelect.appendChild(option);
   });
 
-  const paymentStageSelect = document.getElementById('payment_stage')
-  Object.keys(paymentStages).forEach(function (key) {
+  const studyStageSelect = document.getElementById('study_stage')
+  Object.keys(studyStages).forEach(function (key) {
     const option = document.createElement('option');
     option.value = key;
-    option.textContent = paymentStages[key].name;
-    paymentStageSelect.appendChild(option);
+    option.textContent = studyStages[key].name;
+    studyStageSelect.appendChild(option);
   });  
 
   const Rcurrency = document.getElementById('Rcurrency')

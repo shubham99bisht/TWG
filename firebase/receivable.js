@@ -1,15 +1,16 @@
-import { readData, searchReports } from "./helpers.js";
+import { getDates, readData, searchReports } from "./helpers.js";
 
-let students = {}, universities = {}, agents = {}, programs = {}, paymentStages = {}, currency = {}
+let students = {}, universities = {}, agents = {}, programs = {}, studyStages = {}, currency = {}
 
 const CommissionType =  'receivable'
 
 // Initialise filters
 function initialise() {
+  const [startOfYear, currentDate] = getDates();
   // Initialize Datepicker
   const datepickerInstance = flatpickr("#datepicker", {
     mode: 'range', dateFormat: 'M d Y', 'disableMobile':true,
-    'defaultDate': ['Nov 01 2023', 'Nov 10 2023'] 
+    'defaultDate': [startOfYear, currentDate]
   });
 
   document.getElementById('searchButton').addEventListener('click', function () {
@@ -52,18 +53,19 @@ function listAllReceivables(inputParams) {
       const schema = `<tr class="btn-reveal-trigger" id="{}">
         <td class="align-middle student"><a href="student_details.html?id={}">{}</a></td>
         <td class="align-middle university"><a href="university_details.html?id={}">{}</a></td>
-        <td class="align-middle white-space-nowrap agent"><a href="agent.html?id={}">{}</a></td>
+        <td class="align-middle agent"><a href="agent.html?id={}">{}</a></td>
         <td class="align-middle program_type">{}</td>
         <td class="align-middle stage">{}</td>
         <td class="align-middle text-nowrap fees">{}</td>
         <td class="align-middle text-nowrap amount">{}</td>
         <td class="align-middle text-nowrap duedate">{}</td>
         <td class="align-middle fs-0 white-space-nowrap status text-center">
-          {}
+        {}
         </td>
+        <td class="align-middle text-nowrap notes">{}</td>
       </tr>`
 
-      let csvContent = 'Student,University,Agent,Program Type,Payment Stage,Fees,Amount,Due Date,Status,Notes\r\n';
+      let csvContent = 'Student,University,Agent,Program Type,Study Stage,Fees,Amount,Due Date,Status,Notes\r\n';
 
       // student, univ, agent, program type, stage, fees, amount, due date, status, notes
       const csvRow = '{},{},{},{},{},{},{},{},{},{}\r\n'      
@@ -76,7 +78,7 @@ function listAllReceivables(inputParams) {
           const UniversityName = universities[p?.university].name
           const ProgramName = programs[p?.program_type].name
   
-          const stage = paymentStages[p.stage]
+          const stage = studyStages[p.stage]
           let status = ''
           switch (p?.status) {
             case 'confirmed': {
@@ -110,7 +112,7 @@ function listAllReceivables(inputParams) {
           }
   
           const row = schema.format(id, p.student, StudentName, p.university, UniversityName,
-            p.agent, AgentName, ProgramName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status)
+            p.agent, AgentName, ProgramName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, status, p?.notes || '')
           if (tableBody) tableBody.innerHTML += row
 
           csvContent += csvRow.format(StudentName, UniversityName,  AgentName, ProgramName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.status, p?.notes || '')
@@ -144,7 +146,7 @@ window.onload = async () => {
   universities = await readData("universities")
   agents = await readData("agents")
   programs = await readData("program_types")
-  paymentStages = await readData("payment_stages")
+  studyStages = await readData("study_stages")
   currency = await readData("currency_types")
   initialise()
 }

@@ -1,13 +1,13 @@
 import { readData, writeDataWithNewId } from "./helpers.js";
 
-let program_types = {}, currencies = {}, paymentStages = {}
+let program_types = {}, currencies = {}, studyStages = {}
 let currency_options = ''
 
 window.onload = async function () {
   // Load Program Types
   program_types = await readData("program_types")
   currencies = await readData("currency_types")
-  paymentStages = await readData("payment_stages")
+  studyStages = await readData("study_stages")
 
   Object.keys(currencies).forEach(key => {
     currency_options += `<option value='${key}'>${currencies[key]?.name}</option>`
@@ -18,21 +18,21 @@ window.onload = async function () {
   addProgramBtn.disabled = false
 };
 
-// Remove Payment Stage
-function removePaymentStage(event) {
+// Remove Study Stage
+function removestudyStage(event) {
   const button = event.target;
   const row = button.closest('tr');
   const nextRow = row.nextElementSibling;
   row.remove(); nextRow.remove();
 }
-window.removePaymentStage = removePaymentStage;
+window.removestudyStage = removestudyStage;
 
-// Add Payment Stage
-function addPaymentStage(event) {
-  const paymentStage1 = `
+// Add Study Stage
+function addstudyStage(event) {
+  const studyStage1 = `
         <td rowspan="2" class="text-center align-middle">
-          <select class="form-select form-select-sm payment_stage" required="required">
-              <option hidden disabled selected value="">Select Payment stage</option>
+          <select class="form-select form-select-sm study_stage" required="required">
+              <option hidden disabled selected value="">Select Study Stage</option>
           </select>
         </td>
         <td>Payable</td>
@@ -48,9 +48,9 @@ function addPaymentStage(event) {
         </td>
         <td><input class="form-control form-control-sm rate" type="number" step="0.01" required="required"/></td>
         <td><input class="form-control form-control-sm days" type="number" required="required"/></td>
-        <td rowspan="2" class="text-center align-middle"><button class="btn btn-link btn-sm" type="button" onclick="removePaymentStage(event)"><span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span></button></td>`
+        <td rowspan="2" class="text-center align-middle"><button class="btn btn-link btn-sm" type="button" onclick="removestudyStage(event)"><span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span></button></td>`
 
-  const paymentStage2 = `
+  const studyStage2 = `
         <td>Receivable</td>
         <td>
           <select class="form-select form-select-sm commission_type mb-1" required="required" onchange="commissionTypeChange(event)">
@@ -72,22 +72,22 @@ function addPaymentStage(event) {
     if (table) {
       const newRow = table.insertRow();
       newRow.classList.add('align-middle')
-      newRow.innerHTML += paymentStage1
+      newRow.innerHTML += studyStage1
       const newRow2 = table.insertRow();
       newRow2.classList.add('align-middle')
-      newRow2.innerHTML += paymentStage2
+      newRow2.innerHTML += studyStage2
 
-      const newSelect = newRow.querySelector(".payment_stage")
-      Object.keys(paymentStages).forEach(function (key) {
+      const newSelect = newRow.querySelector(".study_stage")
+      Object.keys(studyStages).forEach(function (key) {
         const option = document.createElement('option');
         option.value = key;
-        option.textContent = paymentStages[key].name;
+        option.textContent = studyStages[key].name;
         newSelect.appendChild(option);
       });
     }
   }
 }
-window.addPaymentStage = addPaymentStage;
+window.addstudyStage = addstudyStage;
 
 function commissionTypeChange(event) {
   const select = event.target
@@ -148,7 +148,7 @@ function addProgramType(event) {
       <table class="table table-bordered mt-3 bg-white dark__bg-1100">
         <thead>
           <tr class="fs--1">
-            <th>Payment Stage</th>
+            <th>Study Stage</th>
             <th>Payment Type</th>
             <th>Commission Type</th>
             <th>Commission Rate</th>
@@ -162,7 +162,7 @@ function addProgramType(event) {
     </div>
 
     <div class="text-end">
-      <button class="btn btn-falcon-default btn-sm mt-2" type="button" onclick="addPaymentStage(event)"><span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>More Payment Stages </button>
+      <button class="btn btn-falcon-default btn-sm mt-2" type="button" onclick="addstudyStage(event)"><span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>More Study Stages </button>
     </div>
     `
 
@@ -218,11 +218,11 @@ universityForm.addEventListener('submit', function (event) {
       const element = inputsAndSelects[i];
   
       if (element.classList.contains('program_type')) {
-        currentProgramType = { type: element.value, paymentStages: [] };
+        currentProgramType = { type: element.value, studyStages: [] };
         data.programTypes.push(currentProgramType);
-      } else if (element.classList.contains('payment_stage')) {
-        const paymentStage = { stage: element.value, commissions: [] };
-        currentProgramType.paymentStages.push(paymentStage);
+      } else if (element.classList.contains('study_stage')) {
+        const studyStage = { stage: element.value, commissions: [] };
+        currentProgramType.studyStages.push(studyStage);
       } else if (currentProgramType) {
         if (element.classList.contains('commission_type')) {
           const commissionType = element.value;
@@ -260,7 +260,7 @@ universityForm.addEventListener('submit', function (event) {
           }
   
           // 0: Payable, 1: Receivable
-          currentProgramType.paymentStages[currentProgramType.paymentStages.length - 1].commissions.push(data);
+          currentProgramType.studyStages[currentProgramType.studyStages.length - 1].commissions.push(data);
   
           // Skip the next iteration as it's already processed
           i+=3;
@@ -277,10 +277,10 @@ universityForm.addEventListener('submit', function (event) {
           failMessage(`Program Types can't be repeated`); return
         } else { types.push(p.type) }
 
-        if (p?.paymentStages?.length) {
+        if (p?.studyStages?.length) {
           let stages = []
-          for (let j=0; j< p?.paymentStages.length; j++) {
-            let s = p?.paymentStages[j]
+          for (let j=0; j< p?.studyStages.length; j++) {
+            let s = p?.studyStages[j]
             if (stages.includes(s.stage)) {
               failMessage(`Program Stages can't be repeated`); return
             } else { stages.push(s.stage) }
