@@ -147,14 +147,110 @@ function readStudentDetails(id) {
       document.getElementById("source").innerHTML = result?.source
       document.getElementById("agent").innerHTML = result?.agent || '-'
 
+      loadStudyPlan(result?.studyPlan)
+      loadLearningPlan(result?.learningPlan)
       closeSwal()
     })
     .catch((error) => {
       console.log(error)
-      failMessage("Error fetching agent");
+      failMessage("Error fetching student data");
     });
 }
 window.readStudentDetails = readStudentDetails
+
+function loadStudyPlan(studyPlan) {
+  console.log(studyPlan)
+  if (!studyPlan) return
+  const table = document.getElementById('studyPlan')
+  for (let i=0; i < studyPlan.length; i++) {
+    const data = studyPlan[i]
+    const studyStage = studyStages?.[data.studyStage]
+    const row = `<tr>
+      <td class="align-middle">${studyStage?.name || ''}</td>
+      <td class="text-center align-middle">${data.startDate}</td>
+      <td class="text-center align-middle">${data.status}</td>
+      <td class="text-center align-middle">${data.notes}</td>
+      <td class="text-center align-middle">
+        <button class="btn btn-link btn-sm" type="button" onclick="removestudyStage(event)">
+          <span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span>
+        </button>
+        <button class="btn btn-link btn-sm" type="button" onclick="editstudyStage(event)">
+          <span class="fas fa-pencil-alt text-primary" data-fa-transform="shrink-2"></span>
+        </button>
+      </td>
+    </tr>`
+    table.innerHTML += row    
+  }
+}
+
+function loadLearningPlan(learningPlan) {
+  console.log(learningPlan)
+  if (!learningPlan) return
+  const table = document.getElementById('learningPlan')
+  for (let i=0; i < learningPlan.length; i++) {
+    const data = learningPlan[i]
+
+    let tableBody = ''
+    for (let j=0; j < data?.modules.length; j++) {
+      const moduleData = data.modules[j];
+      const row = `<tr>
+        <td class="align-middle">${moduleData.name}</td>
+        <td class="text-center align-middle">${moduleData.result}</td>
+        <td class="text-center align-middle">${moduleData.grade}</td>
+        <td class="text-center align-middle">${moduleData.notes}</td>
+        <td class="text-center align-middle">
+          <button class="btn btn-link btn-sm" type="button" onclick="removeModule(event)">
+            <span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span>
+          </button>
+          <button class="btn btn-link btn-sm" type="button" onclick="editModule(event)">
+            <span class="fas fa-pencil-alt text-primary" data-fa-transform="shrink-2"></span>
+          </button>
+        </td>
+      </tr>`
+      tableBody += row
+    }
+
+    const Term = `
+    <div class="border rounded-1 position-relative bg-white dark__bg-1100 p-3 mb-3 Term">
+      <div class="row form-group">
+        <div class="col-lg-4 col-12 mb-3">
+          <label class="form-label" for="termName">Term Name<span class="text-danger">*</span></label>
+          <input class="form-control termName" name="termName" type="text" value="${data.name}" disabled />
+        </div>
+        <div class="col-lg-4 col-12 mb-3">
+          <label class="form-label" for="startDate">Start Date<span class="text-danger">*</span></label>
+          <input class="form-control startDate" name="startDate" type="text" value="${data.startDate}" disabled />
+        </div>
+        <div class="col-lg-4 col-12 mb-3">
+          <label class="form-label" for="numberOfModules">Module Count<span class="text-danger">*</span></label>
+          <input class="form-control numberOfModules" name="numberOfModules" type="number" value="${data.count}" disabled />
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-sm table-bordered mt-3 bg-white dark__bg-1100">
+          <thead>
+            <tr class="fs--1">
+              <th>Module Name</th>
+              <th class="text-center">Result</th>
+              <th class="text-center">Grade</th>
+              <th class="text-center">Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableBody}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-end">
+        <button class="btn btn-falcon-default btn-sm mt-2" type="button" onclick="addModule(event)"><span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Module</button>
+      </div>
+    </div>`    
+    table.innerHTML += Term    
+  }
+}
 
 async function readPaymentDetails(id) {
   const userRole = localStorage.getItem("userRole")

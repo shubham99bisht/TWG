@@ -127,6 +127,55 @@
           </div>
         </div>
 
+        <!-- Study Plan -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">Study Plan</h5>
+          </div>
+          <div class="card-body bg-light">
+        
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered mt-3 bg-white dark__bg-1100">
+                <thead>
+                  <tr class="fs--1">
+                    <th>Study Stage</th>
+                    <th class="text-center">Expected Start Date</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Notes</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="studyPlan">
+                  <!-- Dynamically add study stages here -->
+                </tbody>
+              </table>
+            </div>
+        
+            <div class="text-end">
+              <button class="btn btn-outline-primary btn-sm mt-2" type="button" id="addStudyPlan" disabled>
+                <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>More Study Stages 
+              </button>
+            </div>
+          </div>
+        </div> 
+        <!-- Study Plan Ends -->
+
+        <!-- TWG Learning Plan -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">TWG Learning Plan</h5>
+          </div>
+          <div class="card-body bg-light" id="learningPlan">
+            
+            <!-- Dynamically add terms here -->
+
+            <button class="btn btn-outline-primary btn-sm mt-2" type="button" id="addTerm" disabled>
+              <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Term
+            </button>
+          </div>
+        </div> 
+        <!-- TWG Learning Plan -->        
+
         <!-- Payable -->
         <div class="card mb-3" id="payableHistoryTable" data-list='{"valueNames":["student","stage","duedate","fees","amount","notes","status"],"page":10,"pagination":true}'>
           <div class="card-header">            

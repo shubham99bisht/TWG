@@ -65,12 +65,19 @@
           </div>
           <div class="card-body bg-light">
             <form class="row gx-2" id="basic-info">
-              <div class="col-lg-4 col-12 mb-3">
+              <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="studentId">Lead Id (LSQ)<span class="text-danger">*</span></label>
                 <input class="form-control" id="studentId" name="studentId" type="text" placeholder="Lead Id" required="required" />
               </div>
-              <div class="col-lg-4 col-6 mb-3">
-                <label class="form-label" for="joinMonth">Commencing Term (Month)<span class="text-danger">*</span></label>
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="studentName">Student Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentName" name="studentName" type="text" placeholder="Student Name" required="required" />
+              </div>                
+
+              <!-- TWG Dates -->
+              <div class="col-lg-6 mb-3">
+                <label class="form-label" for="joinMonth">Commencing Term with TWG (Month)<span class="text-danger">*</span></label>
                 <select class="form-select" id="joinMonth" name="joinMonth">
                   <option value="0">Jan</option>
                   <option value="1">Feb</option>
@@ -86,8 +93,8 @@
                   <option value="11">Dec</option>
                 </select>
               </div>
-              <div class="col-lg-4 col-6 mb-3">
-                <label class="form-label" for="joinYear">Commencing Term (Year)<span class="text-danger">*</span></label>
+              <div class="col-lg-6 mb-3">
+                <label class="form-label" for="joinYear">Commencing Term with TWG (Year)<span class="text-danger">*</span></label>
                 <select class="form-select" id="joinYear" name="joinYear">
                   <option value="2015">2015</option>
                   <option value="2016">2016</option>
@@ -97,27 +104,50 @@
                   <option value="2020">2020</option>
                   <option value="2021">2021</option>
                   <option value="2022">2022</option>
-                  <option value="2023" selected>2023</option>
-                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2024" selected>2024</option>
                   <option value="2025">2025</option>
                   <option value="2026">2026</option>
                 </select>
               </div>
 
-              <div class="col-12 mb-3">
-                <label class="form-label" for="studentEmail">University Email<span class="text-danger">*</span></label>
+              <!-- University Details -->
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="universityStudentId">University Student Id<span class="text-danger">*</span></label>
+                <input class="form-control" id="universityStudentId" name="universityStudentId" type="text" required="required" />
+              </div>              
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="universityStudentEmail">University Email<span class="text-danger">*</span></label>
+                <input class="form-control" id="universityStudentEmail" name="universityStudentEmail" type="email" required="required" />
+              </div>
+              
+              <!-- Contact Details -->
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="studentEmail">Student Email<span class="text-danger">*</span></label>
                 <input class="form-control" id="studentEmail" name="studentEmail" type="email" required="required" />
               </div>
 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="universityStudentId">University Student Id<span class="text-danger">*</span></label>
-                <input class="form-control" id="universityStudentId" name="universityStudentId" type="text" required="required" />
-              </div>
+                <label class="form-label" for="studentPhone">Student Phone<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentPhone" name="studentPhone" type="text" placeholder="Student Phone" required="required" />
+              </div>  
+
+              <!-- Address Details -->
+              <div class="col-lg-12 col-12 mb-3">
+                <label class="form-label" for="studentAddress">Address Line<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentAddress" name="studentAddress" type="text" placeholder="Student Address" required="required" />
+              </div>  
 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="studentName">Student Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="studentName" name="studentName" type="text" placeholder="Student Name" required="required" />
-              </div>    
+                <label class="form-label" for="studentCity">Student City<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentCity" name="studentCity" type="text" placeholder="Student City" required="required" />
+              </div>  
+
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="studentState">Student State<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentState" name="studentState" type="text" placeholder="Student State" required="required" />
+              </div>  
             </form>
           </div>
         </div>              
@@ -154,6 +184,61 @@
                   <option>Select an Agent</option>
                 </select>
               </div> 
+
+              <!-- Links -->
+              <div class="col-lg-12 col-12 mb-3">
+                <label class="form-label" for="twgOfferLink">Final signed TWG Offer Letter<span class="text-danger">*</span></label>
+                <input class="form-control" id="twgOfferLink" name="twgOfferLink" type="url" placeholder="https://drive.google.com/" required="required" />
+              </div>  
+              <div class="col-lg-12 col-12 mb-3">
+                <label class="form-label" for="universityOfferLink">University Offer Letter<span class="text-danger">*</span></label>
+                <input class="form-control" id="universityOfferLink" name="universityOfferLink" type="url" placeholder="https://drive.google.com/" required="required" />
+              </div>  
+
+              <!-- Degree Dropdown -->
+              <div class="col-lg-12 col-12 mb-3">
+                <label class="form-label" for="universityDegree">University Degree<span class="text-danger">*</span></label>
+                <select class="form-select" id="universityDegree" name="universityDegree" required>
+                  <option selected disabled>Select Degree</option>
+                </select>
+              </div> 
+              
+              <!-- Expected Dates -->
+              <div class="col-lg-6 mb-3">
+                <label class="form-label" for="overseasMonth">Expected Progression Overseas (Month)</label>
+                <select class="form-select" id="overseasMonth" name="overseasMonth">
+                  <option value="0">Jan</option>
+                  <option value="1">Feb</option>
+                  <option value="2">Mar</option>
+                  <option value="3">Apr</option>
+                  <option value="4">May</option>
+                  <option value="5">June</option>
+                  <option value="6">July</option>
+                  <option value="7">Aug</option>
+                  <option value="8">Sept</option>
+                  <option value="9">Oct</option>
+                  <option value="10">Nov</option>
+                  <option value="11">Dec</option>
+                </select>
+              </div>
+              <div class="col-lg-6 mb-3">
+                <label class="form-label" for="overseasYear">Expected Progression Overseas (Year)</label>
+                <select class="form-select" id="overseasYear" name="overseasYear">
+                  <option value="2015">2015</option>
+                  <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  <option value="2024" selected>2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                </select>
+              </div>
+
             </form>
           </div>
         </div>
@@ -175,7 +260,7 @@
             <form class="row gx-2" id="receivable">    
               <input class="form-control" id="Rtype" name="type" type="text" required="required" hidden/> 
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="stage">Payment stage<span class="text-danger">*</span></label>
+                <label class="form-label" for="stage">Study Stage<span class="text-danger">*</span></label>
                 <select class="form-select" id="Rstage" name="stage">
                   <option>Select stage</option>
                 </select>
@@ -243,7 +328,7 @@
             <form class="row gx-2" id="payable">     
               <input class="form-control" id="Ptype" name="type" type="text" required="required" hidden/>
               <div class="col-sm-6 mb-3">
-                <label class="form-label" for="Pstage">Payment stage<span class="text-danger">*</span></label>
+                <label class="form-label" for="Pstage">Study Stage<span class="text-danger">*</span></label>
                 <select class="form-select" id="Pstage" name="stage">
                   <option>Select stage</option>
                 </select>
@@ -298,6 +383,63 @@
         </div>
         <!-- Commission Payable Details Ends -->    
         
+
+        <!-- Study Plan -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">Study Plan</h5>
+          </div>
+          <div class="card-body bg-light">
+        
+            <div class="table-responsive">
+              <table class="table table-bordered mt-3 bg-white dark__bg-1100" id="studyPlan">
+                <thead>
+                  <tr class="fs--1">
+                    <th>Study Stage</th>
+                    <th>Expected Start Date</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Dynamically add study stages here -->
+                </tbody>
+              </table>
+            </div>
+        
+            <div class="text-end">
+              <button class="btn btn-outline-primary btn-sm mt-2" type="button" onclick="addstudyStage(event)" id="addStudyPlan" disabled>
+                <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>More Study Stages 
+              </button>
+            </div>
+          </div>
+          <div class="card-footer">
+            <small><b>Note:</b> Add Study Stages only after selecting and finalising <b>Program Type</b> and <b>University</b> to fetch relevant stages.</small>
+          </div>
+        </div> 
+        <!-- Study Plan Ends -->
+
+        <!-- TWG Learning Plan -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">TWG Learning Plan</h5>
+          </div>
+          <div class="card-body bg-light" id="learningPlans">
+            
+            <!-- Dynamically add terms here -->
+
+            <button class="btn btn-outline-primary btn-sm mt-2" type="button" id="addTerm" onclick="addTerm(event)">
+              <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Term
+            </button>
+          </div>
+
+          <div class="card-footer">
+            <small><b>Note:</b> Add Terms only after selecting and finalising <b>Program Type</b> to fetch relevant modules.</small>
+          </div>
+        </div> 
+        <!-- TWG Learning Plan -->
+
         <div class="row">
           <div class="col-6 d-grid">
             <button class="btn btn-secondary" onclick="discardChanges()">Cancel</button>

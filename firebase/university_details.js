@@ -265,7 +265,7 @@ function commissionTypeChange(event) {
   const select = event.target 
   const selectId = select.id[0]
   const row = select.closest('.row')
-  console.log(select, selectId, row)
+
   const currency = row.querySelector(`#${selectId}currency`)
   const rate = row.querySelector(`#${selectId}value`)
   const days = row.querySelector(`#${selectId}installment`)
