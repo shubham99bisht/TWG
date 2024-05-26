@@ -174,7 +174,51 @@
             </button>
           </div>
         </div> 
-        <!-- TWG Learning Plan -->        
+        <!-- TWG Learning Plan -->     
+        
+        <!-- TWG Fee Payments -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="mb-0">TWG Fee Payments</h5>
+          </div>
+          <div class="card-body bg-light">
+
+            <div class="row">
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="totalFeePayable">Total Fee Payable<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" id="totalFeePayable" name="totalFeePayable" type="number" />
+              </div>  
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="totalFeePaid">Total Fee Paid<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" id="totalFeePaid" name="totalFeePaid" type="number" readonly />
+              </div>              
+            </div>
+
+        
+            <div class="table-responsive">
+              <table class="table table-sm table-bordered mt-3 bg-white dark__bg-1100">
+                <thead>
+                  <tr class="fs--1">
+                    <th>Amount Paid</th>
+                    <th class="text-center">Date</th>
+                    <th class="text-center">Notes</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="studyPlan">
+                  <!-- Dynamically add study stages here -->
+                </tbody>
+              </table>
+            </div>
+        
+            <div class="text-end">
+              <button class="btn btn-outline-primary btn-sm mt-2" type="button" id="addPayment" disabled>
+                <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Payment
+              </button>
+            </div>
+          </div>
+        </div> 
+        <!-- TWG Fee Payments Ends -->        
 
         <!-- Payable -->
         <div class="card mb-3" id="payableHistoryTable" data-list='{"valueNames":["student","stage","duedate","fees","amount","notes","status"],"page":10,"pagination":true}'>

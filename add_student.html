@@ -66,7 +66,7 @@
           <div class="card-body bg-light">
             <form class="row gx-2" id="basic-info">
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="studentId">Lead Id (LSQ)<span class="text-danger">*</span></label>
+                <label class="form-label" for="studentId">TWG Student ID<span class="text-danger">*</span></label>
                 <input class="form-control" id="studentId" name="studentId" type="text" placeholder="Lead Id" required="required" />
               </div>
 
@@ -96,18 +96,17 @@
               <div class="col-lg-6 mb-3">
                 <label class="form-label" for="joinYear">Commencing Term with TWG (Year)<span class="text-danger">*</span></label>
                 <select class="form-select" id="joinYear" name="joinYear">
-                  <option value="2015">2015</option>
-                  <option value="2016">2016</option>
-                  <option value="2017">2017</option>
-                  <option value="2018">2018</option>
-                  <option value="2019">2019</option>
-                  <option value="2020">2020</option>
                   <option value="2021">2021</option>
                   <option value="2022">2022</option>
                   <option value="2023">2023</option>
                   <option value="2024" selected>2024</option>
                   <option value="2025">2025</option>
                   <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                  <option value="2031">2031</option>
                 </select>
               </div>
 
@@ -118,8 +117,12 @@
               </div>              
 
               <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="universityStudentEmail">University Email<span class="text-danger">*</span></label>
-                <input class="form-control" id="universityStudentEmail" name="universityStudentEmail" type="email" required="required" />
+                <label class="form-label" for="enrollmentStatus">Student Enrollment Status<span class="text-danger">*</span></label>
+                <select class="form-select" id="enrollmentStatus" name="enrollmentStatus" required>
+                  <option value="Admitted">Admitted</option>
+                  <option value="Enrolled">Enrolled</option>
+                  <option value="Withdrawn">Withdrawn</option>
+                </select>
               </div>
               
               <!-- Contact Details -->
@@ -194,6 +197,10 @@
                 <label class="form-label" for="universityOfferLink">University Offer Letter<span class="text-danger">*</span></label>
                 <input class="form-control" id="universityOfferLink" name="universityOfferLink" type="url" placeholder="https://drive.google.com/" required="required" />
               </div>  
+              <div class="col-lg-12 col-12 mb-3">
+                <label class="form-label" for="gDriveLink">Google Drive Link<span class="text-danger">*</span></label>
+                <input class="form-control" id="gDriveLink" name="gDriveLink" type="url" placeholder="https://drive.google.com/" required="required" />
+              </div>                
 
               <!-- Degree Dropdown -->
               <div class="col-lg-12 col-12 mb-3">
@@ -224,165 +231,34 @@
               <div class="col-lg-6 mb-3">
                 <label class="form-label" for="overseasYear">Expected Progression Overseas (Year)</label>
                 <select class="form-select" id="overseasYear" name="overseasYear">
-                  <option value="2015">2015</option>
-                  <option value="2016">2016</option>
-                  <option value="2017">2017</option>
-                  <option value="2018">2018</option>
-                  <option value="2019">2019</option>
-                  <option value="2020">2020</option>
                   <option value="2021">2021</option>
                   <option value="2022">2022</option>
                   <option value="2023">2023</option>
                   <option value="2024" selected>2024</option>
                   <option value="2025">2025</option>
                   <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                  <option value="2031">2031</option>
                 </select>
               </div>
+
+              <!-- Fee and Modules -->
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="totalFeePayable">Total Fee Payable for TWG Program<span class="text-danger">*</span></label>
+                <input class="form-control" id="totalFeePayable" name="totalFeePayable" type="number" required="required" />
+              </div>  
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="totalModules">Total Modules enrolled for in TWG Program<span class="text-danger">*</span></label>
+                <input class="form-control" id="totalModules" name="totalModules" type="number" required="required" />
+              </div>              
 
             </form>
           </div>
         </div>
         <!-- Enrollment Details Ends -->
-
-        <hr>
-        <h5 class="text-center mt-4 mb-3">First Payment Details</h5>
-
-        <!-- Commission Receivable Details -->
-        <div class="card mb-3">
-          <div class="card-header">
-            <div class="row align-items-center">
-              <div class="col">
-                <h5 class="mb-0">Commission Receivable Details</h5>
-              </div>
-            </div>            
-          </div>
-          <div class="card-body bg-light">
-            <form class="row gx-2" id="receivable">    
-              <input class="form-control" id="Rtype" name="type" type="text" required="required" hidden/> 
-              <div class="col-sm-6 mb-3">
-                <label class="form-label" for="stage">Study Stage<span class="text-danger">*</span></label>
-                <select class="form-select" id="Rstage" name="stage">
-                  <option>Select stage</option>
-                </select>
-              </div>
-              <div class="col-sm-6 mb-3">
-                <label class="form-label" for="status">Status<span class="text-danger">*</span></label>
-                <select class="form-select" id="Rstatus" name="status">
-                  <option value="pending" selected>Pending</option>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="invoiced">Invoiced</option>
-                  <option value="paid">Paid</option>
-                  <option value="na">Not Applicable</option>
-                </select>
-              </div> 
-
-              <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="Rfees">Fees Paid<span class="text-danger">*</span></label>
-                <input class="form-control" id="Rfees" name="fees" type="number" placeholder="10000" required="required" />
-              </div>  
-              <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="feesCurrency">Currency<span class="text-danger">*</span></label>
-                <select class="form-select" id="RfeesCurrency" name="feesCurrency">
-                  <!-- Auto populated -->
-                </select>
-              </div>
-              
-              <div class="col-lg-6 col-12 mb-3 d-grid my-auto">
-                <button class="btn btn-secondary" type="button" id="receivableRecompute">Compute Commission</button>
-              </div>
-
-              <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="Ramount">Commission Receivable<span class="text-danger">*</span></label>
-                <input class="form-control" id="Ramount" name="amount" type="number" placeholder="10000" required="required" />
-              </div> 
-              <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="Currency">Currency<span class="text-danger">*</span></label>
-                <select class="form-select" id="RCurrency" name="currency">
-                  <!-- Auto populated -->
-                </select>
-              </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="RdueDate">Due Date (YYYY-MM-DD)<span class="text-danger">*</span></label>
-                <input class="form-control" id="RdueDate" name="dueDate" type="text" placeholder="YYYY-MM-DD" required="required" />
-              </div>  
-              
-              <div class="col-12 mb-3">
-                <label class="form-label" for="notes">Notes</label>
-                <textarea class="form-control" id="Rnotes" name="notes" placeholder="Notes/Comments" rows="2"></textarea>
-              </div>  
-            </form>
-          </div>
-        </div>
-        <!-- Commission Receivable Details Ends -->    
-        
-        <!-- Commission Payable Details -->
-        <div class="card mb-3 d-none" id="agentPaymentDetails">
-          <div class="card-header">
-            <div class="row align-items-center">
-              <div class="col">
-                <h5 class="mb-0">Commission Payable Details</h5>
-              </div>
-            </div>            
-          </div>
-          <div class="card-body bg-light">
-            <form class="row gx-2" id="payable">     
-              <input class="form-control" id="Ptype" name="type" type="text" required="required" hidden/>
-              <div class="col-sm-6 mb-3">
-                <label class="form-label" for="Pstage">Study Stage<span class="text-danger">*</span></label>
-                <select class="form-select" id="Pstage" name="stage">
-                  <option>Select stage</option>
-                </select>
-              </div>
-              <div class="col-sm-6 mb-3">
-                <label class="form-label" for="Pstatus">Status<span class="text-danger">*</span></label>
-                <select class="form-select" id="Pstatus" name="status">
-                  <option value="pending" selected>Pending</option>
-                  <option value="confirmed">Confirmed</option>
-                  <option value="invoiced">Invoiced</option>
-                  <option value="paid">Paid</option>
-                  <option value="na">Not Applicable</option>
-                </select>
-              </div> 
-
-              <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="Pfees">Fees Paid<span class="text-danger">*</span></label>
-                <input class="form-control" id="Pfees" name="fees" type="number" placeholder="10000" required="required" />
-              </div>  
-              <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="feesCurrency">Currency<span class="text-danger">*</span></label>
-                <select class="form-select" id="PfeesCurrency" name="feesCurrency">
-                  <!-- Auto populated -->
-                </select>
-              </div>
-              
-              <div class="col-lg-6 col-12 mb-3 d-grid my-auto">
-                <button class="btn btn-secondary" type="button" id="payableRecompute">Compute Commission</button>
-              </div>
-
-              <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="Pamount">Commission Payable<span class="text-danger">*</span></label>
-                <input class="form-control" id="Pamount" name="amount" type="number" placeholder="10000" required="required" />
-              </div> 
-              <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="Currency">Currency<span class="text-danger">*</span></label>
-                <select class="form-select" id="PCurrency" name="currency">
-                  <!-- Auto populated -->
-                </select>
-              </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="PdueDate">Due Date (YYYY-MM-DD)<span class="text-danger">*</span></label>
-                <input class="form-control" id="PdueDate" name="dueDate" type="text" placeholder="YYYY-MM-DD" required="required" />
-              </div>  
-              
-              <div class="col-12 mb-3">
-                <label class="form-label" for="notes">Notes</label>
-                <textarea class="form-control" id="Pnotes" name="notes" placeholder="Notes/Comments" rows="2"></textarea>
-              </div> 
-            </form>
-          </div>
-        </div>
-        <!-- Commission Payable Details Ends -->    
-        
 
         <!-- Study Plan -->
         <div class="card mb-3">

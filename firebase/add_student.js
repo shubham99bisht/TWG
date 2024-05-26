@@ -1,10 +1,8 @@
-import { readData, writeData, writeDataWithNewId } from "./helpers.js";
+import { readData, writeData } from "./helpers.js";
 
 // Forms
 const basicInfo = document.getElementById("basic-info")
 const enrollmentInfo = document.getElementById("enrollment-info")
-const payableForm = document.getElementById("payable")
-const receivableForm = document.getElementById("receivable")
 
 const submitBtn = document.getElementById("submitBtn")
 
@@ -13,14 +11,6 @@ const agentSelect = document.getElementById("agent")
 const sourceSelect = document.getElementById("source")
 const programSelect = document.getElementById("program_types")
 const universitySelect = document.getElementById("university")
-
-// Inputs
-
-const receiveDueDateInput = document.getElementById("RdueDate")
-const receiveAmountInput = document.getElementById("Ramount")
-
-const payableDueDateInput = document.getElementById("PdueDate")
-const payableAmountInput = document.getElementById("Pamount")
 
 // Global Variables
 let programs = {}, universities = {}, agents = {}, currency = {}, studyStages = {}
@@ -39,13 +29,15 @@ async function createStudent() {
 
   const {
     studentId, studentName, joinMonth, joinYear,
-    universityStudentId, universityStudentEmail, studentPhone, studentEmail,
+    universityStudentId, enrollmentStatus,
+    studentEmail, studentPhone, 
     studentAddress, studentCity, studentState
   } = basicInfoData
   let {
     program_type, university, source, agent,
-    twgOfferLink, universityOfferLink, universityDegree,
-    overseasMonth, overseasYear
+    twgOfferLink, universityOfferLink, gDriveLink,
+    universityDegree, overseasMonth, overseasYear, 
+    totalFeePayable, totalModules
   } = enrollmentInfoData
 
   //  Convert Dates
@@ -56,10 +48,14 @@ async function createStudent() {
 
   // Validation
   if (
-    !studentId || !studentName || !joinDate || !universityStudentId ||
-    !universityStudentEmail || !studentPhone || !studentEmail || !studentAddress ||
-    !studentCity || !studentState || !program_type || !university || !source ||
-    !twgOfferLink || !universityOfferLink || !universityDegree || !overseasDate
+    !studentId || !studentName || !joinDate || 
+    !universityStudentId || !enrollmentStatus ||
+    !studentPhone || !studentEmail || 
+    !studentAddress || !studentCity || !studentState || 
+    !program_type || !university || !source ||
+    !twgOfferLink || !universityOfferLink || !gDriveLink ||
+    !universityDegree || !overseasDate ||
+    !totalFeePayable || !totalModules
   ) { failMessage("Please provide all data"); return }
 
   // Verifying old entries
@@ -73,29 +69,6 @@ async function createStudent() {
     if (!agent) { failMessage("Agent Info missing!"); return }
   } else { agent = '' }
 
-  if (source == "Agent") {
-    let { stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(payableForm));
-    if (document.getElementById("Ptype").value != 'na' && (!stage || !status || !fees || !amount || !dueDate)) {
-      failMessage("Please provide enteries for Commission Payable"); return
-    }
-    else {
-      const res = await createPayable(studentId, university, agent, program_type)
-      if (!res) {
-        failMessage("Failed adding Payable"); return;
-      }
-    }
-  }
-
-  let { stage, status, fees, amount, dueDate, notes } = Object.fromEntries(new FormData(receivableForm));
-  if (document.getElementById("Rtype").value != 'na' && (!stage || !status || !fees || !amount || !dueDate)) {
-    failMessage("Please provide enteries for Commission Receivable"); return
-  } else {
-    const res = await createReceivable(studentId, university, agent, program_type)
-    if (!res) {
-      failMessage("Failed adding Receivable"); return;
-    }
-  }
-
   // Read study plan
   const studyPlan = readStudyPlan()
   if (studyPlan === undefined) return
@@ -106,10 +79,11 @@ async function createStudent() {
   // Create Student
   const newStudent = {
     studentId, studentName, joinDate,
-    universityStudentId, universityStudentEmail, studentPhone, studentEmail,
+    universityStudentId, enrollmentStatus, studentPhone, studentEmail,
     studentAddress, studentCity, studentState,
     program_type, university, source,
-    twgOfferLink, universityOfferLink, universityDegree, overseasDate,
+    twgOfferLink, universityOfferLink, gDriveLink,
+    universityDegree, overseasDate, totalFeePayable, totalModules,
     studyPlan, learningPlan
   }
   if (source == "Agent") newStudent["agent"] = agent
@@ -130,46 +104,7 @@ async function createStudent() {
     });
 }
 
-async function createReceivable(student, university, agent, program_type) {
-  console.log("function called")
-  const receivableFormData = Object.fromEntries(new FormData(receivableForm));
-
-  console.log(receivableFormData, document.getElementById("Rtype").value)
-
-  if (document.getElementById("Rtype").value == 'na') {
-    console.log("Writting data")
-    return writeDataWithNewId('receivable', {
-      ...receivableFormData, amount: 0, dueDate: '', student, university, agent, program_type
-    })
-  }
-
-  console.log("Not NA")
-
-  if (!receivableFormData.amount) return
-  console.log("No amount")
-  return writeDataWithNewId(`receivable`, {
-    ...receivableFormData, student, university, agent, program_type
-  })
-}
-
-async function createPayable(student, university, agent, program_type) {
-  const payableFormData = Object.fromEntries(new FormData(payableForm));
-
-  if (document.getElementById("Ptype").value == 'na') {
-    return writeDataWithNewId('payable', {
-      ...payableFormData, amount: 0, dueDate: '', student, university, agent, program_type
-    })
-  }
-
-  if (!payableFormData.amount) return
-  return writeDataWithNewId('payable', {
-    ...payableFormData, student, university, agent, program_type
-  })
-}
-
 window.createStudent = createStudent
-window.createReceivable = createReceivable
-window.createPayable = createPayable
 
 /**
  * --------------------------------------------------
@@ -183,19 +118,6 @@ async function fetchData() {
   agents = await readData("agents")
   currency = await readData("currency_types")
   studyStages = await readData("study_stages")
-}
-
-function updateCurrencyList() {
-  let options = ''
-  for (const id in currency) {
-    options += `<option id=${id} value=${id}>${currency[id].name}</option>`;
-  }
-
-  let selectors = ['RfeesCurrency', 'RCurrency', 'PfeesCurrency', 'PCurrency']
-  selectors.forEach(s => {
-    const sl = document.getElementById(s)
-    sl.innerHTML = options
-  })
 }
 
 function updateAgentList() {
@@ -234,33 +156,6 @@ function updateUniversityList(pId) {
   }
 }
 
-function updatestudyStageList() {
-  const uid = universitySelect.value
-  const pid = programSelect.value
-
-  Pstage.innerHTML = '<option selected disabled>Select stage</option>'
-  Rstage.innerHTML = '<option selected disabled>Select stage</option>'
-
-  const pType = universities[uid].programTypes.find(pt => pt.type == pid)
-  if (!pType) return
-
-  const stageIds = pType.studyStages.map(pst => pst.stage)
-  stageIds.forEach(stageId => {
-    let studyStage = studyStages[stageId]
-    if (studyStage) {
-      let option = document.createElement("option");
-      option.value = stageId;
-      option.textContent = studyStage.name;
-      Pstage.appendChild(option);
-
-      option = document.createElement("option");
-      option.value = stageId;
-      option.textContent = studyStage.name;
-      Rstage.appendChild(option);
-    }
-  });
-}
-
 function updateDegreesOffered() {
   const uid = universitySelect.value
   universityDegree.innerHTML = '<option selected disabled>Select stage</option>'
@@ -275,108 +170,6 @@ function updateDegreesOffered() {
     universityDegree.appendChild(option);
   });
 }
-
-function computeComissionReceivable() {
-  const uid = universitySelect.value
-  const pid = programSelect.value
-  const sid = Rstage.value
-  const fees = Rfees.value || 0
-  const Rcurrency = document.getElementById('RCurrency')
-  const Rnotes = document.getElementById('Rnotes')
-
-  if (!uid || !pid || !sid || !fees) return
-  const university = universities[uid]
-  if (!university) return
-  const programType = university.programTypes.find(p => p.type == pid)
-  if (!programType) return
-  const stage = programType.studyStages.find(s => s.stage == sid)
-  if (!stage) return
-  const commissions = stage.commissions
-  if (!commissions) return
-
-  let dueDate = new Date(joinYear.value, joinMonth.value)
-  if (dueDate == 'Invalid Date') dueDate = new Date()
-  dueDate.setDate(dueDate.getDate() + parseInt(commissions[1].installmentDays));
-
-  document.getElementById("Rtype").value = commissions[1].type
-
-  receiveDueDateInput.value = `${dueDate.toISOString().slice(0, 10)}`
-  switch (commissions[1].type) {
-    case 'fixed': {
-      receiveAmountInput.value = commissions[1].value
-      document.getElementById('RCurrency').value = commissions[1].currency
-      Rnotes.disabled = false; Rnotes.value = ''
-      break;
-    }
-    case 'percentage': {
-      receiveAmountInput.value = parseInt(fees * (commissions[1].value / 100))
-      document.getElementById('RCurrency').value = document.getElementById('RfeesCurrency').value
-      Rnotes.disabled = false; Rnotes.value = ''
-      break;
-    }
-    case 'na': {
-      receiveAmountInput.value = '0'
-      receiveAmountInput.disabled = true
-      Rcurrency.disabled = true
-      Rcurrency.value = ''
-      receiveDueDateInput.value = ''
-      receiveDueDateInput.disabled = true
-      Rnotes.disabled = true
-      Rnotes.value = 'N/A commission entry'
-
-    }
-  }
-}
-
-function computeComissionPayable() {
-  const uid = universitySelect.value
-  const pid = programSelect.value
-  const sid = Pstage.value
-  const fees = Pfees.value || 0
-
-  if (!uid || !pid || !sid || !fees) return
-  const university = universities[uid]
-  if (!university) return
-  const programType = university.programTypes.find(p => p.type == pid)
-  if (!programType) return
-  const stage = programType.studyStages.find(s => s.stage == sid)
-  if (!stage) return
-  const commissions = stage.commissions
-  if (!commissions) return
-
-  let dueDate = new Date(joinYear.value, joinMonth.value)
-  if (dueDate == 'Invalid Date') dueDate = new Date()
-  dueDate.setDate(dueDate.getDate() + parseInt(commissions[0].installmentDays));
-
-  document.getElementById("Ptype").value = commissions[0].type
-
-  payableDueDateInput.value = `${dueDate.toISOString().slice(0, 10)}`
-  switch (commissions[0].type) {
-    case 'fixed': {
-      payableAmountInput.value = commissions[0].value
-      document.getElementById('PCurrency').value = commissions[0].currency
-      Pnotes.disabled = false; Pnotes.value = ''
-      break;
-    }
-    case 'percentage': {
-      payableAmountInput.value = parseInt(fees * (commissions[0].value / 100))
-      document.getElementById('PCurrency').value = document.getElementById('PfeesCurrency').value
-      Pnotes.disabled = false; Pnotes.value = ''
-      break;
-    }
-    case 'na': {
-      payableAmountInput.value = '0'
-      payableAmountInput.disabled = true
-      document.getElementById('PCurrency').disabled = true
-      document.getElementById('PCurrency').value = ''
-      payableDueDateInput.value = ''
-      payableDueDateInput.disabled = true
-      document.getElementById('Pnotes').disabled = true
-      document.getElementById('Pnotes').value = 'N/A commission entry'
-    }
-  }
-}
-
 
 /**
  * --------------------------------------------------
@@ -421,6 +214,7 @@ function addstudyStage(event) {
         <option value="Not Started">Not Started</option>
         <option value="Currently Enrolled">Currently Enrolled</option>
         <option value="Completed">Completed</option>
+        <option value="Withdrawn">Withdrawn</option>
       </select>
     </td>
     <td><input class="form-control form-control-sm notes" type="text"/></td>
@@ -639,8 +433,7 @@ function readLearningPlan() {
 window.onload = async () => {
   await fetchData()
   updateAgentList()
-  updateProgramsList()
-  updateCurrencyList()
+  updateProgramsList() 
 
   // Enable adding study plan
   const addStudyPlanBtn = document.getElementById("addStudyPlan")
@@ -652,10 +445,8 @@ submitBtn.onclick = createStudent
 sourceSelect.addEventListener("change", () => {
   if (sourceSelect.value === "Agent") {
     agentSelect.disabled = false;
-    agentPaymentDetails.classList.remove("d-none")
   } else {
     agentSelect.disabled = true;
-    agentPaymentDetails.classList.add("d-none")
   }
 });
 
@@ -668,13 +459,8 @@ programSelect.addEventListener("change", () => {
 })
 
 universitySelect.addEventListener("change", () => {
-  updatestudyStageList()
   updateDegreesOffered()
 })
-
-payableRecompute.addEventListener("click", computeComissionPayable)
-receivableRecompute.addEventListener("click", computeComissionReceivable)
-
 
 function discardChanges() {
   if (confirm("Discard all changes?")) {
