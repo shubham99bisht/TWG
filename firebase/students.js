@@ -149,6 +149,7 @@ function readStudentDetails(id) {
 
       loadStudyPlan(result?.studyPlan)
       loadLearningPlan(result?.learningPlan)
+      loadFeePayable(result?.feePayable, result?.totalFeePayable)
       closeSwal()
     })
     .catch((error) => {
@@ -166,15 +167,15 @@ function loadStudyPlan(studyPlan) {
     const data = studyPlan[i]
     const studyStage = studyStages?.[data.studyStage]
     const row = `<tr>
-      <td class="align-middle">${studyStage?.name || ''}</td>
-      <td class="text-center align-middle">${data.startDate}</td>
-      <td class="text-center align-middle">${data.status}</td>
-      <td class="text-center align-middle">${data.notes}</td>
+      <td class="align-middle name">${studyStage?.name || ''}</td>
+      <td class="text-center align-middle date">${data.startDate}</td>
+      <td class="text-center align-middle status">${data.status}</td>
+      <td class="text-center align-middle notes">${data.notes}</td>
       <td class="text-center align-middle">
-        <button class="btn btn-link btn-sm" type="button" onclick="removestudyStage(event)">
+        <button class="btn btn-link btn-sm" type="button" onclick="removeStudyPlan(event)">
           <span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span>
         </button>
-        <button class="btn btn-link btn-sm" type="button" onclick="editstudyStage(event)">
+        <button class="btn btn-link btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#studyPlanModal">
           <span class="fas fa-pencil-alt text-primary" data-fa-transform="shrink-2"></span>
         </button>
       </td>
@@ -250,6 +251,38 @@ function loadLearningPlan(learningPlan) {
     </div>`    
     table.innerHTML += Term    
   }
+}
+
+function loadFeePayable(feePayable, totalFeePayable) {
+  console.log(feePayable)
+  if (!feePayable) return
+  const table = document.getElementById('feePayableTable')
+
+  let totalPaid = 0
+
+  const keys = Object.keys(feePayable)
+  for (let i=0; i < keys.length; i++ ) {
+    const id = keys[i]
+    const data = feePayable[id]
+    totalPaid += parseFloat(data['amount']) || 0
+    const row = `<tr id="${id}">
+      <td class="align-middle amount">${data.amount || ''}</td>
+      <td class="text-center align-middle date">${data.date}</td>
+      <td class="text-center align-middle notes">${data.notes}</td>
+      <td class="text-center align-middle">
+        <button class="btn btn-link btn-sm" type="button" onclick="removeFeePayable('${id}')">
+          <span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span>
+        </button>
+        <button class="btn btn-link btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#feepayable">
+          <span class="fas fa-pencil-alt text-primary" data-fa-transform="shrink-2"></span>
+        </button>
+      </td>
+    </tr>`
+    table.innerHTML += row    
+  }
+
+  document.getElementById('totalFeePayable').value = totalFeePayable
+  document.getElementById('totalFeePaid').value = totalPaid
 }
 
 async function readPaymentDetails(id) {
@@ -709,3 +742,26 @@ async function deleteTransaction(id, type) {
   }
 }
 window.deleteTransaction = deleteTransaction
+
+
+function updateStudyPlanStageList(studentId) {
+  const stageSelector = document.getElementById('studyPlanStage')
+  stageSelector.innerHTML = '<option value="">Select stage</option>'
+
+  const pid = students[studentId].program_type
+  const uid = students[studentId].university
+  const pType = universities[uid].programTypes.find(pt => pt.type == pid)
+  if (!pType) return
+  
+  const stageIds = pType.studyStages.map(pst => pst.stage)
+  stageIds.forEach(stageId => {
+    let stage = studyStages[stageId]
+    if (stage) {
+      let option = document.createElement("option");
+      option.value = stageId;
+      option.textContent = stage.name;
+      stageSelector.appendChild(option);
+    }
+  });
+}
+window.updateStudyPlanStageList = updateStudyPlanStageList
