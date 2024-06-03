@@ -65,18 +65,18 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <div class="card z-index-1" id="payableCommissions"
-          data-list='{"valueNames":["id","student","studentEmail","program_type","university","universityDegree","enrollmentStatus","startDate","status","notes"],"page":50,"pagination":true}'>
+        <div class="card z-index-1" id="enrollmentReport"
+          data-list='{"valueNames":["id","student","studentEmail","program_type","university","universityDegree","studyStage","enrollmentStatus","startDate","status","notes"],"page":50,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-3">
               <div class="col-6 col-md-auto d-flex align-items-center">
                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Enrolment Report</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
-                <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('receivable')"><span
+                <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('enrollmentReport')"><span
                     class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
                 <button class="btn btn-outline-success btn-sm" type="button"
-                  onclick="downloadCSVData('receivable')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+                  onclick="downloadCSVData('enrollmentReport')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
               </div>
               <div class="col-12 col-md-5 mt-1 mt-md-0 ms-auto text-end">
                 <form>
@@ -99,10 +99,9 @@
                     <th class="sort pe-1 align-middle" data-sort="studentEmail">Email Id</th>
                     <th class="sort pe-1 align-middle" data-sort="program_type">TWG Program</th>
                     <th class="sort pe-1 align-middle" data-sort="university">University</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="universityDegree">University Degree
-                    </th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="enrollmentStatus">Enrollment Status
-                    </th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="universityDegree">Degree</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="studyStage">Stage</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="enrollmentStatus">Status</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="startDate">Start Date</th>
                     <th class="sort pe-1 align-middle" data-sort="status">Status</th>
                     <th class="sort pe-1 align-middle white-space-nowrap">Notes</th>
@@ -110,7 +109,7 @@
                 </thead>
                 <tbody class="list" id="table-payable-body">
                   <tr class="text-center">
-                    <td colspan="10">Search using filter params</td>
+                    <td colspan="10">Loading Data...</td>
                   </tr>
                 </tbody>
               </table>

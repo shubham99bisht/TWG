@@ -3,8 +3,9 @@ import { readData, writeData } from "./helpers.js";
 let universities = {}, programs = {}
 
 // Initialise filters
-function initialise() {
-    listAllEnroll()
+async function fetchData() {
+    universities = await readData("universities")
+    programs = await readData("program_types")
 }
 
 function listAllEnroll() {
@@ -15,16 +16,16 @@ function listAllEnroll() {
     readData(`students`)
         .then(async (data) => {
             const schema = `<tr class="btn-reveal-trigger" id="{}">
-            <td class="align-middle student"><a href="student_details.html?id={}">{}</a></td>
-            <td class="align-middle studentEmail">{}</td>
-            <td class="align-middle program_type">{}</td>
-            <td class="align-middle university">{}</td>
-            <td class="align-middle startDate">{}</td>
-            <td class="align-middle name">{}</td>
-            <td class="align-middle result">{}</td>
-            <td class="align-middle grade">{}</td>
-            <td class="align-middle text-nowrap notes">{}</td>
-        </tr>`;
+                <td class="align-middle student"><a href="student_details.html?id={}">{}</a></td>
+                <td class="align-middle studentEmail">{}</td>
+                <td class="align-middle program_type">{}</td>
+                <td class="align-middle university">{}</td>
+                <td class="align-middle startDate">{}</td>
+                <td class="align-middle name">{}</td>
+                <td class="align-middle result">{}</td>
+                <td class="align-middle grade">{}</td>
+                <td class="align-middle text-nowrap notes">{}</td>
+            </tr>`;
 
             let csvContent = 'Student, Student Email,Program Type, University, Start Date, Module, Result, Grade, Notes\r\n';
 
@@ -47,7 +48,6 @@ function listAllEnroll() {
 
                     });
 
-
                 } catch (e) {
                     console.log("ERRROR:", e)
                 }
@@ -64,9 +64,7 @@ function listAllEnroll() {
         });
 }
 
-
 window.onload = async () => {
-    universities = await readData("universities")
-    programs = await readData("program_types")
-    initialise()
+    await fetchData()
+    listAllEnroll()
 }

@@ -1,11 +1,14 @@
-import { readData, writeData } from "./helpers.js";
+import { readData } from "./helpers.js";
 
-let universities = {}, programs = {};
+let universities = {}, programs = {}, studyStages = {};
 
-// Initialise filters
-function initialise() {
-    listAllEnroll()
-}
+
+async function fetchData() {
+    universities = await readData("universities")
+    programs = await readData("program_types")
+    studyStages = await readData("study_stages")
+  }
+  
 
 function listAllEnroll() {
     const tableBody = document.getElementById("table-payable-body");
@@ -15,21 +18,22 @@ function listAllEnroll() {
     readData(`students`)
         .then(async (data) => {
             const schema = `<tr class="btn-reveal-trigger" id="{}">
-            <td class="align-middle student"><a href="student_details.html?id={}">{}</a></td>
-            <td class="align-middle studentEmail">{}</td>
-            <td class="align-middle program_type">{}</td>
-            <td class="align-middle university">{}</td>
-            <td class="align-middle universityDegree">{}</td>
-            <td class="align-middle enrollmentStatus">{}</td>
-            <td class="align-middle startDate">{}</td>
-            <td class="align-middle status">{}</td>
-            <td class="align-middle text-nowrap notes">{}</td>
-        </tr>`;
+                <td class="align-middle student"><a href="student_details.html?id={}">{}</a></td>
+                <td class="align-middle studentEmail">{}</td>
+                <td class="align-middle program_type">{}</td>
+                <td class="align-middle university">{}</td>
+                <td class="align-middle universityDegree">{}</td>
+                <td class="align-middle studyStage">{}</td>
+                <td class="align-middle enrollmentStatus">{}</td>
+                <td class="align-middle startDate">{}</td>
+                <td class="align-middle status">{}</td>
+                <td class="align-middle text-nowrap notes">{}</td>
+            </tr>`;
 
-            let csvContent = 'Student, Student Email,Program Type, University, University Degree, Status, Start Date, Status, Notes\r\n';
+            let csvContent = 'Student, Student Email,Program Type, University, Degree, Study Stage, Status, Start Date, Status, Notes\r\n';
 
             // student, email, program type, university, university degree, status, start date, status, notes
-            const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'
+            const csvRow = '{},{},{},{},{},{},{},{},{},{}\r\n'
 
             const promises = Object.keys(data).map(async id => {
                 try {
@@ -37,9 +41,12 @@ function listAllEnroll() {
                     const UniversityName = universities[p?.university].name;
                     const ProgramName = programs[p?.program_type].name;
                     p.studyPlan && p.studyPlan.forEach(function (plan) {
-                        const row = schema.format(id, id, p.studentName, p.studentEmail, ProgramName, UniversityName, p.universityDegree, p.enrollmentStatus, plan.startDate, plan.status, plan?.notes || '');
+                        const row = schema.format(id, id, p.studentName, p.studentEmail, ProgramName, 
+                            UniversityName, p.universityDegree, studyStages?.[plan?.studyStage]?.name || '',
+                            p.enrollmentStatus, plan.startDate, plan.status, plan?.notes || ''
+                        );
                         if (tableBody) tableBody.innerHTML += row;
-                        csvContent += csvRow.format(p.studentName, p.studentEmail, ProgramName, UniversityName, p.universityDegree, p.enrollmentStatus, plan.startDate, plan.status, plan?.notes || '');
+                        csvContent += csvRow.format(p.studentName, p.studentEmail, ProgramName, UniversityName, p.universityDegree, studyStages?.[p?.studyStage]?.name || '', p.enrollmentStatus, plan.startDate, plan.status, plan?.notes || '');
                     });
                 } catch (e) {
                     console.log("ERRROR:", e)
@@ -59,7 +66,6 @@ function listAllEnroll() {
 
 
 window.onload = async () => {
-    universities = await readData("universities")
-    programs = await readData("program_types")
-    initialise()
+    await fetchData()
+    listAllEnroll()
 }
