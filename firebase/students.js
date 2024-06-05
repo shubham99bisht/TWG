@@ -7,6 +7,7 @@ let currency_options = ''
 
 const currencyInput =  document.getElementById("currency")
 const feesCurrencyInput =  document.getElementById("fees_currency")
+const programSelect = document.getElementById("program_type")
 
 async function fetchData() {
   programs = await readData("program_types")
@@ -160,19 +161,20 @@ function readStudentDetails(id) {
 window.readStudentDetails = readStudentDetails
 
 function loadStudyPlan(studyPlan) {
-  console.log(studyPlan)
   if (!studyPlan) return
   const table = document.getElementById('studyPlan')
-  for (let i=0; i < studyPlan.length; i++) {
-    const data = studyPlan[i]
+  const keys = Object.keys(studyPlan);
+  for (let i=0; i < keys.length; i++) {
+    const id = keys[i];
+    const data = studyPlan[id]
     const studyStage = studyStages?.[data.studyStage]
-    const row = `<tr>
+    const row = `<tr id="${id}">
       <td class="align-middle name">${studyStage?.name || ''}</td>
       <td class="text-center align-middle date">${data.startDate}</td>
       <td class="text-center align-middle status">${data.status}</td>
       <td class="text-center align-middle notes">${data.notes}</td>
       <td class="text-center align-middle">
-        <button class="btn btn-link btn-sm" type="button" onclick="removeStudyPlan(event)">
+        <button class="btn btn-link btn-sm" type="button" onclick="removeStudyPlan('${id}')">
           <span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span>
         </button>
         <button class="btn btn-link btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#studyPlanModal">
@@ -187,23 +189,28 @@ function loadStudyPlan(studyPlan) {
 function loadLearningPlan(learningPlan) {
   console.log(learningPlan)
   if (!learningPlan) return
-  const table = document.getElementById('learningPlan')
-  for (let i=0; i < learningPlan.length; i++) {
-    const data = learningPlan[i]
+  const table = document.getElementById('learningPlan');
+  const keys = Object.keys(learningPlan);
+  for (let i=0; i < keys.length; i++) {
+    const termId = keys[i];
+    const data = learningPlan[termId];
 
     let tableBody = ''
-    for (let j=0; j < data?.modules.length; j++) {
-      const moduleData = data.modules[j];
-      const row = `<tr>
-        <td class="align-middle">${moduleData.name}</td>
-        <td class="text-center align-middle">${moduleData.result}</td>
-        <td class="text-center align-middle">${moduleData.grade}</td>
-        <td class="text-center align-middle">${moduleData.notes}</td>
+    const moduleKeys = Object.keys(data?.modules);
+    for (let j=0; j < moduleKeys.length; j++) {
+      
+      const moduleId = moduleKeys[j];
+      const moduleData = data.modules[moduleId];
+      const row = `<tr id="${moduleId}">
+        <td class="align-middle name">${moduleData.name}</td>
+        <td class="text-center align-middle result">${moduleData.result}</td>
+        <td class="text-center align-middle grade">${moduleData.grade}</td>
+        <td class="text-center align-middle notes">${moduleData.notes}</td>
         <td class="text-center align-middle">
-          <button class="btn btn-link btn-sm" type="button" onclick="removeModule(event)">
+          <button class="btn btn-link btn-sm" type="button" onclick="removeModule('${termId}','${moduleId}')">
             <span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span>
           </button>
-          <button class="btn btn-link btn-sm" type="button" onclick="editModule(event)">
+          <button class="btn btn-link btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#twgTermModuleModal">
             <span class="fas fa-pencil-alt text-primary" data-fa-transform="shrink-2"></span>
           </button>
         </td>
@@ -215,6 +222,7 @@ function loadLearningPlan(learningPlan) {
     <div class="border rounded-1 position-relative bg-white dark__bg-1100 p-3 mb-3 Term">
       <div class="row form-group">
         <div class="col-lg-4 col-12 mb-3">
+          
           <label class="form-label" for="termName">Term Name<span class="text-danger">*</span></label>
           <input class="form-control termName" name="termName" type="text" value="${data.name}" disabled />
         </div>
@@ -229,6 +237,7 @@ function loadLearningPlan(learningPlan) {
       </div>
 
       <div class="table-responsive">
+      <input type="hidden" value="${termId}" name="termId" id="termId"/>
         <table class="table table-sm table-bordered mt-3 bg-white dark__bg-1100">
           <thead>
             <tr class="fs--1">
@@ -246,7 +255,8 @@ function loadLearningPlan(learningPlan) {
       </div>
 
       <div class="text-end">
-        <button class="btn btn-falcon-default btn-sm mt-2" type="button" onclick="addModule(event)"><span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Module</button>
+        <input type="hidden" value="${termId}" name="termId" id="termId"/>
+        <button id="addModule" class="btn btn-falcon-default btn-sm mt-2" type="button"  data-bs-toggle="modal" data-bs-target="#twgTermModuleModal"><span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Module</button>
       </div>
     </div>`    
     table.innerHTML += Term    
@@ -254,7 +264,6 @@ function loadLearningPlan(learningPlan) {
 }
 
 function loadFeePayable(feePayable, totalFeePayable) {
-  console.log(feePayable)
   if (!feePayable) return
   const table = document.getElementById('feePayableTable')
 
@@ -759,9 +768,104 @@ function updateStudyPlanStageList(studentId) {
     if (stage) {
       let option = document.createElement("option");
       option.value = stageId;
+      option.name = stageId;
       option.textContent = stage.name;
       stageSelector.appendChild(option);
     }
   });
+  
 }
 window.updateStudyPlanStageList = updateStudyPlanStageList
+
+
+
+/**
+ * --------------------------------------------------
+ * Update TWG Learning Plan term
+ * --------------------------------------------------
+ */
+
+function getLatestModulesList() {
+  try {
+    const pid = programSelect.textContent
+    const modules = programs[pid]["modules"]
+    return modules
+  } catch(error) {
+    return []
+  }
+}
+
+function addModule(event) {
+  const module = `
+    <td>
+      <select class="form-select form-select-sm module mb-1" required="required">
+        <option hidden disabled selected value="">Select Module</option>
+      </select>
+    </td>
+    <td>
+      <select class="form-select form-select-sm result mb-1" required="required">
+        <option value="pass">Pass</option>
+        <option value="fail">Fail</option>
+        <option value="withdrawn">Withdrawn</option>
+      </select>
+    </td>
+    <td><input class="form-control form-control-sm grade" type="text" required="required"/></td>
+    <td><input class="form-control form-control-sm notes" type="text" required="required"/></td>
+    <td class="text-center align-middle"><button class="btn btn-link btn-sm" type="button" onclick="removeModuleTemp(event)"><span class="fas fa-trash-alt text-danger" data-fa-transform="shrink-2"></span></button></td>`
+
+  const button = event.target;
+  const tablePair = button.closest('.Term');
+  if (tablePair) {
+    const table = tablePair.querySelector('table tbody');
+    if (table) {
+      const newRow = table.insertRow();
+      newRow.classList.add('align-middle')
+      newRow.innerHTML += module
+
+      const newSelect = newRow.querySelector(".module")
+
+      const modules = getLatestModulesList()
+      modules.forEach(m => {
+        let option = document.createElement("option");
+        option.value = m;
+        option.textContent = m;
+        newSelect.appendChild(option);
+      });
+    }
+  }
+}
+window.addModule = addModule;
+
+function removeModuleTemp(event) {
+  const button = event.target;
+  const row = button.closest('tr');
+  row.remove();
+}
+window.removeModuleTemp = removeModuleTemp;
+
+function readLearningPlan() {
+  const termsContainer = document.getElementById('updateTwgTermForm');
+  const terms = termsContainer.querySelectorAll('.Term');
+
+    const term = terms[0]
+    const termData = {
+      name: term.querySelector('.termName').value,
+      startDate: term.querySelector('.startDate').value,
+      count: term.querySelector('.numberOfModules').value,
+      modules: []
+    };
+  
+    if (!termData.name || !termData.startDate || !termData.count) { failMessage("Please complete Term information."); return }
+  
+    const rows = term.querySelectorAll('tbody tr');
+    for (let j=0; j<rows.length; j++) {
+      const row = rows[j]
+      const name = row.querySelector('.module').value;
+      const result = row.querySelector('.result').value;
+      const grade = row.querySelector('.grade').value;
+      const notes = row.querySelector('.notes').value;
+      termData.modules.push({ name, result, grade, notes });
+    }
+  return termData
+}
+window.readLearningPlan = readLearningPlan

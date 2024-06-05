@@ -6,6 +6,8 @@ if (!studentId) location.href = "students.html"
 
 // Forms
 const updateFeePayableForm = document.getElementById("updateFeePayableForm")
+const updateStudyPlanForm = document.getElementById("studyPlanForm");
+const updateTwgModuleForm = document.getElementById("updateTwgModuleForm");
 
 /**
  * --------------------------------------------------
@@ -84,10 +86,9 @@ window.removeFeePayable = removeFeePayable
  */
 
 const studyPlanModal = document.getElementById('studyPlanModal')
-studyPlanModal.addEventListener('show.bs.modal', event => {
+studyPlanModal.addEventListener('show.bs.modal',event => {
     const button = event.relatedTarget
     updateStudyPlanStageList(studentId)
-    
     if (button.id == 'addStudyPlan') {
         updateFeePayableForm.reset();
     }
@@ -97,12 +98,44 @@ studyPlanModal.addEventListener('show.bs.modal', event => {
         studyPlanModal.querySelector('#studyPlanStage').value = row?.querySelector('.name').textContent || ''
         studyPlanModal.querySelector('#studyPlanDate').value = row?.querySelector('.date').textContent || ''
         studyPlanModal.querySelector('#studyPlanStatus').value = row?.querySelector('.status').textContent || ''
-        studyPlanModal.querySelector('#feePayableNotes').value =  row?.querySelector('.notes').textContent || ''
+        studyPlanModal.querySelector('#studyPlanNotes').value =  row?.querySelector('.notes').textContent || ''
     }
 })
 
 async function updateStudyPlan() {
+    try {
+        const formProps = new FormData(updateStudyPlanForm);
+        const formData = Object.fromEntries(formProps);
 
+        const id = formData['studyPlanId']
+        const studyStage = formData['studyPlanStage']
+        const startDate = formData['studyPlanDate']
+        const status = formData['studyPlanStatus']
+        const notes = formData['studyPlanNotes']
+
+        if (!studyStage || !startDate) { 
+            failMessage("Failed to update Study Plan. Missing fields."); 
+            return 
+        }
+
+        if (id) {
+            if (updateData(`students/${studentId}/studyPlan/${id}`, {notes, startDate, status, studyStage})) {
+                successMessage("Study Plan updated!").then(() => location.reload())
+            } else {
+                failMessage("Study Plan failed.")
+            }
+        }else {
+            if (writeDataWithNewId(`students/${studentId}/studyPlan`, {notes, startDate, status, studyStage})) {
+                successMessage("Study Plan updated!").then(() => location.reload())
+            } 
+            else {
+                failMessage("Study Plan failed.")
+            }
+        }
+
+    } catch (error) {
+        failMessage("Failed to update Study Plan")
+    }
 }
 window.updateStudyPlan = updateStudyPlan
 
@@ -118,4 +151,106 @@ async function removeStudyPlan(id) {
         }
     }
 }
-window.removeStudyPlan = removeStudyPlan
+window.removeStudyPlan = removeStudyPlan;
+
+/**
+ * --------------------------------------------------
+ * Update TWG Learning Plan
+ * --------------------------------------------------
+ */
+
+const twgTermModuleModal = document.getElementById('twgTermModuleModal')
+twgTermModuleModal.addEventListener('show.bs.modal',event => {
+    const button = event.relatedTarget
+    const termId = button.closest('div');
+    console.log(termId?.querySelector('#termId').value)
+    if (button.id == 'addModule') {
+        updateTwgModuleForm.reset();
+        twgTermModuleModal.querySelector('#termId').value = termId?.querySelector('#termId').value;
+    }
+    else {
+        const row = button.closest('tr')
+        
+        twgTermModuleModal.querySelector('#moduleId').value = row.id
+        twgTermModuleModal.querySelector('#termId').value = termId?.querySelector('#termId').value;
+        twgTermModuleModal.querySelector('#twgModuleName').value = row?.querySelector('.name').textContent || ''
+        twgTermModuleModal.querySelector('#twgModuleNotes').value = row?.querySelector('.notes').textContent || ''
+        twgTermModuleModal.querySelector('#twgModuleResult').value = row?.querySelector('.result').textContent || ''
+        twgTermModuleModal.querySelector('#twgModuleGrade').value =  row?.querySelector('.grade').textContent || ''
+    }
+})
+
+async function updateModule() {
+    try {
+        const formProps = new FormData(updateTwgModuleForm);
+        const formData = Object.fromEntries(formProps);
+
+        const moduleId = formData['moduleId']
+        const termId = formData['termId'];
+        const name = formData['twgModuleName']
+        const notes = formData['twgModuleNotes']
+        const result = formData['twgModuleResult']
+        const grade = formData['twgModuleGrade']
+
+        console.log(name,notes,result,grade,termId,moduleId);
+        if (!name || !result) { 
+            failMessage("Failed to update Learning Plan. Missing fields."); 
+            return 
+        }
+
+        if(!termId){
+            failMessage("Some Error Occured"); 
+            return 
+        }
+
+        if (moduleId) {
+            if (updateData(`students/${studentId}/learningPlan/${termId}/modules/${moduleId}`, {name, notes, result, grade})) {
+                successMessage("Learning Plan updated!").then(() => location.reload())
+            } else {
+                failMessage("Learning Plan failed.")
+            }
+        }else {
+            if (writeDataWithNewId(`students/${studentId}/learningPlan/${termId}/modules`, {name, notes, result, grade})) {
+                successMessage("Learning Plan updated!").then(() => location.reload())
+            } 
+            else {
+                failMessage("Learning Plan failed.")
+            }
+        }
+
+    } catch (error) {
+        failMessage("Failed to update Learning Plan")
+    }
+}
+window.updateModule = updateModule
+
+async function removeModule(termId,id) {
+    if (confirm("Confirm delete Learning plan module?")) {      
+        try {
+          if (await deleteData(`students/${studentId}/learningPlan/${termId}/modules/${id}`)) {
+            successMessage('Learning Plan Module deleted successfully!').then(() => location.reload())
+          } else { throw "Not deleted" }
+        } catch (e) {
+          failMessage('Failed to delete Learning Plan Module')
+          console.error(e)
+        }
+    }
+}
+window.removeModule = removeModule;
+
+async function addTwgTerm() {
+    try {
+        const learningPlan = readLearningPlan();
+        if (writeDataWithNewId(`students/${studentId}/learningPlan`, learningPlan)) {
+            successMessage("TWG term updated!").then(() => location.reload())
+        }
+        else {
+            failMessage("TWG term failed.")
+        }
+
+    } catch (error) {
+        failMessage("Failed to update TWG term")
+    }
+}
+window.addTwgTerm = addTwgTerm
+

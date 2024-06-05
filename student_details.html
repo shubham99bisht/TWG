@@ -109,6 +109,7 @@
                     <p class="fw-semi-bold mb-1">Program</p>
                   </div>
                   <div class="col" id="program_type">-</div>
+                  <input type="hidden" id="programId" name="programId" />
                 </div>
                 <div class="row">
                   <div class="col-5 col-sm-4">
@@ -165,7 +166,7 @@
             <div class="mb-3" id="learningPlan">
               <!-- Dynamically add terms here -->
             </div>
-            <button class="btn btn-outline-primary btn-sm mt-2" type="button" id="addTerm" disabled>
+            <button class="btn btn-outline-primary btn-sm mt-2" type="button" id="addTerm" data-bs-toggle="modal" data-bs-target="#twgTermModal">
               <span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Term
             </button>
             <!-- TWG Learning Plan Ends-->
@@ -596,7 +597,7 @@
               </div> 
               <div class="col-12 mb-3">
                 <label class="form-label" for="studyPlanStatus">Status</label>
-                <select class="form-select form-select-sm" id="studyPlanStatus" required="required">
+                <select class="form-select form-select-sm" id="studyPlanStatus" name="studyPlanStatus" required="required">
                   <option value="Not Started">Not Started</option>
                   <option value="Currently Enrolled">Currently Enrolled</option>
                   <option value="Completed">Completed</option>
@@ -657,6 +658,114 @@
   </div>
   <!-- Add Fee Payable Ends -->  
 
+  <!-- Add TWG Learning Plan Module -->
+  <div class="modal fade" id="twgTermModuleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Add/Update Module </h5>
+          </div>
+          <div class="px-4 py-2">
+            <form class="row" id="updateTwgModuleForm">
+              <input class="form-control" id="moduleId" name="moduleId" type="hidden" />
+              <input type="hidden" name="termId" id="termId"/>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="twgModuleName">Module Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="twgModuleName" name="twgModuleName" type="text" placeholder="1000" />
+              </div>
+              <div class="col-12 col-lg-6 mb-3">
+                <label class="form-label" for="twgModuleResult">Result<span class="text-danger">*</span></label>
+                <select class="form-select form-select-sm status" id="twgModuleResult" name="twgModuleResult" required="required">
+                  <option value="pass">Pass</option>
+                  <option value="fail">Fail</option>
+                  <option value="withdrawn">Withdrawn</option>
+                </select>
+              </div>
+              <div class="col-12 col-lg-6 mb-3">
+                <label class="form-label" for="twgModuleGrade">Grade<span class="text-danger">*</span></label>
+                <input class="form-control" id="twgModuleGrade" name="twgModuleGrade" type="text" placeholder="YYYY-MM-DD" />
+              </div> 
+              <div class="col-12 mb-3">
+                <label class="form-label" for="twgModuleNotes">Notes</label>
+                <textarea class="form-control" id="twgModuleNotes" name="twgModuleNotes" placeholder="Notes/Comments" rows="2"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" onclick="updateModule()">Add Module</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add TWG Learning Plan Module Ends --> 
+
+  <!-- Add TWG Learning Plan Term -->
+  <div class="modal fade" id="twgTermModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document" style="max-width: 600px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Add/Update Term </h5>
+          </div>
+          <div class="px-4 py-2">
+            <div class="row" id="updateTwgTermForm">
+              <div class="Term">
+                <div class="row form-group">
+                  <div class="col-lg-4 col-12 mb-3">
+                    <label class="form-label" for="termName">Term Name<span class="text-danger">*</span></label>
+                    <input class="form-control termName" name="termName" type="text" placeholder="Term X" required="required" />
+                  </div>
+                  <div class="col-lg-4 col-12 mb-3">
+                    <label class="form-label" for="startDate">Start Date<span class="text-danger">*</span></label>
+                    <input class="form-control startDate" name="startDate" type="text" placeholder="YYYY-MM-DD" required="required" />
+                  </div>
+                  <div class="col-lg-4 col-12 mb-3">
+                    <label class="form-label" for="numberOfModules">Module Count<span class="text-danger">*</span></label>
+                    <input class="form-control numberOfModules" name="numberOfModules" type="number" required="required" />
+                  </div>
+                </div>
+          
+                <div class="table-responsive">
+                  <table class="table table-bordered mt-3 bg-white dark__bg-1100">
+                    <thead>
+                      <tr class="fs--1">
+                        <th>Module Name</th>
+                        <th>Result</th>
+                        <th>Grade</th>
+                        <th>Notes</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+          
+              <div class="text-end">
+                <button class="btn btn-falcon-default btn-sm mt-2" type="button" onclick="addModule(event)"><span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Module</button>
+              </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" onclick="addTwgTerm()">Add Term</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Add TWG Learning Plan Term Ends --> 
 
   <!--    JavaScripts-->
   <script src="./vendors/popper/popper.min.js"></script>
