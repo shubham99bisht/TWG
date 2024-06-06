@@ -1,7 +1,7 @@
 import { readData, deleteData, fetchPaymentDetails, updateData, writeDataWithNewId } from "./helpers.js";
 
 // Global Variables
-let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, studyStages = {}
+let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, studyStages = {}, modules ={}
 let availablestudyStages = {}, currency = {}
 let currency_options = ''
 
@@ -136,6 +136,7 @@ function readStudentDetails(id) {
 
       const universityName = await readData(`universities/${result?.university}/name`)
       const programName = await readData(`program_types/${result?.program_type}/name`)
+      modules = await readData(`program_types/${result?.program_type}`);
 
       document.getElementById("student_id").innerHTML = id
       document.getElementById("name").innerHTML = result?.studentName
@@ -187,7 +188,6 @@ function loadStudyPlan(studyPlan) {
 }
 
 function loadLearningPlan(learningPlan) {
-  console.log(learningPlan)
   if (!learningPlan) return
   const table = document.getElementById('learningPlan');
   const keys = Object.keys(learningPlan);
@@ -785,16 +785,6 @@ window.updateStudyPlanStageList = updateStudyPlanStageList
  * --------------------------------------------------
  */
 
-function getLatestModulesList() {
-  try {
-    const pid = programSelect.textContent
-    const modules = programs[pid]["modules"]
-    return modules
-  } catch(error) {
-    return []
-  }
-}
-
 function addModule(event) {
   const module = `
     <td>
@@ -824,8 +814,7 @@ function addModule(event) {
 
       const newSelect = newRow.querySelector(".module")
 
-      const modules = getLatestModulesList()
-      modules.forEach(m => {
+      modules.modules.forEach(m => {
         let option = document.createElement("option");
         option.value = m;
         option.textContent = m;
@@ -869,3 +858,21 @@ function readLearningPlan() {
   return termData
 }
 window.readLearningPlan = readLearningPlan
+
+function updateModuleList() {
+  const stageSelector = document.getElementById('twgModuleName')
+  stageSelector.innerHTML = '<option value="">Select Module</option>'
+
+  
+  modules.modules.forEach(stageId => {
+    if (stageId) {
+      let option = document.createElement("option");
+      option.value = stageId;
+      option.name = stageId;
+      option.textContent = stageId;
+      stageSelector.appendChild(option);
+    }
+  });
+  
+}
+window.updateModuleList = updateModuleList

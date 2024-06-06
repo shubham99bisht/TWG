@@ -163,7 +163,7 @@ const twgTermModuleModal = document.getElementById('twgTermModuleModal')
 twgTermModuleModal.addEventListener('show.bs.modal',event => {
     const button = event.relatedTarget
     const termId = button.closest('div');
-    console.log(termId?.querySelector('#termId').value)
+    updateModuleList()
     if (button.id == 'addModule') {
         updateTwgModuleForm.reset();
         twgTermModuleModal.querySelector('#termId').value = termId?.querySelector('#termId').value;
@@ -192,7 +192,6 @@ async function updateModule() {
         const result = formData['twgModuleResult']
         const grade = formData['twgModuleGrade']
 
-        console.log(name,notes,result,grade,termId,moduleId);
         if (!name || !result) { 
             failMessage("Failed to update Learning Plan. Missing fields."); 
             return 
