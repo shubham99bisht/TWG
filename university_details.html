@@ -228,6 +228,49 @@
             </div>
           </div>
         </div>  
+
+        <!-- Degrees Offered -->
+        <div class="card mb-3" id="degreesTable" data-list='{"valueNames":["degrees"],"page":10,"pagination":true}'>
+          <div class="card-header">            
+            <div class="row flex-between-center mb-3">
+              <div class="col-6 col-md-auto d-flex align-items-center">
+                <h5 class="mb-0 text-nowrap py-2 py-xl-0">Degrees</h5>
+              </div>
+              <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
+                <button class="btn btn-outline-success btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#degree-modal"><span class="fas fa-file-excel fs--2 me-1"></span>Add Degree</button>
+              </div>
+              <div class="col-12 col-md-5 mt-1 mt-md-0 ms-auto text-end">
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for a page" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                  </div>
+                </form>
+              </div>              
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive scrollbar">
+              <table class="table table-sm fs--1 mb-0 overflow-hidden" id="receivable">
+                <thead class="bg-200 text-900">
+                  <tr>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="degrees">Name</th>
+                    <th class="no-sort pe-1 align-middle white-space-nowrap">Actions</th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="table-degree-body">
+                  <tr class="text-center"><td colspan="7">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-center mt-3"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+              <ul class="pagination mb-0"></ul><button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"> </span></button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
@@ -400,6 +443,36 @@
         <div class="modal-footer">
           <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
           <button class="btn btn-warning" onclick="updateCommission()">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Update Program Types Ends -->
+
+  <!-- Update Degree Modal -->
+  <div class="modal fade" id="degree-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Degree </h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form class="row" id="degreeForm">
+              <input class="form-control" id="degreeId" name="degreeId" type="text" hidden />
+              <div class="col-12 mb-3">
+                <label class="form-label" for="degreeName">Name</label>
+                <input class="form-control form-control-sm" type="text" id="degreeName" name="degreeName" required="required"/>
+              </div> 
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-warning" id="update-degree" onclick="updateDegree()">Update</button>
         </div>
       </div>
     </div>

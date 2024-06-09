@@ -1,12 +1,12 @@
 import { readData, deleteData, fetchPaymentDetails, updateData, writeDataWithNewId } from "./helpers.js";
 
 // Global Variables
-let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, studyStages = {}, modules ={}
+let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, studyStages = {}, modules = {}
 let availablestudyStages = {}, currency = {}
 let currency_options = ''
 
-const currencyInput =  document.getElementById("currency")
-const feesCurrencyInput =  document.getElementById("fees_currency")
+const currencyInput = document.getElementById("currency")
+const feesCurrencyInput = document.getElementById("fees_currency")
 const programSelect = document.getElementById("program_type")
 
 async function fetchData() {
@@ -37,7 +37,7 @@ let downloadData = {
 
 function downloadCommissions(type, downloadName = 'data') {
   if (!Object.keys(downloadData).includes(type)) return;
-  
+
   let data = downloadData[type];
   const blob = new Blob([data], { type: "text/csv;charset=utf-8" });
   const blobUrl = URL.createObjectURL(blob);
@@ -118,7 +118,7 @@ function listAllStudents() {
       if (tableBody)
         tableBody.innerHTML = `<tr class="text-center"><td colspan="6">Student data not found!</td></tr>`
     });
-    closeSwal()
+  closeSwal()
 }
 window.listAllStudents = listAllStudents
 
@@ -148,6 +148,7 @@ function readStudentDetails(id) {
       document.getElementById("program_type").innerHTML = programName || ''
       document.getElementById("source").innerHTML = result?.source
       document.getElementById("agent").innerHTML = result?.agent || '-'
+      document.getElementById('degree').innerHTML = result?.universityDegree || '-'
 
       loadStudyPlan(result?.studyPlan)
       loadLearningPlan(result?.learningPlan)
@@ -165,7 +166,7 @@ function loadStudyPlan(studyPlan) {
   if (!studyPlan) return
   const table = document.getElementById('studyPlan')
   const keys = Object.keys(studyPlan);
-  for (let i=0; i < keys.length; i++) {
+  for (let i = 0; i < keys.length; i++) {
     const id = keys[i];
     const data = studyPlan[id]
     const studyStage = studyStages?.[data.studyStage]
@@ -183,7 +184,7 @@ function loadStudyPlan(studyPlan) {
         </button>
       </td>
     </tr>`
-    table.innerHTML += row    
+    table.innerHTML += row
   }
 }
 
@@ -191,14 +192,14 @@ function loadLearningPlan(learningPlan) {
   if (!learningPlan) return
   const table = document.getElementById('learningPlan');
   const keys = Object.keys(learningPlan);
-  for (let i=0; i < keys.length; i++) {
+  for (let i = 0; i < keys.length; i++) {
     const termId = keys[i];
     const data = learningPlan[termId];
 
     let tableBody = ''
-    const moduleKeys = Object.keys(data?.modules);
-    for (let j=0; j < moduleKeys.length; j++) {
-      
+    const moduleKeys = data.modules ? Object.keys(data?.modules) : [];
+    for (let j = 0; j < moduleKeys.length; j++) {
+
       const moduleId = moduleKeys[j];
       const moduleData = data.modules[moduleId];
       const row = `<tr id="${moduleId}">
@@ -222,8 +223,7 @@ function loadLearningPlan(learningPlan) {
     <div class="border rounded-1 position-relative bg-white dark__bg-1100 p-3 mb-3 Term">
       <div class="row form-group">
         <div class="col-lg-4 col-12 mb-3">
-          
-          <label class="form-label" for="termName">Term Name<span class="text-danger">*</span></label>
+          <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>
           <input class="form-control termName" name="termName" type="text" value="${data.name}" disabled />
         </div>
         <div class="col-lg-4 col-12 mb-3">
@@ -254,12 +254,16 @@ function loadLearningPlan(learningPlan) {
         </table>
       </div>
 
-      <div class="text-end">
+      <div class="d-flex justify-content-between">
+        <div>
+          <button class="btn btn-falcon-danger btn-sm mt-2" type="button" onclick="removeTerm('${termId}')">Delete</button>
+          <button class="btn btn-falcon-default align-self-start btn-sm mt-2" type="button" data-bs-toggle="modal" data-bs-target="#twgTermEditModal">Edit</button>
+        </div>
         <input type="hidden" value="${termId}" name="termId" id="termId"/>
         <button id="addModule" class="btn btn-falcon-default btn-sm mt-2" type="button"  data-bs-toggle="modal" data-bs-target="#twgTermModuleModal"><span class="fas fa-plus fs--2 me-1" data-fa-transform="up-1"></span>Add Module</button>
-      </div>
-    </div>`    
-    table.innerHTML += Term    
+        </div>
+    </div>`
+    table.innerHTML += Term
   }
 }
 
@@ -270,7 +274,7 @@ function loadFeePayable(feePayable, totalFeePayable) {
   let totalPaid = 0
 
   const keys = Object.keys(feePayable)
-  for (let i=0; i < keys.length; i++ ) {
+  for (let i = 0; i < keys.length; i++) {
     const id = keys[i]
     const data = feePayable[id]
     totalPaid += parseFloat(data['amount']) || 0
@@ -287,7 +291,7 @@ function loadFeePayable(feePayable, totalFeePayable) {
         </button>
       </td>
     </tr>`
-    table.innerHTML += row    
+    table.innerHTML += row
   }
 
   document.getElementById('totalFeePayable').value = totalFeePayable
@@ -312,7 +316,7 @@ window.readPaymentDetails = readPaymentDetails
 
 async function updatePayables(tableBody, payables, type) {
   tableBody.innerHTML = ''
-  let deleteRow = localStorage.getItem("userRole") == 'Admin' ? 
+  let deleteRow = localStorage.getItem("userRole") == 'Admin' ?
     `<a class="dropdown-item text-danger" onclick="deleteTransaction('{}', '${type}')" style="cursor:pointer">Delete</a>` :
     ''
 
@@ -346,7 +350,7 @@ async function updatePayables(tableBody, payables, type) {
       const AgentName = agents && agents[p.agent]?.name || ''
       const StudentName = students[p.student].studentName
       const UniversityName = universities[p?.university].name
-  
+
       const stage = studyStages[p.stage]
       let status = ''
       switch (p?.status) {
@@ -366,7 +370,7 @@ async function updatePayables(tableBody, payables, type) {
           status = '<span class="badge badge rounded-pill badge-soft-secondary">N/A<span class="ms-1 fas fa-ban" data-fa-transform="shrink-2"></span></span>'
           break
         }
-        case 'pending': 
+        case 'pending':
         default: {
           status = '<span class="badge badge rounded-pill badge-soft-warning">Pending<span class="ms-1 fas fa-stream" data-fa-transform="shrink-2"></span></span>'
           break
@@ -379,10 +383,10 @@ async function updatePayables(tableBody, payables, type) {
       } else if (p.amount) {
         amount = `${p.amount}%`
       }
-  
-      const row = schema.format(id, p.student, StudentName, 
+
+      const row = schema.format(id, p.student, StudentName,
         stage?.name || '', `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.notes || '', status, id)
-        if (tableBody) tableBody.innerHTML += row
+      if (tableBody) tableBody.innerHTML += row
 
       csvContent += csvRow.format(StudentName, UniversityName, AgentName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.status, p?.notes || '')
     } catch (e) {
@@ -408,37 +412,36 @@ async function updatePayables(tableBody, payables, type) {
 
 const updateStudentModal = document.getElementById('update-details-modal')
 if (updateStudentModal)
-updateStudentModal.addEventListener('show.bs.modal', event => {
-  const params = new URLSearchParams(document.location.search);
-  const id = params.get('id')
-  const student = students[id]
-  const joinDate = new Date(student.joinDate)
-  updateStudentModal.querySelector('#studentId').value = id
-  updateStudentModal.querySelector('#joinMonth').value = joinDate.getMonth()
-  updateStudentModal.querySelector('#joinYear').value = joinDate.getFullYear()
-  updateStudentModal.querySelector('#studentName').value = student.studentName
-  updateStudentModal.querySelector('#studentEmail').value = student?.studentEmail || ''
-  updateStudentModal.querySelector('#universityStudentId').value = student.universityStudentId
-})
+  updateStudentModal.addEventListener('show.bs.modal', event => {
+    const params = new URLSearchParams(document.location.search);
+    const id = params.get('id')
+    const student = students[id]
+    const joinDate = new Date(student.joinDate)
+    updateStudentModal.querySelector('#studentId').value = id
+    updateStudentModal.querySelector('#joinMonth').value = joinDate.getMonth()
+    updateStudentModal.querySelector('#joinYear').value = joinDate.getFullYear()
+    updateStudentModal.querySelector('#studentName').value = student.studentName
+    updateStudentModal.querySelector('#studentEmail').value = student?.studentEmail || ''
+    updateStudentModal.querySelector('#universityStudentId').value = student.universityStudentId
+  })
 
 async function updateStudent() {
   try {
     processingMessage()
     const params = new URLSearchParams(document.location.search);
     const id = params.get('id')
-    
+
     const basicInfoData = Object.fromEntries(new FormData(updateStudentForm));
-  
+
     const studentId = updateStudentForm.querySelector('#studentId').value
     const { joinMonth, joinYear, universityStudentId, studentName, studentEmail } = basicInfoData
     const date = new Date(joinYear, joinMonth, 2)
-    const joinDate = `${date.toISOString().slice(0,10)}`
-  
+    const joinDate = `${date.toISOString().slice(0, 10)}`
+
     // Validation
     if (id != studentId) failMessage("Can't update student LSQ Id")
-    if (!studentId || !studentName || !studentEmail || !joinMonth || !joinYear || !universityStudentId) 
-      { failMessage("Please provide all data"); return }
-  
+    if (!studentId || !studentName || !studentEmail || !joinMonth || !joinYear || !universityStudentId) { failMessage("Please provide all data"); return }
+
     const newStudent = { studentId, joinDate, universityStudentId, studentName, studentEmail }
     updateData(`students/${studentId}`, newStudent)
       .then((result) => {
@@ -451,7 +454,7 @@ async function updateStudent() {
         }
       })
   }
-  catch(error) {
+  catch (error) {
     console.log(error)
     failMessage("Error adding student");
   }
@@ -466,19 +469,19 @@ window.updateStudent = updateStudent
 
 function deleteStudent(id) {
   if (confirm(`Confirm delete student with id: ${id}`))
-  deleteData(`students/${id}`)
-    .then((result) => {
-      if (result) {
-        successMessage("Agent deleted successfully!")
-        .then(() => location.reload())
-      } else {
-        failMessage("Failed deleting student");
-      }
-    })
-    .catch((error) => {
-      console.log(error)
-      failMessage("Error deleting student");
-    });
+    deleteData(`students/${id}`)
+      .then((result) => {
+        if (result) {
+          successMessage("Agent deleted successfully!")
+            .then(() => location.reload())
+        } else {
+          failMessage("Failed deleting student");
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        failMessage("Error deleting student");
+      });
 }
 
 /**
@@ -522,7 +525,7 @@ editDetailsModel.addEventListener('show.bs.modal', event => {
   const CommissionType = button.closest('table').id
 
   const pay_currency = editDetailsModel.querySelector('#pay_currency')
-  pay_currency.innerHTML = currency_options  
+  pay_currency.innerHTML = currency_options
 
   editDetailsModel.querySelector('#payment-id').value = row.id
   editDetailsModel.querySelector('#commissionType').value = CommissionType
@@ -547,13 +550,13 @@ async function updateDetails() {
     const dueDate = formData['dueDate']
     const amount = formData['amount']
     const notes = formData['notes']
-    const currency = formData['currency']    
-  
-    if (!id || !dueDate || !amount || !currency) { 
-      failMessage("Failed to update payment details"); 
-      return 
+    const currency = formData['currency']
+
+    if (!id || !dueDate || !amount || !currency) {
+      failMessage("Failed to update payment details");
+      return
     }
-    if (updateData(`${CommissionType}/${id}`, {dueDate, amount, notes, currency})) {
+    if (updateData(`${CommissionType}/${id}`, { dueDate, amount, notes, currency })) {
       successMessage("Payment details updated!").then(() => location.reload())
     } else {
       failMessage("Payment update failed.")
@@ -600,7 +603,7 @@ updateStatusModal.addEventListener('show.bs.modal', event => {
   updateStatusModal.querySelector('#commissionType').value = CommissionType
   updateStatusModal.querySelector('#notes').value = payments[CommissionType][row.id]?.notes || ''
   updateStatusModal.querySelector('#status').value = payments[CommissionType][row.id].status
-  
+
   const stageSelector = updateStatusModal.querySelector('#stage')
   updatestudyStageList(row.id, CommissionType, stageSelector)
 
@@ -613,8 +616,8 @@ updateStatusModal.addEventListener('show.bs.modal', event => {
     } catch { isMorePayment = 0 }
     if (isMorePayment) {
       morePaymentsSelect.value = 1; morePaymentsSelect.disabled = true
-    } else { 
-      morePaymentsSelect.value = 0; morePaymentsSelect.disabled = false 
+    } else {
+      morePaymentsSelect.value = 0; morePaymentsSelect.disabled = false
     }
   }
 
@@ -657,13 +660,13 @@ async function updateStatus() {
         ...payments[CommissionType][id],
         stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency, notes: ''
       })
-      res = updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
+      res = updateData(`${CommissionType}/${id}`, { status, notes, morePayments })
     } else if (morePayments == 0) {
-      res = updateData(`${CommissionType}/${id}`, {status, notes, morePayments})
+      res = updateData(`${CommissionType}/${id}`, { status, notes, morePayments })
     } else {
-      res = updateData(`${CommissionType}/${id}`, {status, notes})
+      res = updateData(`${CommissionType}/${id}`, { status, notes })
     }
-    
+
     if (res) {
       successMessage('Payment status updated!').then(() => location.reload())
     } else { throw "Not saved" }
@@ -671,7 +674,7 @@ async function updateStatus() {
     failMessage('Failed to update payment status')
     console.error(e)
   }
-} 
+}
 window.updateStatus = updateStatus
 
 function updatestudyStageList(paymentId, CommissionType, stageSelector) {
@@ -698,14 +701,11 @@ function updatestudyStageList(paymentId, CommissionType, stageSelector) {
 
 computeCommission.addEventListener("click", (event) => {
   const button = event.target
-  console.log("Clicked", button)
   const form = button.closest('form')
-  const CommissionType= form.querySelector('#commissionType').value
-  const selectedStage= form.querySelector('#stage').value
-  console.log(selectedStage)
+  const CommissionType = form.querySelector('#commissionType').value
+  const selectedStage = form.querySelector('#stage').value
   const stageConfig = availablestudyStages.find(s => s.stage == selectedStage)
   const commissions = stageConfig?.commissions
-  console.log(stageConfig)
   if (!commissions) return
 
   const isReceivable = CommissionType == 'receivable' ? 1 : 0
@@ -720,7 +720,7 @@ computeCommission.addEventListener("click", (event) => {
   let dueDate = new Date()
   dueDate.setDate(dueDate.getDate() + parseInt(commissions[isReceivable].installmentDays || 0));
 
-  dueDateInput.value = `${dueDate.toISOString().slice(0,10)}`
+  dueDateInput.value = `${dueDate.toISOString().slice(0, 10)}`
   switch (commissions[isReceivable].type) {
     case 'fixed': {
       amountInput.value = commissions[isReceivable].value
@@ -728,7 +728,7 @@ computeCommission.addEventListener("click", (event) => {
       break;
     }
     case 'percentage': {
-      amountInput.value = parseInt(fees * (commissions[isReceivable].value/100))
+      amountInput.value = parseInt(fees * (commissions[isReceivable].value / 100))
       currencyInput.value = feesCurrencyInput.value
       break;
     }
@@ -739,7 +739,7 @@ computeCommission.addEventListener("click", (event) => {
 })
 
 async function deleteTransaction(id, type) {
-  if (confirm("Confirm delete transaction?")) {      
+  if (confirm("Confirm delete transaction?")) {
     try {
       if (await deleteData(`${type}/${id}`)) {
         successMessage('Commission deleted successfully!').then(() => location.reload())
@@ -761,7 +761,7 @@ function updateStudyPlanStageList(studentId) {
   const uid = students[studentId].university
   const pType = universities[uid].programTypes.find(pt => pt.type == pid)
   if (!pType) return
-  
+
   const stageIds = pType.studyStages.map(pst => pst.stage)
   stageIds.forEach(stageId => {
     let stage = studyStages[stageId]
@@ -773,7 +773,7 @@ function updateStudyPlanStageList(studentId) {
       stageSelector.appendChild(option);
     }
   });
-  
+
 }
 window.updateStudyPlanStageList = updateStudyPlanStageList
 
@@ -794,6 +794,7 @@ function addModule(event) {
     </td>
     <td>
       <select class="form-select form-select-sm result mb-1" required="required">
+        <option selected disabled class="d-none"></option>
         <option value="pass">Pass</option>
         <option value="fail">Fail</option>
         <option value="withdrawn">Withdrawn</option>
@@ -836,25 +837,25 @@ function readLearningPlan() {
   const termsContainer = document.getElementById('updateTwgTermForm');
   const terms = termsContainer.querySelectorAll('.Term');
 
-    const term = terms[0]
-    const termData = {
-      name: term.querySelector('.termName').value,
-      startDate: term.querySelector('.startDate').value,
-      count: term.querySelector('.numberOfModules').value,
-      modules: []
-    };
-  
-    if (!termData.name || !termData.startDate || !termData.count) { failMessage("Please complete Term information."); return }
-  
-    const rows = term.querySelectorAll('tbody tr');
-    for (let j=0; j<rows.length; j++) {
-      const row = rows[j]
-      const name = row.querySelector('.module').value;
-      const result = row.querySelector('.result').value;
-      const grade = row.querySelector('.grade').value;
-      const notes = row.querySelector('.notes').value;
-      termData.modules.push({ name, result, grade, notes });
-    }
+  const term = terms[0]
+  const termData = {
+    name: term.querySelector('select#termName').value,
+    startDate: term.querySelector('.startDate').value,
+    count: term.querySelector('.numberOfModules').value,
+    modules: []
+  }
+
+  if (!termData.name || !termData.startDate || !termData.count) { failMessage("Please complete Term information."); return }
+
+  const rows = term.querySelectorAll('tbody tr');
+  for (let j = 0; j < rows.length; j++) {
+    const row = rows[j]
+    const name = row.querySelector('.module').value;
+    const result = row.querySelector('.result').value;
+    const grade = row.querySelector('.grade').value;
+    const notes = row.querySelector('.notes').value;
+    termData.modules.push({ name, result, grade, notes });
+  }
   return termData
 }
 window.readLearningPlan = readLearningPlan
@@ -863,7 +864,7 @@ function updateModuleList() {
   const stageSelector = document.getElementById('twgModuleName')
   stageSelector.innerHTML = '<option value="">Select Module</option>'
 
-  
+
   modules.modules.forEach(stageId => {
     if (stageId) {
       let option = document.createElement("option");
@@ -873,6 +874,6 @@ function updateModuleList() {
       stageSelector.appendChild(option);
     }
   });
-  
+
 }
 window.updateModuleList = updateModuleList

@@ -297,6 +297,7 @@ function addModule(event) {
     </td>
     <td>
       <select class="form-select form-select-sm result mb-1" required="required">
+        <option selected disabled class="d-none"></option>
         <option value="pass">Pass</option>
         <option value="fail">Fail</option>
         <option value="withdrawn">Withdrawn</option>
@@ -349,6 +350,18 @@ function addTerm(event) {
     <div class="row form-group">
       <div class="col-lg-4 col-12 mb-3">
         <label class="form-label" for="termName">Term Name<span class="text-danger">*</span></label>
+        <select class="form-select form-select-sm" id="termName" name="termName" required="required">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
         <input class="form-control termName" name="termName" type="text" placeholder="Term X" required="required" />
       </div>
       <div class="col-lg-4 col-12 mb-3">
@@ -401,7 +414,7 @@ function readLearningPlan() {
   for (let i=0; i<terms.length; i++) {
     const term = terms[i]
     const termData = {
-      name: term.querySelector('.termName').value,
+      name: term.querySelector('select#termName').value,
       startDate: term.querySelector('.startDate').value,
       count: term.querySelector('.numberOfModules').value,
       modules: []

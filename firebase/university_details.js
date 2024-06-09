@@ -1,4 +1,4 @@
-import { readData, fetchPaymentDetails, updateData } from "./helpers.js";
+import { readData, fetchPaymentDetails, updateData, writeDataWithNewId, writeData } from "./helpers.js";
 import { auth } from "./index.js";
 
 let programs = {}, students = {}, agents = {}, studyStages = {}
@@ -390,6 +390,84 @@ async function readPaymentDetails(id) {
 }
 window.readPaymentDetails = readPaymentDetails
 
+
+/**
+ * --------------------------------------------------
+ * Display Degree details
+ * --------------------------------------------------
+ */
+
+const degreeModal = document.getElementById('degree-modal')
+const degreeForm = document.getElementById('degreeForm')
+
+if (degreeModal) {
+  degreeModal.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget
+    if (button.id == "update-degree") {
+      commissionsForm.reset()
+    } else {
+      const row = button.closest('tr')
+      degreeForm.querySelector('#degreeId').value = row?.id;
+      degreeForm.querySelector('#degreeName').value = row?.querySelector('.degrees').textContent || ''
+    }
+  })
+}
+
+
+function listDegree(id) {
+  const tableBody = document.getElementById("table-degree-body");
+  tableBody.innerHTML = ''
+
+  readData(`universities/${id}/degrees`)
+    .then((data) => {
+      data && Object.keys(data).forEach((index) => {
+        const newRow = tableBody.insertRow();
+        newRow.setAttribute('id', `${index}`);
+        newRow.innerHTML = `
+          <td class="degrees">${data[index]}</td>
+          <td>
+            <a data-bs-toggle="modal" data-bs-target="#degree-modal" class="pe-2" type="button"><i class="fas fa-edit text-warning"></i></a>
+          </td>`
+      });
+    })
+    .catch((error) => {
+      console.error("Error reading Universities:", error);
+      if (tableBody)
+        tableBody.innerHTML = `<tr class="text-center"><td colspan="6">Error reading University details</td></tr>`
+    });
+}
+window.listDegree = listDegree
+
+function updateDegree() {
+  try {
+    const formProps = new FormData(degreeForm);
+    const formData = Object.fromEntries(formProps);
+    const { degreeName, degreeId } = formData
+    const id = university.id;
+    if (!id || !degreeName) {
+      failMessage("Enter all details"); return
+    }
+    if (id && degreeId) {
+      if (writeData(`universities/${id}/degrees/${degreeId}`, degreeName)) {
+        successMessage("Updated Degree details").then(() => location.reload())
+      } else {
+        failMessage("Failed Degree commissions")
+      }
+    } else {
+      if (writeDataWithNewId(`universities/${id}/degrees`, degreeName)) {
+        successMessage("Added Degree details").then(() => location.reload())
+      } else {
+        failMessage("Failed Degree commissions")
+      }
+    }
+
+  } catch (e) {
+    console.log(e);
+    failMessage("Failed to Degree  details.");
+  }
+}
+window.updateDegree = updateDegree
+
 async function updatePayables(tableBody, payables, type) {
   tableBody.innerHTML = ''
   const schema = `<tr class="btn-reveal-trigger">
@@ -406,7 +484,7 @@ async function updatePayables(tableBody, payables, type) {
 
   let csvContent = 'Student,University,Agent,Study Stage,Fees,Amount,Due Date,Status,Notes\r\n';
   // student, univ, agent, program type, stage, fees, amount, due date, status, notes
-  const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'  
+  const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'
 
   const promises = Object.keys(payables).map(async id => {
     try {
@@ -414,7 +492,7 @@ async function updatePayables(tableBody, payables, type) {
       const AgentName = agents[p.agent]?.name || ''
       const StudentName = students[p.student].studentName
       const UniversityName = university.name
-  
+
       const stage = studyStages[p.stage]
       let status = ''
       switch (p?.status) {
@@ -440,14 +518,14 @@ async function updatePayables(tableBody, payables, type) {
           break
         }
       }
-  
+
       let amount = 'N/A'
       if (p.amount && p.currency) {
         amount = `${p.amount} ${currencies[p.currency].name}`
       } else if (p.amount) {
         amount = `${p.amount}%`
       }
-  
+
       const row = schema.format(StudentName, p.student, AgentName, p.agent,
         stage.name, `${p.fees} ${currencies[p.feesCurrency].name}`, amount, p.dueDate, status)
       if (tableBody) tableBody.innerHTML += row
@@ -522,6 +600,7 @@ window.onload = async function () {
   const id = params.get('id')
   if (!id) location.href = "universities.html"
   listOne(id); 
+  listDegree(id)
   await readPaymentDetails(id);
   listInit()
 } 
