@@ -235,6 +235,7 @@
                 <h5 class="mb-0 text-nowrap py-2 py-xl-0">Payable</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
+                <button class="btn btn-outline-danger btn-sm" type="button" id="payableNewPayment" data-bs-toggle="modal" data-bs-target="#newPaymentDetailsModal">New Payment</button>
                 <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('payable', '#payable')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
                 <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCommissions('payable', 'payableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
               </div>
@@ -836,6 +837,78 @@
     </div>
   </div>
   <!-- Edit TWG Term  Ends --> 
+
+  <!-- Add Payment status -->
+  <div class="modal fade" id="newPaymentDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">New Payable</h5>
+          </div>
+          <div class="px-4 py-2">
+            <form class="row" id="newPaymentDetailsForm">
+              <div class="row">
+                <hr>
+                <div class="col-12 mb-3">
+                  <label class="form-label" for="stage">Next Study Stage<span class="text-danger">*</span></label>
+                  <select class="form-select" id="stage" name="stage">
+                    <option value="">Select stage</option>
+                  </select>
+                </div>
+                <div class="col-4 mb-3">
+                  <label class="form-label" for="fees">Fees Paid<span class="text-danger">*</span></label>
+                  <input class="form-control" id="fees" name="fees" type="text" />
+                </div>
+                <div class="col-4 mb-3">
+                  <label class="form-label" for="currency">Currency<span class="text-danger">*</span></label>
+                  <select class="form-select" id="fees_currency" name="feesCurrency">
+                  </select>
+                </div>
+                <div class="col-4 mb-3 d-grid my-auto">
+                  <button class="btn btn-secondary" id="computePayabaleCommission" type="button">Compute</button>
+                </div>
+                <div class="col-4 mb-3">
+                  <label class="form-label" for="amount">Amount<span class="text-danger">*</span></label>
+                  <input class="form-control" id="amount" name="amount" type="text" placeholder="1000" />
+                </div>
+                <div class="col-4 mb-3">
+                  <label class="form-label" for="currency">Currency<span class="text-danger">*</span></label>
+                  <select class="form-select" id="currency" name="currency">
+                  </select>
+                </div>
+                <div class="col-4 mb-3">
+                  <label class="form-label" for="dueDate">Due Date<span class="text-danger">*</span></label>
+                  <input class="form-control" id="dueDate" name="dueDate" type="text" placeholder="YYYY-MM-DD" />
+                </div>                
+            
+                <div class="col-12 mb-3">
+                  <label class="form-label" for="newStatus">Status<span class="text-danger">*</span></label>
+                  <select class="form-select" id="newStatus" name="newStatus">
+                    <option value="pending" selected>Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="invoiced">Invoiced</option>
+                    <option value="paid">Paid</option>
+                    <option value="na">Not Applicable</option>
+                  </select>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" id="newPayable" onclick="newPayable()">Add Payable</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Payment status  Ends --> 
+
 
   <!--    JavaScripts-->
   <script src="./vendors/popper/popper.min.js"></script>

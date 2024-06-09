@@ -778,6 +778,51 @@ function updateStudyPlanStageList(studentId) {
 window.updateStudyPlanStageList = updateStudyPlanStageList
 
 
+async function newPayable() {
+  try {
+    const formProps = new FormData(newPaymentDetailsForm);
+    const formData = Object.fromEntries(formProps);
+    const CommissionType = formData['commissionType']
+    const stage = formData['stage']
+    const fees = formData['fees']
+    const feesCurrency = formData['feesCurrency']
+    const dueDate = formData['dueDate']
+    const amount = formData['amount']
+    const newStatus = formData['newStatus']
+    const currency = formData['currency']
+
+
+    console.log(CommissionType,stage,fees,feesCurrency,dueDate,amount,newStatus,currency)
+
+    // let morePayments = ''
+    // if (formData['morePayments']) {
+    //   morePayments = parseInt(formData['morePayments'])
+    // }
+
+    // if (morePayments && (!stage || !fees || !feesCurrency || !dueDate || !amount || !newStatus)) {
+    //   failMessage("Please provide all inputs")
+    //   return
+    // }
+
+    // let res = 0
+    // if (morePayments) {
+    //   writeDataWithNewId(`${CommissionType}`, {
+    //     ...payments[CommissionType][id],
+    //     stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency, notes: ''
+    //   })
+    //   res = updateData(`${CommissionType}/${id}`, { status, notes, morePayments })
+    // }
+
+    // if (res) {
+    //   successMessage('Payment status updated!').then(() => location.reload())
+    // } else { throw "Not saved" }
+  } catch (e) {
+    failMessage('Failed to update payment status')
+    console.error(e)
+  }
+}
+window.newPayable = newPayable
+
 
 /**
  * --------------------------------------------------
