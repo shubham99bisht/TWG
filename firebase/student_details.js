@@ -1,4 +1,4 @@
-import { deleteData, updateData, writeDataWithNewId, writeData } from "./helpers.js";
+import { deleteData, updateData, writeData, writeDataWithNewId, readData } from "./helpers.js";
 
 const params = new URLSearchParams(document.location.search);
 const studentId = params.get('id')
@@ -208,6 +208,9 @@ async function updateModule() {
             return
         }
 
+        const moduleList = await readData(`students/${studentId}/learningPlan/${termId}/modules`);
+        moduleList.push({ name, notes, result, grade })
+
         if (moduleId) {
             if (updateData(`students/${studentId}/learningPlan/${termId}/modules/${moduleId}`, { name, notes, result, grade })) {
                 successMessage("Learning Plan updated!").then(() => location.reload())
@@ -215,7 +218,7 @@ async function updateModule() {
                 failMessage("Learning Plan failed.")
             }
         } else {
-            if (writeDataWithNewId(`students/${studentId}/learningPlan/${termId}/modules`, { name, notes, result, grade })) {
+            if (writeData(`students/${studentId}/learningPlan/${termId}/modules`, moduleList)) {
                 successMessage("Learning Plan updated!").then(() => location.reload())
             }
             else {
@@ -260,7 +263,10 @@ window.removeTerm = removeTerm;
 async function addTwgTerm() {
     try {
         const learningPlan = readLearningPlan();
-        if (writeDataWithNewId(`students/${studentId}/learningPlan`, learningPlan)) {
+        const currentLearningPlan = Object.values(await readData(`students/${studentId}/learningPlan`))
+        currentLearningPlan.push(learningPlan)
+
+        if (writeData(`students/${studentId}/learningPlan`, currentLearningPlan)) {
             successMessage("TWG term updated!").then(() => location.reload())
         }
         else {
