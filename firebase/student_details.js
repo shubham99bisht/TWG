@@ -131,7 +131,9 @@ async function updateStudyPlan() {
                 failMessage("Study Plan failed.")
             }
         } else {
-            if (writeDataWithNewId(`students/${studentId}/studyPlan`, { notes, startDate, status, studyStage })) {
+            const studentStudyPlan = await readData(`students/${studentId}/studyPlan`)
+            const newId = studentStudyPlan?.length || 0
+            if (updateData(`students/${studentId}/studyPlan/${newId}`, { notes, startDate, status, studyStage })) {
                 successMessage("Study Plan updated!").then(() => location.reload())
             }
             else {
@@ -161,7 +163,7 @@ window.removeStudyPlan = removeStudyPlan;
 
 /**
  * --------------------------------------------------
- * Update TWG Learning Plan
+ * Update TWG Learning Plan - Modules
  * --------------------------------------------------
  */
 
@@ -208,9 +210,6 @@ async function updateModule() {
             return
         }
 
-        const moduleList = await readData(`students/${studentId}/learningPlan/${termId}/modules`);
-        moduleList.push({ name, notes, result, grade })
-
         if (moduleId) {
             if (updateData(`students/${studentId}/learningPlan/${termId}/modules/${moduleId}`, { name, notes, result, grade })) {
                 successMessage("Learning Plan updated!").then(() => location.reload())
@@ -218,7 +217,9 @@ async function updateModule() {
                 failMessage("Learning Plan failed.")
             }
         } else {
-            if (writeData(`students/${studentId}/learningPlan/${termId}/modules`, moduleList)) {
+            const moduleList = await readData(`students/${studentId}/learningPlan/${termId}/modules`);
+            const newModuleId = moduleList?.length || 0
+            if (updateData(`students/${studentId}/learningPlan/${termId}/modules/${newModuleId}`, { name, notes, result, grade })) {
                 successMessage("Learning Plan updated!").then(() => location.reload())
             }
             else {
@@ -246,6 +247,12 @@ async function removeModule(termId, id) {
 }
 window.removeModule = removeModule;
 
+/**
+ * --------------------------------------------------
+ * Update TWG Learning Plan - Terms
+ * --------------------------------------------------
+ */
+
 async function removeTerm(termId) {
     if (confirm("Confirm delete TWG Term?")) {
         try {
@@ -263,10 +270,10 @@ window.removeTerm = removeTerm;
 async function addTwgTerm() {
     try {
         const learningPlan = readLearningPlan();
-        const currentLearningPlan = Object.values(await readData(`students/${studentId}/learningPlan`))
-        currentLearningPlan.push(learningPlan)
+        const currentLearningPlan = await readData(`students/${studentId}/learningPlan`)
+        const newId = currentLearningPlan?.length || 0
 
-        if (writeData(`students/${studentId}/learningPlan`, currentLearningPlan)) {
+        if (updateData(`students/${studentId}/learningPlan/${newId}`, currentLearningPlan)) {
             successMessage("TWG term updated!").then(() => location.reload())
         }
         else {
@@ -279,16 +286,6 @@ async function addTwgTerm() {
 }
 window.addTwgTerm = addTwgTerm
 
-const twgTermEditModal = document.getElementById('twgTermEditModal')
-twgTermEditModal.addEventListener('show.bs.modal', event => {
-    const button = event.relatedTarget
-    const termId = button.parentElement.parentElement;
-    const parentDiv = termId.parentElement.querySelector('.form-group');
-    twgTermEditModal.querySelector('#termId').value = termId?.querySelector('#termId').value;
-    twgTermEditModal.querySelector('#termName').value = parentDiv?.querySelector('.termName').value || ''
-    twgTermEditModal.querySelector('#startDate').value = parentDiv?.querySelector('.startDate').value || ''
-    twgTermEditModal.querySelector('#numberOfModules').value = parentDiv?.querySelector('.numberOfModules').value || ''
-})
 async function editTwgTerm() {
     try {
         const formProps = new FormData(editTwgForm);
@@ -311,3 +308,14 @@ async function editTwgTerm() {
     }
 }
 window.editTwgTerm = editTwgTerm
+
+const twgTermEditModal = document.getElementById('twgTermEditModal')
+twgTermEditModal.addEventListener('show.bs.modal', event => {
+    const button = event.relatedTarget
+    const termId = button.parentElement.parentElement;
+    const parentDiv = termId.parentElement.querySelector('.form-group');
+    twgTermEditModal.querySelector('#termId').value = termId?.querySelector('#termId').value;
+    twgTermEditModal.querySelector('#termName').value = parentDiv?.querySelector('.termName').value || ''
+    twgTermEditModal.querySelector('#startDate').value = parentDiv?.querySelector('.startDate').value || ''
+    twgTermEditModal.querySelector('#numberOfModules').value = parentDiv?.querySelector('.numberOfModules').value || ''
+})

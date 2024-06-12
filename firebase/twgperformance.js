@@ -39,13 +39,12 @@ function listAllEnroll() {
                     const UniversityName = universities[p?.university].name;
                     const ProgramName = programs[p?.program_type].name;
 
-                    p.learningPlan && p.learningPlan.forEach(function (plan) {
-                        plan.modules && plan.modules.forEach(function (moduleData) {
-                            const row = schema.format(id, id, p.studentName, p.studentEmail, ProgramName, UniversityName, plan.startDate, plan.name, moduleData.result, moduleData.grade, moduleData?.notes || '');
+                    p.learningPlan && p.learningPlan.forEach(plan => {
+                        plan.modules && plan.modules.forEach(moduleData => {
+                            const row = schema.format(id, id, p?.studentName, p?.studentEmail, ProgramName, UniversityName, plan?.startDate, plan?.name, moduleData?.result, moduleData?.grade, moduleData?.notes || '');
                             if (tableBody) tableBody.innerHTML += row;
-                            csvContent += csvRow.format(id, id, p.studentName, p.studentEmail, ProgramName, UniversityName, plan.startDate, plan.name, moduleData.result, moduleData.grade, moduleData?.notes || '');
+                            csvContent += csvRow.format(id, id, p?.studentName, p?.studentEmail, ProgramName, UniversityName, plan?.startDate, plan?.name, moduleData?.result, moduleData?.grade, moduleData?.notes || '');
                         })
-
                     });
 
                 } catch (e) {
