@@ -197,10 +197,10 @@ async function updateModule() {
         const termId = formData['termId'];
         const name = formData['twgModuleName']
         const notes = formData['twgModuleNotes']
-        const result = formData['twgModuleResult']
+        const result = formData['twgModuleResult'] || ''
         const grade = formData['twgModuleGrade']
 
-        if (!name || !result) {
+        if (!name) {
             failMessage("Failed to update Learning Plan. Missing fields.");
             return
         }

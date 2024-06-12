@@ -296,8 +296,8 @@ function addModule(event) {
       </select>
     </td>
     <td>
-      <select class="form-select form-select-sm result mb-1" required="required">
-        <option selected disabled class="d-none"></option>
+      <select class="form-select form-select-sm result mb-1">
+        <option selected></option>
         <option value="pass">Pass</option>
         <option value="fail">Fail</option>
         <option value="withdrawn">Withdrawn</option>
@@ -349,7 +349,7 @@ function addTerm(event) {
 
     <div class="row form-group">
       <div class="col-lg-4 col-12 mb-3">
-        <label class="form-label" for="termName">Term Name<span class="text-danger">*</span></label>
+        <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>
         <select class="form-select form-select-sm" id="termName" name="termName" required="required">
           <option value="1">1</option>
           <option value="2">2</option>
@@ -362,7 +362,6 @@ function addTerm(event) {
           <option value="9">9</option>
           <option value="10">10</option>
         </select>
-        <input class="form-control termName" name="termName" type="text" placeholder="Term X" required="required" />
       </div>
       <div class="col-lg-4 col-12 mb-3">
         <label class="form-label" for="startDate">Start Date<span class="text-danger">*</span></label>
@@ -426,7 +425,7 @@ function readLearningPlan() {
     for (let j=0; j<rows.length; j++) {
       const row = rows[j]
       const name = row.querySelector('.module').value;
-      const result = row.querySelector('.result').value;
+      const result = row.querySelector('.result').value || '';
       const grade = row.querySelector('.grade').value;
       const notes = row.querySelector('.notes').value;
       termData.modules.push({ name, result, grade, notes });
