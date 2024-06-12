@@ -239,7 +239,7 @@
                 <h5 class="mb-0 text-nowrap py-2 py-xl-0">Payable</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
-                <button class="btn btn-outline-danger btn-sm d-none" type="button" id="payableNewPayment" data-bs-toggle="modal" data-bs-target="#newPaymentDetailsModal">New Payment</button>
+                <button class="btn btn-outline-danger btn-sm" type="button" id="payableNewPayment" data-bs-toggle="modal" data-bs-target="#newPaymentDetailsModal">New Payment</button>
                 <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('payable', '#payable')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
                 <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCommissions('payable', 'payableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
               </div>
@@ -289,6 +289,7 @@
                 <h5 class="mb-0 text-nowrap py-2 py-xl-0">Receivable</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
+                <button class="btn btn-outline-danger btn-sm" type="button" id="receivableNewPayment" data-bs-toggle="modal" data-bs-target="#newPaymentDetailsModal">New Payment</button>
                 <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('receivableHistory', '#receivable')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
                 <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCommissions('receivable', 'receivableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
               </div>
@@ -858,8 +859,9 @@
               <div class="row">
                 <hr>
                 <div class="col-12 mb-3">
-                  <label class="form-label" for="stage">Next Study Stage<span class="text-danger">*</span></label>
-                  <select class="form-select" id="stage" name="stage">
+                  <input type="hidden" id="newPayableCommisionType" name="newPayableCommisionType"/>
+                  <label class="form-label" for="newPaymentstage">Next Study Stage<span class="text-danger">*</span></label>
+                  <select class="form-select" id="newPaymentstage" name="newPaymentstage">
                     <option value="">Select stage</option>
                   </select>
                 </div>
@@ -869,7 +871,7 @@
                 </div>
                 <div class="col-4 mb-3">
                   <label class="form-label" for="currency">Currency<span class="text-danger">*</span></label>
-                  <select class="form-select" id="fees_currency" name="feesCurrency">
+                  <select class="form-select" id="newPayment_fees_currency" name="feesCurrency">
                   </select>
                 </div>
                 <div class="col-4 mb-3 d-grid my-auto">
@@ -881,7 +883,7 @@
                 </div>
                 <div class="col-4 mb-3">
                   <label class="form-label" for="currency">Currency<span class="text-danger">*</span></label>
-                  <select class="form-select" id="currency" name="currency">
+                  <select class="form-select" id="newPaymentcurrency" name="currency">
                   </select>
                 </div>
                 <div class="col-4 mb-3">

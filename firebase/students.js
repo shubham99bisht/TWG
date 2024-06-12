@@ -316,6 +316,8 @@ async function readPaymentDetails(id) {
   payments = data
   const payableBody = document.getElementById("table-payable-body");
   const receivableBody = document.getElementById("table-receivable-body");
+  data["payable"] && Object.keys(data["payable"]).length && document.getElementById('payableNewPayment').classList.add('d-none');
+  data["receivable"] && Object.keys(data["receivable"]).length && document.getElementById('receivableNewPayment').classList.add('d-none');
   await updatePayables(payableBody, data["payable"], "payable")
   if (!isAgent) {
     await updatePayables(receivableBody, data["receivable"], "receivable")
@@ -787,51 +789,29 @@ function updateStudyPlanStageList(studentId) {
 }
 window.updateStudyPlanStageList = updateStudyPlanStageList
 
+function updateStudyPlanStageListById(studentId,selectorId) {
+  const stageSelector = document.getElementById(selectorId)
+  stageSelector.innerHTML = '<option value="">Select stage</option>'
 
-async function newPayable() {
-  try {
-    const formProps = new FormData(newPaymentDetailsForm);
-    const formData = Object.fromEntries(formProps);
-    const CommissionType = formData['commissionType']
-    const stage = formData['stage']
-    const fees = formData['fees']
-    const feesCurrency = formData['feesCurrency']
-    const dueDate = formData['dueDate']
-    const amount = formData['amount']
-    const newStatus = formData['newStatus']
-    const currency = formData['currency']
+  const pid = students[studentId].program_type
+  const uid = students[studentId].university
+  const pType = universities[uid].programTypes.find(pt => pt.type == pid)
+  if (!pType) return
 
+  const stageIds = pType.studyStages.map(pst => pst.stage)
+  stageIds.forEach(stageId => {
+    let stage = studyStages[stageId]
+    if (stage) {
+      let option = document.createElement("option");
+      option.value = stageId;
+      option.name = stageId;
+      option.textContent = stage.name;
+      stageSelector.appendChild(option);
+    }
+  });
 
-    console.log(CommissionType,stage,fees,feesCurrency,dueDate,amount,newStatus,currency)
-
-    // let morePayments = ''
-    // if (formData['morePayments']) {
-    //   morePayments = parseInt(formData['morePayments'])
-    // }
-
-    // if (morePayments && (!stage || !fees || !feesCurrency || !dueDate || !amount || !newStatus)) {
-    //   failMessage("Please provide all inputs")
-    //   return
-    // }
-
-    // let res = 0
-    // if (morePayments) {
-    //   writeDataWithNewId(`${CommissionType}`, {
-    //     ...payments[CommissionType][id],
-    //     stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency, notes: ''
-    //   })
-    //   res = updateData(`${CommissionType}/${id}`, { status, notes, morePayments })
-    // }
-
-    // if (res) {
-    //   successMessage('Payment status updated!').then(() => location.reload())
-    // } else { throw "Not saved" }
-  } catch (e) {
-    failMessage('Failed to update payment status')
-    console.error(e)
-  }
 }
-window.newPayable = newPayable
+window.updateStudyPlanStageListById = updateStudyPlanStageListById
 
 
 /**

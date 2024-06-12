@@ -80,6 +80,66 @@ async function removeFeePayable(id) {
 }
 window.removeFeePayable = removeFeePayable
 
+const newPaymentDetailsModal = document.getElementById('newPaymentDetailsModal')
+const currencyInput = document.getElementById("newPaymentcurrency")
+const feesCurrencyInput = document.getElementById("newPayment_fees_currency")
+newPaymentDetailsModal.addEventListener('show.bs.modal', async event => {
+    const button = event.relatedTarget
+    newPaymentDetailsForm.reset()
+    try {
+        updateStudyPlanStageListById(studentId, 'newPaymentstage');
+        let currency = await readData("currency_types")
+        let currency_options = ''
+        Object.keys(currency).forEach(key => {
+            currency_options += `<option value='${key}'>${currency[key]?.name}</option>`
+        })
+        if (currencyInput) {
+            currencyInput.innerHTML = currency_options
+            feesCurrencyInput.innerHTML = currency_options
+        }
+        document.getElementById('newPayableCommisionType').value = button.id == "payableNewPayment" ? "payable" : "receivable";
+    } catch (error) {
+        failMessage('Failed to Open payment form')
+    }
+
+})
+
+async function newPayable() {
+    try {
+        const formProps = new FormData(newPaymentDetailsForm);
+        const formData = Object.fromEntries(formProps);
+        const stage = formData['newPaymentstage']
+        const fees = formData['fees']
+        const feesCurrency = formData['feesCurrency']
+        const dueDate = formData['dueDate']
+        const amount = formData['amount']
+        const newStatus = formData['newStatus']
+        const currency = formData['currency']
+        const CommissionType = formData['newPayableCommisionType'];
+        const student = studentId;
+        const result = await readData(`students/${student}`)
+        const programName = result?.program_type
+        const university = result?.university
+        const agent = result.agent ? result.agent : '';
+
+        if (!stage || !fees || !feesCurrency || !dueDate || !amount || !newStatus) {
+            failMessage("Please provide all inputs")
+            return
+        }
+
+        if (await writeDataWithNewId(`${CommissionType}`, {
+            stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency, notes: '', student, agent, university, programName
+        })) {
+            successMessage('Payment status updated!').then(() => location.reload())
+        }
+
+    } catch (e) {
+        failMessage('Failed to update payment status')
+        console.error(e)
+    }
+}
+window.newPayable = newPayable
+
 /**
  * --------------------------------------------------
  * Update Study Plan
