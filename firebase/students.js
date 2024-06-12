@@ -152,7 +152,7 @@ function readStudentDetails(id) {
 
       loadStudyPlan(result?.studyPlan)
       loadLearningPlan(result?.learningPlan)
-      loadFeePayable(result?.feePayable, result?.totalFeePayable)
+      loadFeePayable(result?.learningPlan || [], result?.feePayable || 0, result?.totalFeePayable || 0, result?.totalModules || 0)
       closeSwal()
     })
     .catch((error) => {
@@ -267,11 +267,14 @@ function loadLearningPlan(learningPlan) {
   }
 }
 
-function loadFeePayable(feePayable, totalFeePayable) {
+function loadFeePayable(learningPlan, feePayable, totalFeePayable, totalModules) {
   if (!feePayable) return
   const table = document.getElementById('feePayableTable')
 
   let totalPaid = 0
+  let moduleCount = 0
+
+  learningPlan?.forEach(lp => moduleCount += lp?.modules?.length || 0)
 
   const keys = Object.keys(feePayable)
   for (let i = 0; i < keys.length; i++) {
@@ -294,8 +297,15 @@ function loadFeePayable(feePayable, totalFeePayable) {
     table.innerHTML += row
   }
 
+  // [Total fee paid] - [(Total Fee Payable for hybrid) / (Total Modules enrolled for in Hybrid Component) * (# of modules where “name of module” is defined)]
+  const studyCredits = totalPaid - (totalFeePayable/(totalModules * moduleCount))
+
+  console.log(totalPaid, totalFeePayable, totalModules, moduleCount)
+
   document.getElementById('totalFeePayable').value = totalFeePayable
   document.getElementById('totalFeePaid').value = totalPaid
+  document.getElementById('totalModules').value = totalModules
+  document.getElementById('creditsRemaining').value = studyCredits
 }
 
 async function readPaymentDetails(id) {

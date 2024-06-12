@@ -188,16 +188,20 @@
           <div class="card-body bg-light">
 
             <div class="row">
-              <div class="col-lg-4 col-12 mb-3">
+              <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="totalFeePayable">Total Fee Payable<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="totalFeePayable" name="totalFeePayable" type="number" />
+                <input class="form-control form-control-sm" id="totalFeePayable" name="totalFeePayable" type="number" readonly/>
               </div>  
-              <div class="col-lg-4 col-12 mb-3">
+              <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="totalFeePaid">Total Fee Paid<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="totalFeePaid" name="totalFeePaid" type="number" readonly />
+              </div> 
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="totalModules">Total Modules<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" id="totalModules" name="totalModules" type="number" readonly />
               </div>  
-              <div class="col-lg-4 col-12 mb-3">
-                <label class="form-label" for="creditsRemaining">Study credits remaining<span class="text-danger">*</span></label>
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="creditsRemaining">Study Credits<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="creditsRemaining" name="creditsRemaining" type="number" readonly />
               </div>              
             </div>
@@ -235,7 +239,7 @@
                 <h5 class="mb-0 text-nowrap py-2 py-xl-0">Payable</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
-                <button class="btn btn-outline-danger btn-sm" type="button" id="payableNewPayment" data-bs-toggle="modal" data-bs-target="#newPaymentDetailsModal">New Payment</button>
+                <button class="btn btn-outline-danger btn-sm d-none" type="button" id="payableNewPayment" data-bs-toggle="modal" data-bs-target="#newPaymentDetailsModal">New Payment</button>
                 <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('payable', '#payable')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
                 <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCommissions('payable', 'payableHistory')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
               </div>
