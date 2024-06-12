@@ -403,8 +403,9 @@ const degreeForm = document.getElementById('degreeForm')
 if (degreeModal) {
   degreeModal.addEventListener('show.bs.modal', event => {
     const button = event.relatedTarget
-    if (button.id == "update-degree") {
-      commissionsForm.reset()
+    if (button.id == "add-degree") {
+      degreeForm.reset()
+      degreeForm.querySelector('#degreeId').value = university?.degrees?.length || 0;
     } else {
       const row = button.closest('tr')
       degreeForm.querySelector('#degreeId').value = row?.id;
@@ -420,13 +421,15 @@ function listDegree(id) {
 
   readData(`universities/${id}/degrees`)
     .then((data) => {
-      data && Object.keys(data).forEach((index) => {
+      data && data?.forEach((val, index) => {
         const newRow = tableBody.insertRow();
         newRow.setAttribute('id', `${index}`);
         newRow.innerHTML = `
-          <td class="degrees">${data[index]}</td>
-          <td>
-            <a data-bs-toggle="modal" data-bs-target="#degree-modal" class="pe-2" type="button"><i class="fas fa-edit text-warning"></i></a>
+          <td class="degrees">${val}</td>
+          <td class="align-middle white-space-nowrap py-2 text-end">
+            <a data-bs-toggle="modal" data-bs-target="#degree-modal" style="cursor:pointer">
+              <i class="fas fa-edit"></i>
+            </a>
           </td>`
       });
     })
@@ -447,20 +450,13 @@ function updateDegree() {
     if (!id || !degreeName) {
       failMessage("Enter all details"); return
     }
-    if (id && degreeId) {
-      if (writeData(`universities/${id}/degrees/${degreeId}`, degreeName)) {
-        successMessage("Updated Degree details").then(() => location.reload())
-      } else {
-        failMessage("Failed Degree commissions")
-      }
-    } else {
-      if (writeDataWithNewId(`universities/${id}/degrees`, degreeName)) {
-        successMessage("Added Degree details").then(() => location.reload())
-      } else {
-        failMessage("Failed Degree commissions")
-      }
-    }
 
+    console.log(id, degreeId, degreeName)
+    if (writeData(`universities/${id}/degrees/${degreeId}`, degreeName)) {
+      successMessage("Updated Degree details").then(() => location.reload())
+    } else {
+      failMessage("Failed Degree commissions")
+    }
   } catch (e) {
     console.log(e);
     failMessage("Failed to Degree  details.");

@@ -185,6 +185,19 @@ function addProgramType(event) {
 }
 window.addProgramType = addProgramType
 
+// Degree Inputs
+const degreesInputDiv = document.getElementById('degreesInput');
+
+function addNewDegree() {
+  const input = document.createElement('input');
+  input.setAttribute('class', 'form-control mb-2 degreeInput');
+  input.setAttribute('type', 'text');
+  input.setAttribute('placeholder', 'Degree Name');
+  degreesInputDiv.appendChild(input);   
+}
+window.addNewDegree = addNewDegree;
+
+
 // Submit Form
 const universityForm = document.getElementById('UniversityForm')
 universityForm.addEventListener('submit', function (event) {
@@ -209,15 +222,25 @@ universityForm.addEventListener('submit', function (event) {
         email5: inputsAndSelects[11].value || '-',
         usage5: inputsAndSelects[12].value || '-',
       },
-      programTypes: []
+      programTypes: [],
+      degrees: []
     };
   
     let currentProgramType = null;
   
     for (let i = 13; i < inputsAndSelects.length; i++) {
       const element = inputsAndSelects[i];
-  
-      if (element.classList.contains('program_type')) {
+
+      // Degrees
+      if (element.classList.contains('degreeInput')) {
+        let degreeName = element.value
+        console.log(degreeName)
+        if (degreeName)
+          data.degrees.push(degreeName);
+      }
+
+      // Program Types
+      else if (element.classList.contains('program_type')) {
         currentProgramType = { type: element.value, studyStages: [] };
         data.programTypes.push(currentProgramType);
       } else if (element.classList.contains('study_stage')) {
@@ -292,7 +315,7 @@ universityForm.addEventListener('submit', function (event) {
     } else {
       failMessage(`Program Types can't be empty`); return
     }
-  
+
     writeDataWithNewId('universities', data).then((success) => {
       if (success)
       successMessage(`University added sucessfully!`).then(() => location.href = "universities.html")
@@ -300,5 +323,6 @@ universityForm.addEventListener('submit', function (event) {
     }).catch(e => failMessage(`Failed to save university: ${e}`))
   } catch (e) {
     failMessage(`Failed to save university: ${e}`)
+    console.log(e)
   }
 });
