@@ -59,7 +59,7 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <div class="card mb-3" id="programTable" data-list='{"valueNames":["id", "name"],"page":25,"pagination":true}'>
+        <div class="card mb-3" id="programTable" data-list='{"valueNames":["name", "modules"],"page":25,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-3">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
@@ -92,11 +92,12 @@
                 <thead class="bg-200 text-900">
                   <tr>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Program Name</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="modules">Module Count</th>
                     <th class="align-middle no-sort"></th>
                   </tr>
                 </thead>
                 <tbody class="list" id="table-program-body">
-                  <tr><td colspan="2">Loading Data...</td></tr>
+                  <tr><td colspan="3">Loading Data...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -122,7 +123,7 @@
 
   <!-- New Program Modal -->
   <div class="modal fade" id="add-new-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document" style="max-width: 500px">
       <div class="modal-content position-relative">
         <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
           <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -133,10 +134,17 @@
           </div>
           <div class="p-4 pb-0">
             <form>
-              <div class="col-12 mb-3">
+              <div class="mb-3">
                 <label class="form-label" for="program-name">Program Name<span class="text-danger">*</span></label>
                 <input class="form-control" id="program-name" type="text" placeholder="Program Name" required="required" />
                 <div class="form-text">Program Id will be assigned automatically.</div>
+              </div>
+              <div class="mb-3" id="modulesInput">
+                <label class="form-label">Modules</label>
+                <div class="form-text">Empty modules will be deleted automatically.</div>
+              </div>
+              <div class="text-end mb-3">
+                <button class="btn btn-sm btn-outline-primary" type="button" onclick="addNewModule()">Add Module</button>
               </div>
             </form>
           </div>
