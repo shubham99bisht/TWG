@@ -38,7 +38,7 @@ onAuthStateChanged(auth, async (user) => {
     const snapshot = await get(dbRef)
     const role = snapshot.val()
 
-    if (!['Admin', 'Finance', 'Agent'].includes(role) && !is403) {
+    if (!['Admin', 'Finance', 'Agent','Student'].includes(role) && !is403) {
       location.href = PAGES[403]
     }
 

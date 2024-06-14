@@ -16,7 +16,7 @@ async function fetchData() {
   agents = await readData("agents")
   currency = await readData("currency_types")
   studyStages = await readData("study_stages")
-  Object.keys(currency).forEach(key => {
+  currency && Object.keys(currency).forEach(key => {
     currency_options += `<option value='${key}'>${currency[key]?.name}</option>`
   })
   if (currencyInput) {
@@ -220,7 +220,7 @@ function loadLearningPlan(learningPlan) {
     }
 
     const Term = `
-    <div class="border rounded-1 position-relative bg-white dark__bg-1100 p-3 mb-3 Term">
+    <div class="border rounded-1 mt-3 position-relative bg-white dark__bg-1100 p-3 mb-3 Term">
       <div class="row form-group">
         <div class="col-lg-4 col-12 mb-3">
           <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>

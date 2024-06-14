@@ -169,6 +169,24 @@
 
             <!-- TWG Learning Plan -->
             <h5 class="my-3">TWG Learning Plan</h5>
+            <div class="row">
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="totalFeePayable">Total Fee Payable<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" id="totalFeePayable" name="totalFeePayable" type="number" readonly/>
+              </div>  
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="totalFeePaid">Total Fee Paid<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" id="totalFeePaid" name="totalFeePaid" type="number" readonly />
+              </div> 
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label" for="totalModules">Total Modules<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" id="totalModules" name="totalModules" type="number" readonly />
+              </div>  
+              <div class="col-lg-3 col-12 mb-3">
+                <label class="form-label text-truncate" for="creditsRemaining">Remaining Study Credits<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" id="creditsRemaining" name="creditsRemaining" type="number" readonly />
+              </div>              
+            </div>
             <div class="mb-3" id="learningPlan">
               <!-- Dynamically add terms here -->
             </div>
@@ -201,7 +219,7 @@
                 <input class="form-control form-control-sm" id="totalModules" name="totalModules" type="number" readonly />
               </div>  
               <div class="col-lg-3 col-12 mb-3">
-                <label class="form-label" for="creditsRemaining">Study Credits<span class="text-danger">*</span></label>
+                <label class="form-label text-truncate" for="creditsRemaining">Remaining Study Credits<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="creditsRemaining" name="creditsRemaining" type="number" readonly />
               </div>              
             </div>
