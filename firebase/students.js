@@ -139,7 +139,7 @@ function readStudentDetails(id) {
       modules = await readData(`program_types/${result?.program_type}`);
 
       document.getElementById("student_id").innerHTML = id
-      document.getElementById("name").innerHTML = result?.studentName
+      document.getElementById("name").innerHTML = result?.studentName + " ("+result?.enrollmentStatus+")"
       document.getElementById("university_id").innerHTML = result.universityStudentId
       document.getElementById("join_date").innerHTML = result?.joinDate
       document.getElementById("student_email").innerHTML = result?.studentEmail || '-'
@@ -435,6 +435,7 @@ if (updateStudentModal)
     updateStudentModal.querySelector('#studentName').value = student.studentName
     updateStudentModal.querySelector('#studentEmail').value = student?.studentEmail || ''
     updateStudentModal.querySelector('#universityStudentId').value = student.universityStudentId
+    updateStudentModal.querySelector('#enrollmentStatus').value = student?.enrollmentStatus
   })
 
 async function updateStudent() {
@@ -449,12 +450,12 @@ async function updateStudent() {
     const { joinMonth, joinYear, universityStudentId, studentName, studentEmail } = basicInfoData
     const date = new Date(joinYear, joinMonth, 2)
     const joinDate = `${date.toISOString().slice(0, 10)}`
-
+    const enrollmentStatus = updateStudentForm.querySelector('#enrollmentStatus').value;
     // Validation
     if (id != studentId) failMessage("Can't update student LSQ Id")
     if (!studentId || !studentName || !studentEmail || !joinMonth || !joinYear || !universityStudentId) { failMessage("Please provide all data"); return }
 
-    const newStudent = { studentId, joinDate, universityStudentId, studentName, studentEmail }
+    const newStudent = { studentId, joinDate, universityStudentId, studentName, studentEmail, enrollmentStatus }
     updateData(`students/${studentId}`, newStudent)
       .then((result) => {
         if (result) {

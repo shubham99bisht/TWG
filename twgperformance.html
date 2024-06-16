@@ -92,6 +92,43 @@
                                 </form>
                             </div>
                         </div>
+                        <div class="row">
+                            <!-- Status Dropdown Column -->
+                            <div class="col-md-4 mb-3">
+                              <label for="twgModuleDropdown">Module</label>
+                              <select class="form-select form-select-sm js-choice" id="twgModuleDropdown" multiple="multiple" size="1" name="twgModuleDropdown" data-options='{"removeItemButton":true}'>
+                                
+                              </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                              <label for="twgProgramDropdown">TWG Program</label>
+                              <select class="form-select form-select-sm js-choice" id="twgProgramDropdown" multiple="multiple" size="1" name="twgProgramDropdown" data-options='{"removeItemButton":true}'>
+                                
+                              </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                              <label for="twgUniversityDropdown">University</label>
+                              <select class="form-select form-select-sm js-choice" id="twgUniversityDropdown" multiple="multiple" size="1" name="twgUniversityDropdown" data-options='{"removeItemButton":true}'>
+                                
+                              </select>
+                            </div>
+                        
+                            <!-- Date Range Column -->
+                            <div class="col-md-4">
+                              <label for="datepicker">Start Date</label>
+                              <div class="position-relative">
+                                <input class="form-control form-control-sm datetimepicker ps-4" id="datepicker" type="text" />
+                                <span class="fas fa-calendar-alt text-primary position-absolute top-50 translate-middle-y ms-2"> </span>
+                              </div>
+                            </div>
+                        
+                            <!-- Search Button Column -->
+                            <div class="col-md-4 mt-md-4 mt-2">
+                              <div class="d-grid">
+                                <button id="searchButton" class="btn btn-primary btn-sm">Search</button>
+                              </div>
+                            </div>
+                          </div>
                     </div>
                     <div class="card-body px-0 py-0">
                         <div class="table-responsive scrollbar">
@@ -103,7 +140,7 @@
                                         <th class="sort pe-1 align-middle" data-sort="program_type">TWG Program</th>
                                         <th class="sort pe-1 align-middle" data-sort="university">University</th>
                                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="startDate">Start Date</th>
-                                        <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Module
+                                        <th class="sort pe-1 align-middle " data-sort="name">Module
                                         </th>
                                         <th class="sort pe-1 align-middle white-space-nowrap" data-sort="result">Result
                                         </th>

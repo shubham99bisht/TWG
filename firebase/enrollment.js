@@ -1,17 +1,94 @@
-import { readData } from "./helpers.js";
+import { readData, getDates } from "./helpers.js";
 
 let universities = {}, programs = {}, studyStages = {};
+const twgDatasChoices = new Choices( document.getElementById("twgProgramDropdown"),
+{
+    removeItems: true,
+    removeItemButton: true}
+);
+
+const studyStagesChoices = new Choices( document.getElementById("enrollStageDropdown"),
+{
+    removeItems: true,
+    removeItemButton: true}
+);
+
+async function initialise() {
+
+    const temp = Object.keys(programs).map(stageId => {
+        let twgData = programs[stageId]
+        if (twgData) {
+            return {
+                value: stageId,
+                label: twgData.name
+            }
+        }
+    });
+    twgDatasChoices.setChoices(temp)
+
+    const temp2 = Object.keys(studyStages).map(stageId => {
+        let studyStage = studyStages[stageId]
+        if (studyStage) {
+            return {
+                value: stageId,
+                label: studyStages?.[stageId]?.name
+            }
+        }
+    });
+    studyStagesChoices.setChoices(temp2)
+
+    const [startOfYear, currentDate] = getDates();
+    const datepickerInstance = flatpickr("#datepicker", {
+        mode: 'range', dateFormat: 'M d Y', 'disableMobile':true,
+        'defaultDate': [startOfYear, currentDate] 
+    });
+
+    document.getElementById('searchButton').addEventListener('click', function () {
+        let enrollStatus = []
+        let studyStageStatus = [];
+        let twgProgram = [];
+        let studyStage = [];
+
+        for(let i = 0; i < enrollStatusDropdown.options.length; i++) {
+          const value = enrollStatusDropdown.options[i]?.value;
+          enrollStatus.push(value)
+        }
+
+        for(let i = 0; i < studyStageStatusDropdown.options.length; i++) {
+            const value = studyStageStatusDropdown.options[i]?.value;
+            studyStageStatus.push(value)
+        }
+
+        for(let i = 0; i < twgProgramDropdown.options.length; i++) {
+            const value = twgProgramDropdown.options[i]?.value;
+            twgProgram.push(value)
+        }
+
+        for(let i = 0; i < enrollStageDropdown.options.length; i++) {
+            const value = enrollStageDropdown.options[i]?.value;
+            studyStage.push(value)
+        }
+
+        const dateRange = datepickerInstance.selectedDates.map(date => date.toISOString().split('T')[0]);
+    
+        const inputParams = {
+            enrollStatus, studyStageStatus, twgProgram,  studyStage, startDate: dateRange[0], endDate: dateRange[1]
+        }
+        listAllEnroll(inputParams)
+      });  
+}
 
 
 async function fetchData() {
     universities = await readData("universities")
     programs = await readData("program_types")
     studyStages = await readData("study_stages")
-  }
+}
   
 
-function listAllEnroll() {
+function listAllEnroll(inputParams) {
     const tableBody = document.getElementById("table-payable-body");
+    const { enrollStatus, studyStageStatus, twgProgram, studyStage, startDate, endDate } = inputParams;
     if (!tableBody) return
     tableBody.innerHTML = ''
 
@@ -34,20 +111,54 @@ function listAllEnroll() {
 
             // student, email, program type, university, university degree, status, start date, status, notes
             const csvRow = '{},{},{},{},{},{},{},{},{},{}\r\n'
+            
+            const transformedData = [];
+        
+            Object.values(data).forEach(user => {
+                if (user.studyPlan && user.studyPlan.length > 0) {
+                    user.studyPlan.forEach(plan => {
+                        const transformedUser = { ...user, ...plan };
+                        delete transformedUser.studyPlan;
+                        transformedData.push(transformedUser);
+                    });
+                }
+            });
 
-            const promises = Object.keys(data).map(async id => {
+            const filteredData = transformedData.filter(user => {
+                if (enrollStatus && enrollStatus.length && !enrollStatus.includes(user.enrollmentStatus)) {
+                    return false;
+                }
+                if (studyStageStatus && studyStageStatus.length && !studyStageStatus.includes(user.status)) {
+                    return false;
+                }
+                if (twgProgram && twgProgram.length && !twgProgram.includes(user.program_type)) {
+                    return false;
+                }
+                if (studyStage && studyStage.length && !studyStage.includes(user.studyStage)) {
+                    return false;
+                }
+                if (startDate && !(user.startDate >= startDate)) {
+                    return false;
+                }
+
+                if (endDate && !(user.startDate <= endDate)) {
+                    return false;
+                }
+                return true;
+            })
+
+            const promises = filteredData && Object.keys(filteredData).map(async id => {
                 try {
-                    const p = data[id];
+                    const p = filteredData[id];
                     const UniversityName = universities[p?.university].name;
                     const ProgramName = programs[p?.program_type].name;
-                    p.studyPlan && p.studyPlan.forEach(function (plan) {
-                        const row = schema.format(id, id, p.studentName, p.studentEmail, ProgramName, 
-                            UniversityName, p.universityDegree, studyStages?.[plan?.studyStage]?.name || '',
-                            p.enrollmentStatus, plan.startDate, plan.status, plan?.notes || ''
-                        );
-                        if (tableBody) tableBody.innerHTML += row;
-                        csvContent += csvRow.format(p.studentName, p.studentEmail, ProgramName, UniversityName, p.universityDegree, studyStages?.[p?.studyStage]?.name || '', p.enrollmentStatus, plan.startDate, plan.status, plan?.notes || '');
-                    });
+                    
+                    const row = schema.format(id, id, p.studentName, p.studentEmail, ProgramName, 
+                        UniversityName, p.universityDegree, studyStages?.[p?.studyStage]?.name || '',
+                        p.enrollmentStatus, p.startDate, p.status, p?.notes || ''
+                    );
+                    if (tableBody) tableBody.innerHTML += row;
+                    csvContent += csvRow.format(p.studentName, p.studentEmail, ProgramName, UniversityName, p.universityDegree, studyStages?.[p?.studyStage]?.name || '', p.enrollmentStatus, p.startDate, p.status, p?.notes || '');
                 } catch (e) {
                     console.log("ERRROR:", e)
                 }
@@ -57,7 +168,7 @@ function listAllEnroll() {
             window.csvContent = csvContent
             listInit()
         })
-        .catch(() => {
+        .catch((error) => {
             console.error("Error reading program types:", error);
             if (tableBody)
                 tableBody.innerHTML = `<tr class="text-center"><td colspan="10">No Receivable data found!</td></tr>`
@@ -67,5 +178,6 @@ function listAllEnroll() {
 
 window.onload = async () => {
     await fetchData()
-    listAllEnroll()
+    //listAllEnroll()
+    initialise()
 }
