@@ -172,19 +172,19 @@
             <div class="row">
               <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="totalFeePayable">Total Fee Payable<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="totalFeePayable" name="totalFeePayable" type="number" readonly/>
+                <input class="form-control form-control-sm" id="topTotalFeePayable" name="totalFeePayable" type="number" readonly/>
               </div>  
               <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="totalFeePaid">Total Fee Paid<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="totalFeePaid" name="totalFeePaid" type="number" readonly />
+                <input class="form-control form-control-sm" id="topTotalFeePaid" name="totalFeePaid" type="number" readonly />
               </div> 
               <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label" for="totalModules">Total Modules<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="totalModules" name="totalModules" type="number" readonly />
+                <input class="form-control form-control-sm" id="topTotalModules" name="totalModules" type="number" readonly />
               </div>  
               <div class="col-lg-3 col-12 mb-3">
                 <label class="form-label text-truncate" for="creditsRemaining">Remaining Study Credits<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="creditsRemaining" name="creditsRemaining" type="number" readonly />
+                <input class="form-control form-control-sm" id="topCreditsRemaining" name="creditsRemaining" type="number" readonly />
               </div>              
             </div>
             <div class="mb-3" id="learningPlan">
@@ -728,7 +728,7 @@
               </div>
               <div class="col-12 col-lg-6 mb-3">
                 <label class="form-label" for="twgModuleGrade">Grade<span class="text-danger">*</span></label>
-                <input class="form-control" id="twgModuleGrade" name="twgModuleGrade" type="text" />
+                <input class="form-control" id="twgModuleGrade" name="twgModuleGrade" type="text" required/>
               </div> 
               <div class="col-12 mb-3">
                 <label class="form-label" for="twgModuleNotes">Notes</label>
@@ -761,7 +761,7 @@
             <div class="row" id="updateTwgTermForm">
               <div class="Term">
                 <div class="row form-group">
-                  <div class="col-lg-4 col-12 mb-3">
+                  <div class="col-lg-3 col-12 mb-3">
                     <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>
                     <select class="form-select form-select-sm termName" id="termName" name="termName" required="required">
                       <option value="1">1</option>
@@ -777,13 +777,17 @@
                     </select>
                    <!-- <input class="form-control termName" name="termName" type="text" placeholder="Term X" required="required" /> -->
                   </div>
-                  <div class="col-lg-4 col-12 mb-3">
+                  <div class="col-lg-3 col-12 mb-3">
                     <label class="form-label" for="startDate">Start Date<span class="text-danger">*</span></label>
                     <input class="form-control startDate" name="startDate" type="text" placeholder="YYYY-MM-DD" required="required" />
                   </div>
-                  <div class="col-lg-4 col-12 mb-3">
+                  <div class="col-lg-3 col-12 mb-3">
                     <label class="form-label" for="numberOfModules">Module Count<span class="text-danger">*</span></label>
                     <input class="form-control numberOfModules" name="numberOfModules" type="number" required="required" />
+                  </div>
+                  <div class="col-lg-3 col-12 mb-3">
+                    <label class="form-label" for="overallGrade">Overall Grade<span class="text-danger">*</span></label>
+                    <input class="form-control overallGrade" name="overallGrade" type="text" required="required" />
                   </div>
                 </div>
           
@@ -834,7 +838,7 @@
           <div class="px-4 py-2">
             <form class="row" id="editTwgTermForm">
               <input type="hidden" name="termId" id="termId"/>
-              <div class="col-12 mb-3">
+              <div class="col-6 mb-3">
                 <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>
                   <select class="form-select form-select-sm termName" id="termName" name="termName" required="required">
                     <option value="1">1</option>
@@ -856,6 +860,10 @@
               <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="numberOfModules">Module Count<span class="text-danger">*</span></label>
                 <input class="form-control numberOfModules" id="numberOfModules" name="numberOfModules" type="number" required="required" />
+              </div>
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="overallGrade">Overall Grade<span class="text-danger">*</span></label>
+                <input class="form-control overallGrade" id="overallGrade" name="overallGrade" type="text" required="required" />
               </div>
             </form>
           </div>

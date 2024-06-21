@@ -348,7 +348,7 @@ function addTerm(event) {
     </div>
 
     <div class="row form-group">
-      <div class="col-lg-4 col-12 mb-3">
+      <div class="col-lg-3 col-12 mb-3">
         <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>
         <select class="form-select form-select-sm" id="termName" name="termName" required="required">
           <option value="1">1</option>
@@ -363,13 +363,17 @@ function addTerm(event) {
           <option value="10">10</option>
         </select>
       </div>
-      <div class="col-lg-4 col-12 mb-3">
+      <div class="col-lg-3 col-12 mb-3">
         <label class="form-label" for="startDate">Start Date<span class="text-danger">*</span></label>
         <input class="form-control startDate" name="startDate" type="text" placeholder="YYYY-MM-DD" required="required" />
       </div>
-      <div class="col-lg-4 col-12 mb-3">
+      <div class="col-lg-3 col-12 mb-3">
         <label class="form-label" for="numberOfModules">Module Count<span class="text-danger">*</span></label>
         <input class="form-control numberOfModules" name="numberOfModules" type="number" required="required" />
+      </div>
+      <div class="col-lg-3 col-12 mb-3">
+        <label class="form-label" for="overallGrade">Overall Grade</label>
+        <input class="form-control overallGrade" name="overallGrade" type="text" required="required" />
       </div>
     </div>
 
@@ -416,6 +420,7 @@ function readLearningPlan() {
       name: term.querySelector('select#termName').value,
       startDate: term.querySelector('.startDate').value,
       count: term.querySelector('.numberOfModules').value,
+      overallGrade: term.querySelector('.overallGrade').value,
       modules: []
     };
   

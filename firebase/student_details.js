@@ -260,7 +260,7 @@ async function updateModule() {
         const result = formData['twgModuleResult'] || ''
         const grade = formData['twgModuleGrade']
 
-        if (!name) {
+        if (!name || !result || !grade) {
             failMessage("Failed to update Learning Plan. Missing fields.");
             return
         }
@@ -333,7 +333,9 @@ async function addTwgTerm() {
         const currentLearningPlan = await readData(`students/${studentId}/learningPlan`)
         const newId = currentLearningPlan?.length || 0
 
-        if (updateData(`students/${studentId}/learningPlan/${newId}`, currentLearningPlan)) {
+        if(!learningPlan){return }
+
+        if (updateData(`students/${studentId}/learningPlan/${newId}`, learningPlan)) {
             successMessage("TWG term updated!").then(() => location.reload())
         }
         else {
@@ -355,8 +357,9 @@ async function editTwgTerm() {
         const name = formData['termName']
         const startDate = formData['startDate']
         const count = formData['numberOfModules']
+        const overallGrade = formData['overallGrade']
 
-        if (updateData(`students/${studentId}/learningPlan/${termId}`, { name, startDate, count })) {
+        if (updateData(`students/${studentId}/learningPlan/${termId}`, { name, startDate, count, overallGrade })) {
             successMessage("TWG term updated!").then(() => location.reload())
         }
         else {
@@ -378,4 +381,5 @@ twgTermEditModal.addEventListener('show.bs.modal', event => {
     twgTermEditModal.querySelector('#termName').value = parentDiv?.querySelector('.termName').value || ''
     twgTermEditModal.querySelector('#startDate').value = parentDiv?.querySelector('.startDate').value || ''
     twgTermEditModal.querySelector('#numberOfModules').value = parentDiv?.querySelector('.numberOfModules').value || ''
+    twgTermEditModal.querySelector('#overallGrade').value = parentDiv?.querySelector('.overallGrade').value || ''
 })

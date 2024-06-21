@@ -222,17 +222,21 @@ function loadLearningPlan(learningPlan) {
     const Term = `
     <div class="border rounded-1 mt-3 position-relative bg-white dark__bg-1100 p-3 mb-3 Term">
       <div class="row form-group">
-        <div class="col-lg-4 col-12 mb-3">
+        <div class="col-lg-3 col-12 mb-3">
           <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>
           <input class="form-control termName" name="termName" type="text" value="${data.name}" disabled />
         </div>
-        <div class="col-lg-4 col-12 mb-3">
+        <div class="col-lg-3 col-12 mb-3">
           <label class="form-label" for="startDate">Start Date<span class="text-danger">*</span></label>
           <input class="form-control startDate" name="startDate" type="text" value="${data.startDate}" disabled />
         </div>
-        <div class="col-lg-4 col-12 mb-3">
+        <div class="col-lg-3 col-12 mb-3">
           <label class="form-label" for="numberOfModules">Module Count<span class="text-danger">*</span></label>
           <input class="form-control numberOfModules" name="numberOfModules" type="number" value="${data.count}" disabled />
+        </div>
+        <div class="col-lg-3 col-12 mb-3">
+          <label class="form-label" for="overallGrade">Overall Grade<span class="text-danger">*</span></label>
+          <input class="form-control overallGrade" name="overallGrade" type="text" value="${data.overallGrade}" disabled />
         </div>
       </div>
 
@@ -300,12 +304,15 @@ function loadFeePayable(learningPlan, feePayable, totalFeePayable, totalModules)
   // [Total fee paid] - [(Total Fee Payable for hybrid) / (Total Modules enrolled for in Hybrid Component) * (# of modules where “name of module” is defined)]
   const studyCredits = totalPaid - (totalFeePayable/(totalModules * moduleCount))
 
-  console.log(totalPaid, totalFeePayable, totalModules, moduleCount)
 
   document.getElementById('totalFeePayable').value = totalFeePayable
   document.getElementById('totalFeePaid').value = totalPaid
   document.getElementById('totalModules').value = totalModules
   document.getElementById('creditsRemaining').value = studyCredits
+  document.getElementById('topTotalFeePayable').value = totalFeePayable
+  document.getElementById('topTotalFeePaid').value = totalPaid
+  document.getElementById('topTotalModules').value = totalModules
+  document.getElementById('topCreditsRemaining').value = studyCredits
 }
 
 async function readPaymentDetails(id) {
@@ -878,10 +885,11 @@ function readLearningPlan() {
     name: term.querySelector('select#termName').value,
     startDate: term.querySelector('.startDate').value,
     count: term.querySelector('.numberOfModules').value,
+    overallGrade: term.querySelector('.overallGrade').value,
     modules: []
   }
 
-  if (!termData.name || !termData.startDate || !termData.count) { failMessage("Please complete Term information."); return }
+  if (!termData.name || !termData.startDate || !termData.count) { failMessage("Please complete Term information."); return false}
 
   const rows = term.querySelectorAll('tbody tr');
   for (let j = 0; j < rows.length; j++) {
