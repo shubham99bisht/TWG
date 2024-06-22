@@ -383,3 +383,78 @@ twgTermEditModal.addEventListener('show.bs.modal', event => {
     twgTermEditModal.querySelector('#numberOfModules').value = parentDiv?.querySelector('.numberOfModules').value || ''
     twgTermEditModal.querySelector('#overallGrade').value = parentDiv?.querySelector('.overallGrade').value || ''
 })
+
+/**
+ * --------------------------------------------------
+ * Flag Student
+ * --------------------------------------------------
+ */
+
+document.getElementById('flaggerId').value = localStorage.getItem('userId');
+document.getElementById('flaggerName').value = localStorage.getItem('userName');
+
+const flagForm = document.getElementById('studentFlagForm');
+flagForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  processingMessage('Flagging student...');
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+
+  const { flaggedBy, flaggedFor, flaggedDate, flagNotes, resolutionNotes } =
+    data;
+
+  if (
+    !flaggedBy?.trim() ||
+    !flaggedFor?.trim() ||
+    !flaggedDate?.trim() ||
+    !flagNotes?.trim() ||
+    !resolutionNotes?.trim()
+  ) {
+    failMessage('Please provided all details!');
+    return;
+  }
+
+  try {
+    let dbPath = `students/${studentId}/`;
+    await updateData(dbPath, {
+      flagInfo: {
+        flaggedBy,
+        flaggedFor,
+        flaggedDate,
+        flagNotes,
+        resolutionNotes,
+      },
+    });
+
+    dbPath = `students/${studentId}/`;
+    await updateData(dbPath, { flagged: true });
+
+    document.getElementById('closeFlagModal').click();
+    document.getElementById('remove-flag-btn').classList.remove("visually-hidden");
+    document.getElementById('add-flag-btn').classList.add("visually-hidden");
+    successMessage('Student flagged successfully!');
+  } catch (error) {
+    console.log(error);
+    failMessage('Failed to flag student');
+  }
+});
+
+const removeFlagBtn = document.getElementById('remove-flag-btn');
+removeFlagBtn.addEventListener('click', async function () {
+  const isConfirm = confirm('Are you sure to remove the flag?');
+  if (isConfirm) {
+    try {
+      let dbPath = `students/${studentId}/`;
+      await updateData(dbPath, { flagInfo: {} });
+      dbPath = `students/${studentId}/`;
+      await updateData(dbPath, { flagged: false });
+
+      successMessage('Flagged removed successfully!');
+      document.getElementById('remove-flag-btn').classList.add("visually-hidden");
+      document.getElementById('add-flag-btn').classList.remove("visually-hidden");
+    } catch (error) {
+      console.log(error);
+      failMessage('Failed to remove flag!');
+    }
+  }
+});

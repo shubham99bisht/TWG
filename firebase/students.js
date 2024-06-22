@@ -153,6 +153,14 @@ function readStudentDetails(id) {
       loadStudyPlan(result?.studyPlan)
       loadLearningPlan(result?.learningPlan)
       loadFeePayable(result?.learningPlan || [], result?.feePayable || 0, result?.totalFeePayable || 0, result?.totalModules || 0)
+      
+      // set flag button visibilites while data fetching
+      if (result?.flagged) {
+        document.getElementById("remove-flag-btn").classList.remove("visually-hidden");
+      } else {
+        document.getElementById("add-flag-btn").classList.remove("visually-hidden");
+      }
+      
       closeSwal()
     })
     .catch((error) => {

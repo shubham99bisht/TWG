@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TheWorldGrad | Commissions Portal</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="./assets/img/favicon.png">
+  <meta name="theme-color" content="#ffffff">
+  <script src="./assets/js/config.js"></script>
+  <script src="./vendors/simplebar/simplebar.min.js"></script>
+  <!-- Stylesheets-->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
+  <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
+  <link href="./assets/css/theme.min.css" rel="stylesheet">
+  <link href="./assets/css/user.css" rel="stylesheet">
+</head>
+
+<body>
+  <main class="main" id="top">
+    <div class="container" data-layout="container">
+      <script>
+        var isFluid = JSON.parse(localStorage.getItem('isFluid'));
+        if (isFluid) {
+          var container = document.querySelector('[data-layout]');
+          container.classList.remove('container');
+          container.classList.add('container-fluid');
+        }
+      </script>
+
+      <nav class="navbar navbar-light navbar-vertical navbar-expand-xl">
+        <script>
+          var navbarStyle = localStorage.getItem("navbarStyle");
+          if (navbarStyle && navbarStyle !== 'transparent') {
+            document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);
+          }
+        </script>
+        <div class="d-flex align-items-center">
+          <div class="toggle-icon-wrapper">
+
+            <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+
+          </div><a class="navbar-brand" href="index.html">
+            <div class="d-flex align-items-center py-3"><img class="me-2" src="assets/img/logo.png" alt="" width="150" />
+            </div>
+          </a>
+        </div>        
+        <!-- Navbar -->
+        <div id="navbarPlaceholder"></div>
+        <!-- Navbar -->
+      </nav>
+
+      <div class="content">
+        <!-- TopBar -->
+        <div id="topbarPlaceholder"></div>
+        <!-- TopBar -->     
+
+        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","university","program","source"],"page":50,"pagination":true}'>
+          <div class="card-header">
+            <div class="row flex-between-center mb-2">
+              <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Flagged Students</h5>
+              </div>
+              <div class="col-8 col-sm-auto text-end ps-2">
+                <div id="table-students-replace-element">
+                  <a class="btn btn-falcon-default btn-sm" href="add_student.html"><span class="fas fa-plus" data-fa-transform="shrink-3 down-2"></span><span class="d-none d-sm-inline-block ms-1">New</span></a>
+                  <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('students')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+                  <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSVData('students')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>                  
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Students" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                  </div>
+                </form>
+              </div>                
+            </div>            
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive scrollbar">
+              <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
+                <thead class="bg-200 text-900">
+                  <tr>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="id">Flagged</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="id">#</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Name</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap">Flagged For</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap">Flag Notes</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap">Resolution Notes</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap">Flagged By</th>
+                    <th class="align-middle no-sort"></th>
+                  </tr>
+                </thead>
+                <tbody class="list" id="table-students-body">
+                  <tr class="text-center"><td colspan="6">Loading...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer d-flex align-items-center justify-content-center">
+            <button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+            <ul class="pagination mb-0"></ul>
+            <button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- ===============================================-->
+  <!--    End of Main Content-->
+  <!-- ===============================================-->
+
+  <!-- Preloader -->
+  <div id="preloader" class="d-none">
+    <div></div><div></div><div></div><div></div>
+    <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
+  </div>
+
+
+  <!--    JavaScripts-->
+  <script src="./vendors/popper/popper.min.js"></script>
+  <script src="./vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="./vendors/anchorjs/anchor.min.js"></script>
+  <script src="./vendors/is/is.min.js"></script>
+  <script src="./vendors/chart/chart.min.js"></script>
+  <script src="./vendors/countup/countUp.umd.js"></script>
+  <script src="./vendors/echarts/echarts.min.js"></script>
+  <script src="./vendors/dayjs/dayjs.min.js"></script>
+  <script src="./vendors/fontawesome/all.min.js"></script>
+  <script src="./vendors/lodash/lodash.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+  <script src="./vendors/list.js/list.min.js"></script>
+  <script src="./assets/js/theme.js"></script>
+  <script src="./vendors/jspdf/index.js"></script>
+  <script src="./vendors/jspdf/autotable.js"></script>
+
+  <!-- Firebase -->
+  <script src="./firebase/index.js" type="module"></script>
+  <script src="./firebase/flaggedStudents.js" type="module"></script>
+</body>
+
+</html>
