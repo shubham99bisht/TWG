@@ -1,4 +1,4 @@
-import { readData, updateData } from './helpers.js';
+import { readData, updateData, readFlaggedStudents } from './helpers.js';
 
 window.onload = async () => {
   processingMessage('Fetching flagged students...');
@@ -17,7 +17,7 @@ async function listFlaggedStudents() {
   if (!tableBody) return;
 
   try {
-    const students = await readData('students');
+    const students = await readFlaggedStudents();
 
     tableBody.innerHTML = '';
     const schema = `<tr class="btn-reveal-trigger">

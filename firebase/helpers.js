@@ -227,3 +227,20 @@ export function getDates() {
   
   return [formatDate(startOfYear), formatDate(currentDate)];
 }
+
+// Function to read flagged students
+export async function readFlaggedStudents() {
+  const dbRef = ref(db, 'students');
+  const flaggedStudentsQuery = query(dbRef, orderByChild('flagged'), equalTo(true))
+  try {
+    const snapshot = await get(flaggedStudentsQuery);
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error reading data:", error);
+    return null;
+  }
+}
