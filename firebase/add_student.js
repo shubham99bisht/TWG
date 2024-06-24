@@ -40,6 +40,8 @@ async function createStudent() {
     totalFeePayable, totalModules
   } = enrollmentInfoData
 
+  const overallGradeTWG = document.getElementById('overallGradeTWG').value;
+
   //  Convert Dates
   let date = new Date(joinYear, joinMonth, 2)
   const joinDate = `${date.toISOString().slice(0, 10)}`
@@ -55,7 +57,7 @@ async function createStudent() {
     !program_type || !university || !source ||
     !twgOfferLink || !universityOfferLink || !gDriveLink ||
     !universityDegree || !overseasDate ||
-    !totalFeePayable || !totalModules
+    !totalFeePayable || !totalModules || !overallGradeTWG
   ) { failMessage("Please provide all data"); return }
 
   // Verifying old entries
@@ -84,7 +86,7 @@ async function createStudent() {
     program_type, university, source,
     twgOfferLink, universityOfferLink, gDriveLink,
     universityDegree, overseasDate, totalFeePayable, totalModules,
-    studyPlan, learningPlan
+    studyPlan, learningPlan, overallGradeTWG,
   }
   if (source == "Agent") newStudent["agent"] = agent
   console.log(newStudent)

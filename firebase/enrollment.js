@@ -104,13 +104,14 @@ function listAllEnroll(inputParams) {
                 <td class="align-middle enrollmentStatus">{}</td>
                 <td class="align-middle startDate">{}</td>
                 <td class="align-middle status">{}</td>
+                <td class="align-middle remaining-credits">{}</td>
                 <td class="align-middle text-nowrap notes">{}</td>
             </tr>`;
 
-            let csvContent = 'Student, Student Email,Program Type, University, Degree, Study Stage, Status, Start Date, Status, Notes\r\n';
+            let csvContent = 'Student, Student Email,Program Type, University, Degree, Study Stage, Status, Start Date, Status, Remaining Credits, Notes\r\n';
 
             // student, email, program type, university, university degree, status, start date, status, notes
-            const csvRow = '{},{},{},{},{},{},{},{},{},{}\r\n'
+            const csvRow = '{},{},{},{},{},{},{},{},{},{},{}\r\n'
             
             const transformedData = [];
         
@@ -150,15 +151,23 @@ function listAllEnroll(inputParams) {
             const promises = filteredData && Object.keys(filteredData).map(async id => {
                 try {
                     const p = filteredData[id];
+                    const studentId = p['studentId'];
                     const UniversityName = universities[p?.university].name;
                     const ProgramName = programs[p?.program_type].name;
+
+                    const remCredits = getRemainingCredits(
+                      p?.feePayable,
+                      p?.learningPlan,
+                      p?.totalFeePayable,
+                      p?.totalModules
+                    );
                     
-                    const row = schema.format(id, id, p.studentName, p.studentEmail, ProgramName, 
+                    const row = schema.format(studentId, studentId, p.studentName, p.studentEmail, ProgramName, 
                         UniversityName, p.universityDegree, studyStages?.[p?.studyStage]?.name || '',
-                        p.enrollmentStatus, p.startDate, p.status, p?.notes || ''
+                        p.enrollmentStatus, p.startDate, p.status, remCredits, p?.notes || ''
                     );
                     if (tableBody) tableBody.innerHTML += row;
-                    csvContent += csvRow.format(p.studentName, p.studentEmail, ProgramName, UniversityName, p.universityDegree, studyStages?.[p?.studyStage]?.name || '', p.enrollmentStatus, p.startDate, p.status, p?.notes || '');
+                    csvContent += csvRow.format(p.studentName, p.studentEmail, ProgramName, UniversityName, p.universityDegree, studyStages?.[p?.studyStage]?.name || '', p.enrollmentStatus, p.startDate, p.status, remCredits, p?.notes || '');
                 } catch (e) {
                     console.log("ERRROR:", e)
                 }
@@ -180,4 +189,26 @@ window.onload = async () => {
     await fetchData()
     //listAllEnroll()
     initialise()
+}
+
+function getRemainingCredits(
+  feePayable = {},
+  learningPlan = {},
+  totalFeePayable = 0,
+  totalModules = 0,
+) {
+    let totalPaid = 0, remainingCredits = 0, modulesCount = 0;
+    totalFeePayable = Number(totalFeePayable);
+    totalModules = Number(totalModules);
+
+    for (let key in learningPlan) {
+        modulesCount += parseInt(learningPlan[key]['count']) || 0 ;
+    }
+
+    for (let key in feePayable) {
+        totalPaid += parseFloat(feePayable[key]['amount']) || 0;
+    }
+
+    remainingCredits = totalPaid - (totalFeePayable/(totalModules * modulesCount));
+    return remainingCredits.toFixed(2);
 }
