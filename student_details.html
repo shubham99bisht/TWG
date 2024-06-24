@@ -58,12 +58,15 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->     
 
+        <!-- Basic Info -->
         <div class="card mb-3">
           <div class="card-header">
             <div class="row align-items-center">
               <div class="col">
                 <h5 class="mb-0" id="name">Student Name</h5>
               </div>
+              <div class="col-auto d-none" id="add-flag-btn"><a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#flag-student-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Flag Student</a></div>
+              <div class="col-auto d-none" id="remove-flag-btn"><a class="btn btn-outline-danger btn-sm"><span class="fas fa-pencil-alt fs--2 me-1"></span>Remove Flag</a></div>              
               <div class="col-auto"><a class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#update-details-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
             </div>
           </div>
@@ -72,28 +75,52 @@
               <div class="col-lg col-xxl-5">
                 <h6 class="fw-semi-bold ls mb-3 text-uppercase">Basic Information</h6>
                 <div class="row">
-                  <div class="col-5 col-sm-4">
-                    <p class="fw-semi-bold mb-1">LSQ ID</p>
+                  <div class="col-6">
+                    <p class="fw-semi-bold mb-1">Student ID</p>
                   </div>
                   <div class="col" id="student_id">-</div>
                 </div>
                 <div class="row">
-                  <div class="col-5 col-sm-4">
-                    <p class="fw-semi-bold mb-1">University ID</p>
-                  </div>
-                  <div class="col" id="university_id">-</div>
-                </div>
-                <div class="row">
-                  <div class="col-5 col-sm-4">
-                    <p class="fw-semi-bold mb-1">Joining Date</p>
+                  <div class="col-6">
+                    <p class="fw-semi-bold mb-1">Commercing Term</p>
                   </div>
                   <div class="col" id="join_date">-</div>
                 </div>
                 <div class="row">
-                  <div class="col-5 col-sm-4">
+                  <div class="col-6">
+                    <p class="fw-semi-bold mb-1">University Student ID</p>
+                  </div>
+                  <div class="col" id="university_id">-</div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <p class="fw-semi-bold mb-1">Enrollment Status</p>
+                  </div>
+                  <div class="col" id="enrollment_status">-</div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
                     <p class="fw-semi-bold mb-1">Email</p>
                   </div>
                   <div class="col" id="student_email">-</div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <p class="fw-semi-bold mb-1">Phone</p>
+                  </div>
+                  <div class="col" id="student_phone">-</div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <p class="fw-semi-bold mb-1">Address</p>
+                  </div>
+                  <div class="col" id="student_address">-</div>
+                </div>
+                <div class="row">
+                  <div class="col-6">
+                    <p class="fw-semi-bold mb-1">City State</p>
+                  </div>
+                  <div class="col" id="student_city_state">-</div>
                 </div>
               </div>
               <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1">
@@ -129,10 +156,47 @@
                   </div>
                   <div class="col" id="degree">-</div>
                 </div>
+                <div class="row">
+                  <div class="col-6 col-sm-4">
+                    <p class="fw-semi-bold mb-0">Overseas Progression</p>
+                  </div>
+                  <div class="col" id="overseas_date">-</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <!-- Basic Info -->
+
+        <!-- Enrollment Details -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <div class="row align-items-center">
+              <div class="col">
+                <h5 class="mb-0">Student Enrollment Details</h5>
+              </div>
+              <!-- <div class="col-auto"><a class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#update-enrollment-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div> -->
+            </div>
+          </div>
+          <div class="card-body bg-light border-top">
+            <div class="row">
+              <!-- Links -->
+              <div class="col-lg-12 col-12 mb-3">
+                <label class="form-label" for="twgOfferLink">Final signed TWG Offer Letter<span class="text-danger">*</span></label>
+                <input class="form-control" id="twgOfferLink" name="twgOfferLink" type="url" placeholder="https://drive.google.com/" readonly />
+              </div>  
+              <div class="col-lg-12 col-12 mb-3">
+                <label class="form-label" for="universityOfferLink">University Offer Letter<span class="text-danger">*</span></label>
+                <input class="form-control" id="universityOfferLink" name="universityOfferLink" type="url" placeholder="https://drive.google.com/" readonly />
+              </div>  
+              <div class="col-lg-12 col-12 mb-3">
+                <label class="form-label" for="gDriveLink">Google Drive Link<span class="text-danger">*</span></label>
+                <input class="form-control" id="gDriveLink" name="gDriveLink" type="url" placeholder="https://drive.google.com/" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Enrollment Details -->    
 
         <!-- Student Journey -->
         <div class="card mb-3">
@@ -372,16 +436,29 @@
           <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
             <h5 class="mb-1 modal-title">Update Student Details</h5>
           </div>
-          <div class="p-4 pb-0">
+          <div class="px-4">
             <form class="row" id="updateStudentForm">
-              <div class="col-12 mb-3">
-                <label class="form-label" for="studentId">Lead Id (LSQ)<span class="text-danger">*</span></label>
+              <div class="col-12 mb-3 d-none">
+                <label class="form-label" for="studentId">Student Id<span class="text-danger">*</span></label>
                 <input class="form-control" id="studentId" name="studentId" type="text" disabled />
               </div>
               <div class="col-12 mb-3">
-                <label class="form-label" for="studentEmail">Student Email<span class="text-danger">*</span></label>
-                <input class="form-control" id="studentEmail" name="studentEmail" type="email" />
+                <label class="form-label" for="studentName">Student Name<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentName" name="studentName" type="text" placeholder="Student Name" required="required" />
+              </div> 
+              <div class="col-12 col-lg-6 mb-3">
+                <label class="form-label" for="universityStudentId">University Student Id<span class="text-danger">*</span></label>
+                <input class="form-control" id="universityStudentId" name="universityStudentId" type="text" required="required" />
               </div>
+              <div class="col-12 col-lg-6 mb-3">
+                <label class="form-label" for="enrollmentStatus">Student Enrollment Status<span class="text-danger">*</span></label>
+                <select class="form-select" id="enrollmentStatus" name="enrollmentStatus" required>
+                  <option value="Admitted">Admitted</option>
+                  <option value="Enrolled">Enrolled</option>
+                  <option value="Withdrawn">Withdrawn</option>
+                </select>
+              </div>
+              <!-- Join Date -->
               <div class="col-6 mb-3">
                 <label class="form-label" for="joinMonth">Joining Month<span class="text-danger">*</span></label>
                 <select class="form-select" id="joinMonth" name="joinMonth">
@@ -402,11 +479,6 @@
               <div class="col-6 mb-3">
                 <label class="form-label" for="joinYear">Joining Year<span class="text-danger">*</span></label>
                 <select class="form-select" id="joinYear" name="joinYear">
-                  <option value="2015">2015</option>
-                  <option value="2016">2016</option>
-                  <option value="2017">2017</option>
-                  <option value="2018">2018</option>
-                  <option value="2019">2019</option>
                   <option value="2020">2020</option>
                   <option value="2021">2021</option>
                   <option value="2022">2022</option>
@@ -414,23 +486,69 @@
                   <option value="2024">2024</option>
                   <option value="2025">2025</option>
                   <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                  <option value="2031">2031</option>                  
                 </select>
               </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="enrollmentStatus">Student Enrollment Status<span class="text-danger">*</span></label>
-                <select class="form-select" id="enrollmentStatus" name="enrollmentStatus" required>
-                  <option value="Admitted">Admitted</option>
-                  <option value="Enrolled">Enrolled</option>
-                  <option value="Withdrawn">Withdrawn</option>
+              <!-- OverSeas Date -->
+              <div class="col-6 mb-3">
+                <label class="form-label" for="overseasMonth">Overseas Month<span class="text-danger">*</span></label>
+                <select class="form-select" id="overseasMonth" name="overseasMonth">
+                  <option value="0">Jan</option>
+                  <option value="1">Feb</option>
+                  <option value="2">Mar</option>
+                  <option value="3">Apr</option>
+                  <option value="4">May</option>
+                  <option value="5">June</option>
+                  <option value="6">July</option>
+                  <option value="7">Aug</option>
+                  <option value="8">Sept</option>
+                  <option value="9">Oct</option>
+                  <option value="10">Nov</option>
+                  <option value="11">Dec</option>
                 </select>
               </div>
+              <div class="col-6 mb-3">
+                <label class="form-label" for="overseasYear">Overseas Year<span class="text-danger">*</span></label>
+                <select class="form-select" id="overseasYear" name="overseasYear">
+                  <option value="2020">2020</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                  <option value="2031">2031</option>                  
+                </select>
+              </div>
+              <!-- Contact -->
               <div class="col-12 mb-3">
-                <label class="form-label" for="studentName">Student Name<span class="text-danger">*</span></label>
-                <input class="form-control" id="studentName" name="studentName" type="text" placeholder="Student Name" required="required" />
-              </div> 
+                <label class="form-label" for="studentEmail">Student Email<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentEmail" name="studentEmail" type="email" />
+              </div>
               <div class="col-12 mb-3">
-                <label class="form-label" for="universityStudentId">University Student Id<span class="text-danger">*</span></label>
-                <input class="form-control" id="universityStudentId" name="universityStudentId" type="text" required="required" />
+                <label class="form-label" for="studentPhone">Student Phone<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentPhone" name="studentPhone" type="text" />
+              </div>
+              <!-- Address -->
+              <div class="col-12 mb-3">
+                <label class="form-label" for="studentAddress">Student Address<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentAddress" name="studentAddress" type="email" />
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label" for="studentCity">Student City<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentCity" name="studentCity" type="text" />
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label" for="studentState">Student State<span class="text-danger">*</span></label>
+                <input class="form-control" id="studentState" name="studentState" type="text" />
               </div>
             </form>
           </div>
@@ -946,8 +1064,62 @@
       </div>
     </div>
   </div>
-  
   <!-- Payment status  Ends --> 
+
+  <!-- Update Student Modal -->
+  <div class="modal fade" id="flag-student-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Flag Student</h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form class="row" id="studentFlagForm">
+              <input type="text" name="flaggedBy" id="flaggerId" hidden />
+              <div class="col-12 mb-3">
+                <label class="form-label" for="flaggerName">Flagged By<span class="text-danger">*</span></label>
+                <input class="form-control" id="flaggerName" type="text" readonly />
+              </div>
+
+              <div class="col-6 mb-3">
+                <label class="form-label" for="flaggedFor">Flagged For<span class="text-danger">*</span></label>
+                <select class="form-select" id="flaggedFor" name="flaggedFor" required>
+                  <option value="finance">Finance</option>
+                  <option value="admin">Admin</option>
+                  <option value="support">Support</option>
+                </select>
+              </div>
+
+              <div class="col-6 mb-3">
+                <label class="form-label" for="flaggedDate">Flagged Date<span class="text-danger">*</span></label>
+                <input type="date" class="form-control" id="flaggedDate" name="flaggedDate" required>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="flagNotes">Flag Notes<span class="text-danger">*</span></label>
+                <textarea class="form-control" id="flagNotes" rows="3" name="flagNotes" type="text" placeholder="Add flag notes" required="required"></textarea>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="resolutionNotes">Resolution Notes<span class="text-danger">*</span></label>
+                <textarea class="form-control" id="resolutionNotes" rows="3" name="resolutionNotes" type="text" placeholder="Add resolution notes" required="required"></textarea>
+              </div> 
+
+              <div class="modal-footer">
+                <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="closeFlagModal">Cancel</button>
+                <button class="btn btn-warning" type="submit" id="createFlagBtn">Create Flag</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Update Student Modal Ends -->
 
 
   <!--    JavaScripts-->

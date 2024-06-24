@@ -33,6 +33,7 @@ onAuthStateChanged(auth, async (user) => {
   const preloader = document.querySelector('#preloader');
 
   if (user) {
+    localStorage.setItem("userId", user.uid);
     addUserProfile(user)
     const dbRef = ref(db, `/users/${user.uid}/role`)
     const snapshot = await get(dbRef)
@@ -61,9 +62,12 @@ function addUserProfile(user) {
     .then((snapshot) => {
       if (snapshot.exists()) {
         // User's entry exists, retrieve the user's role
-        const userRole = snapshot.val().role;
+        const userData = snapshot.val()
+        const userRole = userData.role;
+        const userName = userData.name;
         // console.log("User's role:", userRole);
         localStorage.setItem("userRole", userRole)
+        localStorage.setItem("userName", userName)
       } else {
         const name = user.displayName;
         const email = user.email;

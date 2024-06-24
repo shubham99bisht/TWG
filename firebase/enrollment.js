@@ -171,7 +171,7 @@ function listAllEnroll(inputParams) {
         .catch((error) => {
             console.error("Error reading program types:", error);
             if (tableBody)
-                tableBody.innerHTML = `<tr class="text-center"><td colspan="10">No Receivable data found!</td></tr>`
+                tableBody.innerHTML = `<tr class="text-center"><td colspan="10">No Enrollment data found!</td></tr>`
         });
 }
 

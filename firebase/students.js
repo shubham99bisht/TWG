@@ -138,21 +138,42 @@ function readStudentDetails(id) {
       const programName = await readData(`program_types/${result?.program_type}/name`)
       modules = await readData(`program_types/${result?.program_type}`);
 
-      document.getElementById("student_id").innerHTML = id
-      document.getElementById("name").innerHTML = result?.studentName + " ("+result?.enrollmentStatus+")"
-      document.getElementById("university_id").innerHTML = result.universityStudentId
-      document.getElementById("join_date").innerHTML = result?.joinDate
-      document.getElementById("student_email").innerHTML = result?.studentEmail || '-'
+      document.getElementById("name").innerHTML = result?.studentName || '-'
 
+      // Basic Info
+      document.getElementById("student_id").innerHTML = id
+      document.getElementById("university_id").innerHTML = result.universityStudentId
+      document.getElementById("join_date").innerHTML = result?.joinDate || '-'
+      document.getElementById("enrollment_status").innerHTML = result?.enrollmentStatus || '-'
+      document.getElementById("student_email").innerHTML = result?.studentEmail || '-'
+      document.getElementById("student_phone").innerHTML = result?.studentPhone || '-'
+      document.getElementById("student_address").innerHTML = result?.studentAddress || '-'
+      document.getElementById("student_city_state").innerHTML = `${result?.studentCity || ''}, ${result?.studentState || ''}`
+      
+      // Enrollment Info
       document.getElementById("university").innerHTML = universityName || ''
       document.getElementById("program_type").innerHTML = programName || ''
       document.getElementById("source").innerHTML = result?.source
       document.getElementById("agent").innerHTML = result?.agent || '-'
       document.getElementById('degree').innerHTML = result?.universityDegree || '-'
+      document.getElementById("overseas_date").innerHTML = result?.overseasDate || '-'
+
+      // GDrive Links
+      document.getElementById("twgOfferLink").value = result?.twgOfferLink || ''
+      document.getElementById("universityOfferLink").value = result?.universityOfferLink || ''
+      document.getElementById("gDriveLink").value = result?.gDriveLink || ''
 
       loadStudyPlan(result?.studyPlan)
       loadLearningPlan(result?.learningPlan)
       loadFeePayable(result?.learningPlan || [], result?.feePayable || 0, result?.totalFeePayable || 0, result?.totalModules || 0)
+
+      // Flag Status
+      if (result?.flagged) {
+        document.getElementById("remove-flag-btn").classList.remove("d-none");
+      } else {
+        document.getElementById("add-flag-btn").classList.remove("d-none");
+      }      
+
       closeSwal()
     })
     .catch((error) => {
@@ -436,13 +457,23 @@ if (updateStudentModal)
     const id = params.get('id')
     const student = students[id]
     const joinDate = new Date(student.joinDate)
+    const overseasDate = new Date(student?.overseasDate)
     updateStudentModal.querySelector('#studentId').value = id
+    
+    updateStudentModal.querySelector('#studentName').value = student.studentName
+    updateStudentModal.querySelector('#universityStudentId').value = student.universityStudentId
     updateStudentModal.querySelector('#joinMonth').value = joinDate.getMonth()
     updateStudentModal.querySelector('#joinYear').value = joinDate.getFullYear()
-    updateStudentModal.querySelector('#studentName').value = student.studentName
-    updateStudentModal.querySelector('#studentEmail').value = student?.studentEmail || ''
-    updateStudentModal.querySelector('#universityStudentId').value = student.universityStudentId
     updateStudentModal.querySelector('#enrollmentStatus').value = student?.enrollmentStatus
+    updateStudentModal.querySelector('#studentEmail').value = student?.studentEmail || ''
+    updateStudentModal.querySelector('#studentPhone').value = student?.studentPhone || ''
+    updateStudentModal.querySelector('#studentAddress').value = student?.studentAddress || ''
+    updateStudentModal.querySelector('#studentCity').value = student?.studentCity || ''
+    updateStudentModal.querySelector('#studentState').value = student?.studentState || ''
+    if (overseasDate != 'Invalid Date') {
+      updateStudentModal.querySelector('#overseasMonth').value = overseasDate.getMonth()
+      updateStudentModal.querySelector('#overseasYear').value = overseasDate.getFullYear()
+    }
   })
 
 async function updateStudent() {
@@ -454,15 +485,24 @@ async function updateStudent() {
     const basicInfoData = Object.fromEntries(new FormData(updateStudentForm));
 
     const studentId = updateStudentForm.querySelector('#studentId').value
-    const { joinMonth, joinYear, universityStudentId, studentName, studentEmail } = basicInfoData
+    const { 
+      studentName, universityStudentId, joinMonth, joinYear, overseasMonth, overseasYear,
+      studentEmail, studentPhone, studentAddress, studentCity, studentState 
+    } = basicInfoData
     const date = new Date(joinYear, joinMonth, 2)
     const joinDate = `${date.toISOString().slice(0, 10)}`
+    const odate = new Date(overseasYear, overseasMonth, 2)
+    const overseasDate = `${odate.toISOString().slice(0, 10)}`
+
     const enrollmentStatus = updateStudentForm.querySelector('#enrollmentStatus').value;
     // Validation
-    if (id != studentId) failMessage("Can't update student LSQ Id")
+    if (id != studentId) failMessage("Can't update Student Id")
     if (!studentId || !studentName || !studentEmail || !joinMonth || !joinYear || !universityStudentId) { failMessage("Please provide all data"); return }
 
-    const newStudent = { studentId, joinDate, universityStudentId, studentName, studentEmail, enrollmentStatus }
+    const newStudent = { 
+      studentId, joinDate, overseasDate, studentName, universityStudentId,
+      studentEmail, studentPhone, studentAddress, studentCity, studentState 
+    }
     updateData(`students/${studentId}`, newStudent)
       .then((result) => {
         if (result) {
