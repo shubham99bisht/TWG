@@ -70,7 +70,7 @@
           <div class="card-header">
             <div class="row flex-between-center mb-3">
               <div class="col-6 col-md-auto d-flex align-items-center">
-                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Enrolment Report</h5>
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Re-Enrolment Report</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
                 <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('enrollmentReport')"><span
@@ -90,37 +90,6 @@
               </div>
             </div>
             <div class="row">
-              <!-- Status Dropdown Column -->
-              <div class="col-md-3 mb-3">
-                <label for="enrollStatusDropdown">Enrollment Status</label>
-                <select class="form-select form-select-sm js-choice" id="enrollStatusDropdown" multiple="multiple" size="1" name="enrollStatusDropdown" data-options='{"removeItemButton":true}'>
-                  <option value="Admitted">Admitted</option>
-                  <option value="Enrolled">Enrolled</option>
-                  <option value="Withdrawn">Withdrawn</option>
-                </select>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="twgProgramDropdown">TWG Program</label>
-                <select class="form-select form-select-sm js-choice" id="twgProgramDropdown" multiple="multiple" size="1" name="twgProgramDropdown" data-options='{"removeItemButton":true}'>
-                  
-                </select>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="enrollStageDropdown">Stage</label>
-                <select class="form-select form-select-sm js-choice" id="enrollStageDropdown" multiple="multiple" size="1" name="enrollStageDropdown" data-options='{"removeItemButton":true}'>
-                  
-                </select>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="studyStageStatusDropdown">Status Study Stage</label>
-                <select class="form-select form-select-sm js-choice" id="studyStageStatusDropdown" multiple="multiple" size="1" name="studyStageStatusDropdown" data-options='{"removeItemButton":true}'>
-                  <option value="Not Started">Not Started</option>
-                  <option value="Currently Enrolled">Currently Enrolled</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Withdrawn">Withdrawn</option>
-                </select>
-              </div>
-          
               <!-- Date Range Column -->
               <div class="col-md-4">
                 <label for="datepicker">Start Date</label>
@@ -146,14 +115,10 @@
                     <th class="sort pe-1 align-middle" data-sort="student">Student</th>
                     <th class="sort pe-1 align-middle" data-sort="studentEmail">Email Id</th>
                     <th class="sort pe-1 align-middle" data-sort="program_type">TWG Program</th>
-                    <th class="sort pe-1 align-middle" data-sort="university">University</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="universityDegree">Degree</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="studyStage">Stage</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="enrollmentStatus">Student Enrollment Status</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="startDate">Start Date</th>
-                    <th class="sort pe-1 align-middle" data-sort="status">Study Stage Status</th>
-                    <th class="sort pe-1 align-middle" data-sort="remaining-credits">Rem. Credits</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap">Notes</th>
+                    <th class="sort pe-1 align-middle" data-sort="term_number">Term #</th>
+                    <th class="sort pe-1 align-middle" data-sort="term_start_date">Term Start Date</th>
+                    <th class="sort pe-1 align-middle" data-sort="status">Student Status</th>
+                    <th class="sort pe-1 align-middle" data-sort="remaining_credits">Remaining Credits</th>
                   </tr>
                 </thead>
                 <tbody class="list" id="table-payable-body">
@@ -211,7 +176,7 @@
 
   <!-- Firebase -->
   <script src="./firebase/index.js" type="module"></script>
-  <script src="./firebase/enrollment.js" type="module"></script>
+  <script src="./firebase/re_enrollment.js" type="module"></script>
 </body>
 
 </html>

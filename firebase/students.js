@@ -9,6 +9,8 @@ const currencyInput = document.getElementById("currency")
 const feesCurrencyInput = document.getElementById("fees_currency")
 const programSelect = document.getElementById("program_type")
 
+let totalModulesCount = 0, modulesCount = 0;
+
 async function fetchData() {
   programs = await readData("program_types")
   students = await readData("students")
@@ -134,6 +136,7 @@ function readStudentDetails(id) {
       students[id] = result
       if (!result) failMessage("Student not found!");
 
+      totalModulesCount = Number(result?.totalModules);
       const universityName = await readData(`universities/${result?.university}/name`)
       const programName = await readData(`program_types/${result?.program_type}/name`)
       modules = await readData(`program_types/${result?.program_type}`);
@@ -162,10 +165,15 @@ function readStudentDetails(id) {
       document.getElementById("twgOfferLink").value = result?.twgOfferLink || ''
       document.getElementById("universityOfferLink").value = result?.universityOfferLink || ''
       document.getElementById("gDriveLink").value = result?.gDriveLink || ''
+      document.getElementById("twgModalLink").value = result?.twgOfferLink || ''
+      document.getElementById("universityModalLink").value = result?.universityOfferLink || ''
+      document.getElementById("gDriveModalLink").value = result?.gDriveLink || ''
 
       loadStudyPlan(result?.studyPlan)
       loadLearningPlan(result?.learningPlan)
       loadFeePayable(result?.learningPlan || [], result?.feePayable || 0, result?.totalFeePayable || 0, result?.totalModules || 0)
+
+      document.getElementById('overallGradeTWG').value = result?.overallGradeTWG || '';
 
       // Flag Status
       if (result?.flagged) {
@@ -240,6 +248,8 @@ function loadLearningPlan(learningPlan) {
       tableBody += row
     }
 
+    modulesCount += Number(data?.count);
+
     const Term = `
     <div class="border rounded-1 mt-3 position-relative bg-white dark__bg-1100 p-3 mb-3 Term">
       <div class="row form-group">
@@ -290,14 +300,25 @@ function loadLearningPlan(learningPlan) {
     </div>`
     table.innerHTML += Term
   }
+
+  if (modulesCount === totalModulesCount) {
+    document.getElementById('modules-check-badge').innerText += ' True';
+    document.getElementById('modules-check-badge').classList.add('btn-outline-success')
+  } else {
+    document.getElementById('modules-check-badge').innerText += ' False';
+    document.getElementById('modules-check-badge').classList.add('btn-outline-danger')
+  }
+
 }
 
-function loadFeePayable(learningPlan, feePayable, totalFeePayable, totalModules) {
-  if (!feePayable) return
+function loadFeePayable(learningPlan, feePayable, totalFeePayable=0, totalModules=0) {
+  // if (!feePayable) return
   const table = document.getElementById('feePayableTable')
 
   let totalPaid = 0
   let moduleCount = 0
+  totalFeePayable = Number(totalFeePayable)
+  totalModules = Number(totalModules)
 
   learningPlan?.forEach(lp => moduleCount += lp?.modules?.length || 0)
 
@@ -333,7 +354,7 @@ function loadFeePayable(learningPlan, feePayable, totalFeePayable, totalModules)
   document.getElementById('topTotalFeePayable').value = totalFeePayable
   document.getElementById('topTotalFeePaid').value = totalPaid
   document.getElementById('topTotalModules').value = totalModules
-  document.getElementById('topCreditsRemaining').value = studyCredits
+  document.getElementById('topCreditsRemaining').value = studyCredits.toFixed(2);
 }
 
 async function readPaymentDetails(id) {
@@ -961,3 +982,56 @@ function updateModuleList() {
 
 }
 window.updateModuleList = updateModuleList
+
+/**
+ * --------------------------------------------------
+ * Update Link Form
+ * --------------------------------------------------
+ */
+const updateLinkForm = document.getElementById('studentsLinkForm');
+if (updateLinkForm) {
+  updateLinkForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    processingMessage('Updating links...');
+    const twgOfferLink = document.getElementById('twgModalLink').value;
+    const universityOfferLink = document.getElementById(
+      'universityModalLink'
+    ).value;
+    const gDriveLink = document.getElementById('gDriveModalLink').value;
+
+    if (
+      !twgOfferLink?.trim() ||
+      !universityOfferLink?.trim() ||
+      !gDriveLink?.trim()
+    ) {
+      failMessage('Please provide all links');
+      return;
+    }
+
+    try {
+      const params = new URLSearchParams(document.location.search);
+      const id = params.get('id');
+
+      await updateData(`students/${id}/`, {
+        twgOfferLink,
+        universityOfferLink,
+        gDriveLink,
+      });
+
+      document.getElementById('twgOfferLink').value = twgOfferLink;
+      document.getElementById('universityOfferLink').value =
+        universityOfferLink;
+      document.getElementById('gDriveLink').value = gDriveLink;
+      document.getElementById('twgModalLink').value = twgOfferLink;
+      document.getElementById('universityModalLink').value =
+        universityOfferLink;
+      document.getElementById('gDriveModalLink').value = gDriveLink;
+      document.getElementById('linksModalCloseBtn').click();
+      successMessage('Links updated successfully!');
+    } catch (error) {
+      console.log(error);
+      failMessage('Failed to links!');
+      return;
+    }
+  });
+}

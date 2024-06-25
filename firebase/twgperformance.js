@@ -114,24 +114,28 @@ function listAllEnroll(inputParams) {
                 <td class="align-middle university">{}</td>
                 <td class="align-middle startDate">{}</td>
                 <td class="align-middle name">{}</td>
+                <td class="align-middle term">{}</td>
+                <td class="align-middle overallGradeTWG">{}</td>
+                <td class="align-middle status">{}</td>
                 <td class="align-middle result">{}</td>
                 <td class="align-middle grade">{}</td>
                 <td class="align-middle text-nowrap notes">{}</td>
             </tr>`;
 
-            let csvContent = 'Student, Student Email,Program Type, University, Start Date, Module, Result, Grade, Notes\r\n';
+            let csvContent = 'Student, Student Email,Program Type, University, Start Date, Module, Term, Overall Grade, Status, Result, Grade, Notes\r\n';
 
             // student, univ, agent, program type, stage, fees, amount, due date, status, notes
-            const csvRow = '{},{},{},{},{},{},{},{},{}\r\n'
+            const csvRow = '{},{},{},{},{},{},{},{},{},{},{},{}\r\n'
 
             const transformedData = [];
         
             Object.values(data).forEach(user => {
                 if (user.learningPlan && user.learningPlan.length > 0) {
                     user.learningPlan.forEach(plan => {
+                        const termName = plan['name'];
                         if (plan.modules && plan.modules.length > 0) {
                             plan.modules.forEach(item => {
-                                const transformedUser = { ...user, ...plan, ...item };
+                                const transformedUser = { termName, ...user, ...plan, ...item, };
                                 delete transformedUser.learningPlan;
                                 transformedData.push(transformedUser);
                             })
@@ -163,12 +167,12 @@ function listAllEnroll(inputParams) {
             const promises = Object.keys(filteredData).map(async id => {
                 try {
                     const p = filteredData[id];
+                    const studentId = p['studentId'];
                     const UniversityName = universities[p?.university].name;
                     const ProgramName = programs[p?.program_type].name;
-
-                    const row = schema.format(id, id, p?.studentName, p?.studentEmail, ProgramName, UniversityName, p?.startDate, p?.name, p?.result, p?.grade, p?.notes || '');
+                    const row = schema.format(studentId, studentId, p?.studentName, p?.studentEmail, ProgramName, UniversityName, p?.startDate, p?.name, p?.termName, p?.overallGrade || '', p?.enrollmentStatus, p?.result, p?.grade, p?.notes || '');
                     if (tableBody) tableBody.innerHTML += row;
-                    csvContent += csvRow.format(id, id, p?.studentName, p?.studentEmail, ProgramName, UniversityName, p?.startDate, p?.name, p?.result, p?.grade, p?.notes || '');
+                    csvContent += csvRow.format(studentId, studentId, p?.studentName, p?.studentEmail, ProgramName, UniversityName, p?.startDate, p?.name, p?.termName, p?.overallGrade || '', p?.result, p?.grade, p?.enrollmentStatus, p?.notes || '');
                 } catch (e) {
                     console.log("ERRROR:", e)
                 }

@@ -172,10 +172,12 @@
         <div class="card mb-3">
           <div class="card-header">
             <div class="row align-items-center">
-              <div class="col">
-                <h5 class="mb-0">Student Enrollment Details</h5>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="col">
+                  <h5 class="mb-0">Student Enrollment Details</h5>
+                </div>
+                <div class="col-auto"><a class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#student-links-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update Links</a></div>
               </div>
-              <!-- <div class="col-auto"><a class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#update-enrollment-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div> -->
             </div>
           </div>
           <div class="card-body bg-light border-top">
@@ -232,21 +234,28 @@
             <hr class="mb-3">
 
             <!-- TWG Learning Plan -->
-            <h5 class="my-3">TWG Learning Plan</h5>
+            <div class="my-3 d-flex align-items-center justify-content-between">
+              <h5>TWG Learning Plan</h5>
+              <span class="btn" id="modules-check-badge">Modules Check:</span>
+            </div>
             <div class="row">
-              <div class="col-lg-3 col-12 mb-3">
+              <div class="col-lg-4 col-12 mb-3">
+                <label class="form-label" for="overallGradeTWG">Overall Grade in TWG<span class="text-danger">*</span></label>
+                <input class="form-control form-control-sm" id="overallGradeTWG" name="overallGradeTWG" type="text" readonly />
+              </div>
+              <div class="col-lg-4 col-12 mb-3">
                 <label class="form-label" for="totalFeePayable">Total Fee Payable<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="topTotalFeePayable" name="totalFeePayable" type="number" readonly/>
               </div>  
-              <div class="col-lg-3 col-12 mb-3">
+              <div class="col-lg-4 col-12 mb-3">
                 <label class="form-label" for="totalFeePaid">Total Fee Paid<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="topTotalFeePaid" name="totalFeePaid" type="number" readonly />
               </div> 
-              <div class="col-lg-3 col-12 mb-3">
+              <div class="col-lg-4 col-12 mb-3">
                 <label class="form-label" for="totalModules">Total Modules<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="topTotalModules" name="totalModules" type="number" readonly />
               </div>  
-              <div class="col-lg-3 col-12 mb-3">
+              <div class="col-lg-4 col-12 mb-3">
                 <label class="form-label text-truncate" for="creditsRemaining">Remaining Study Credits<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="topCreditsRemaining" name="creditsRemaining" type="number" readonly />
               </div>              
@@ -424,6 +433,39 @@
     <div></div><div></div><div></div><div></div>
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
+
+  <!-- Update Links Modal -->
+  <div class="modal fade" id="student-links-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="mb-1 modal-title">Update Links</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="studentsLinkForm">
+            <div class="col-12 mb-3">
+              <label class="form-label" for="twgModalLink">TWG Offer Letter<span class="text-danger">*</span></label>
+              <input class="form-control" id="twgModalLink" name="twgModalLink" type="url" />
+            </div>
+            <div class="col-12 mb-3">
+              <label class="form-label" for="universityModalLink">University Offer Letter<span class="text-danger">*</span></label>
+              <input class="form-control" id="universityModalLink" name="universityModalLink" type="url" />
+            </div>
+            <div class="col-12 mb-3">
+              <label class="form-label" for="gDriveModalLink">Google Drive Link<span class="text-danger">*</span></label>
+              <input class="form-control" id="gDriveModalLink" name="gDriveModalLink" type="url" />
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="linksModalCloseBtn">Cancel</button>
+              <button class="btn btn-warning" type="submit">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Links Modal -->
 
   <!-- Update Student Modal -->
   <div class="modal fade" id="update-details-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
