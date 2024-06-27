@@ -1,4 +1,4 @@
-import { readData, writeData, getDates } from "./helpers.js";
+import { readData, writeData, getDates, readDateFilters } from "./helpers.js";
 
 let universities = {}, programs = {}
 const twgDatasChoices = new Choices(document.getElementById("twgProgramDropdown"),
@@ -84,7 +84,7 @@ async function initialise() {
             twgUniversity.push(value)
         }
 
-        const dateRange = datepickerInstance.selectedDates.map(date => date.toISOString().split('T')[0]);
+        const dateRange = readDateFilters(datepickerInstance);
     
         const inputParams = {
             twgDatas, twgUniversity, twgModule, startDate: dateRange[0], endDate: dateRange[1]

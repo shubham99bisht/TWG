@@ -1,4 +1,4 @@
-import { readData, getDates } from "./helpers.js";
+import { readData, getDates, getRemainingCredits, readDateFilters } from "./helpers.js";
 
 let universities = {}, programs = {}, studyStages = {};
 const twgDatasChoices = new Choices( document.getElementById("twgProgramDropdown"),
@@ -69,7 +69,7 @@ async function initialise() {
             studyStage.push(value)
         }
 
-        const dateRange = datepickerInstance.selectedDates.map(date => date.toISOString().split('T')[0]);
+        const dateRange = readDateFilters(datepickerInstance);
     
         const inputParams = {
             enrollStatus, studyStageStatus, twgProgram,  studyStage, startDate: dateRange[0], endDate: dateRange[1]
@@ -189,26 +189,4 @@ window.onload = async () => {
     await fetchData()
     //listAllEnroll()
     initialise()
-}
-
-function getRemainingCredits(
-  feePayable = {},
-  learningPlan = {},
-  totalFeePayable = 0,
-  totalModules = 0,
-) {
-    let totalPaid = 0, remainingCredits = 0, modulesCount = 0;
-    totalFeePayable = Number(totalFeePayable);
-    totalModules = Number(totalModules);
-
-    for (let key in learningPlan) {
-        modulesCount += parseInt(learningPlan[key]['count']) || 0 ;
-    }
-
-    for (let key in feePayable) {
-        totalPaid += parseFloat(feePayable[key]['amount']) || 0;
-    }
-
-    remainingCredits = totalPaid - (totalFeePayable/(totalModules * modulesCount));
-    return remainingCredits.toFixed(2);
 }

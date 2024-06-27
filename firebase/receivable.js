@@ -1,4 +1,4 @@
-import { getDates, readData, searchReports } from "./helpers.js";
+import { getDates, readData, readDateFilters, searchReports } from "./helpers.js";
 
 let students = {}, universities = {}, agents = {}, programs = {}, studyStages = {}, currency = {}
 
@@ -19,7 +19,7 @@ function initialise() {
       const value = statusDropdown.options[i]?.value;
       status.push(value)
     }
-    const dateRange = datepickerInstance.selectedDates.map(date => date.toISOString().split('T')[0]);
+    const dateRange = readDateFilters(datepickerInstance);
   
     // Perform the search with the selected values (you can call your search function here)
     console.log('Status:', status);
