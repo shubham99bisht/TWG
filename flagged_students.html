@@ -58,7 +58,7 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->     
 
-        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","university","program","source"],"page":50,"pagination":true}'>
+        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","flaggedFor","flagNotes","resNotes","flagger"],"page":50,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
@@ -88,13 +88,12 @@
               <table class="table table-sm table-striped fs--1 mb-0 overflow-hidden">
                 <thead class="bg-200 text-900">
                   <tr>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="id">Flagged</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="id">#</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Name</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap">Flagged For</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap">Flag Notes</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap">Resolution Notes</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap">Flagged By</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flaggedFor">Flagged For</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flagNotes">Flag Notes</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="resNotes">Resolution Notes</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flagger">Flagged By</th>
                     <th class="align-middle no-sort"></th>
                   </tr>
                 </thead>

@@ -211,10 +211,10 @@ async function removeStudyPlan(id) {
     if (confirm("Confirm delete study plan?")) {
         try {
             if (await deleteData(`students/${studentId}/studyPlan/${id}`)) {
-                successMessage('Payment deleted successfully!').then(() => location.reload())
+                successMessage('Study plan successfully!').then(() => location.reload())
             } else { throw "Not deleted" }
         } catch (e) {
-            failMessage('Failed to delete Payment')
+            failMessage('Failed to delete study plan')
             console.error(e)
         }
     }
@@ -401,26 +401,24 @@ flagForm.addEventListener('submit', async function (e) {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  const { flaggedBy, flaggedFor, flaggedDate, flagNotes, resolutionNotes } =
+  const { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes, resolutionNotes } =
     data;
 
-  if (!flaggedBy?.trim() ||!flaggedFor?.trim() ||!flaggedDate?.trim() ||!flagNotes?.trim() ||!resolutionNotes?.trim()) {
+  if (!flaggerId?.trim() || !flaggerName?.trim() ||!flaggedFor?.trim() ||!flaggedDate?.trim() ||!flagNotes?.trim() ||!resolutionNotes?.trim()) {
     failMessage('Please provided all details!');
     return;
   }
 
   try {
-    let dbPath = `students/${studentId}/`;
+    const dbPath = `students/${studentId}/`;
     await updateData(dbPath, {
-      flagInfo: { flaggedBy, flaggedFor, flaggedDate, flagNotes, resolutionNotes },
+      flagInfo: { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes, resolutionNotes },
+      flagged: true,
     });
 
-    dbPath = `students/${studentId}/`;
-    await updateData(dbPath, { flagged: true });
-
     document.getElementById('closeFlagModal').click();
-    document.getElementById('remove-flag-btn').classList.remove("visually-hidden");
-    document.getElementById('add-flag-btn').classList.add("visually-hidden");
+    document.getElementById('remove-flag-btn').classList.remove("d-none");
+    document.getElementById('add-flag-btn').classList.add("d-none");
     successMessage('Student flagged successfully!');
   } catch (error) {
     console.log(error);
@@ -433,14 +431,12 @@ removeFlagBtn.addEventListener('click', async function () {
   const isConfirm = confirm('Are you sure to remove the flag?');
   if (isConfirm) {
     try {
-      let dbPath = `students/${studentId}/`;
-      await updateData(dbPath, { flagInfo: {} });
-      dbPath = `students/${studentId}/`;
-      await updateData(dbPath, { flagged: false });
+      const dbPath = `students/${studentId}/`;
+      await updateData(dbPath, { flagInfo: {}, flagged: false });
 
       successMessage('Flagged removed successfully!');
-      document.getElementById('remove-flag-btn').classList.add("visually-hidden");
-      document.getElementById('add-flag-btn').classList.remove("visually-hidden");
+      document.getElementById('remove-flag-btn').classList.add("d-none");
+      document.getElementById('add-flag-btn').classList.remove("d-none");
     } catch (error) {
       console.log(error);
       failMessage('Failed to remove flag!');

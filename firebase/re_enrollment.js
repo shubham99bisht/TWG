@@ -1,4 +1,4 @@
-import { readData, getDates } from './helpers.js';
+import { readData, getDates, getRemainingCredits, readDateFilters } from './helpers.js';
 
 const programsData = {};
 
@@ -19,9 +19,7 @@ async function initialise() {
 
   const searchBtn = document.getElementById('searchButton');
   searchBtn.addEventListener('click', async function () {
-    const dateRange = datepickerInstance.selectedDates.map(
-      (date) => date.toISOString().split('T')[0]
-    );
+    const dateRange = readDateFilters(datepickerInstance);
 
     const inputParams = {
       filterStartDate: dateRange[0],
@@ -36,18 +34,6 @@ async function initialise() {
 async function listAllEnroll(inputParams) {
   const tableBody = document.getElementById('table-payable-body');
   let { filterStartDate, filterEndDate } = inputParams;
-
-  if (filterStartDate) {
-    filterStartDate = new Date(filterStartDate);
-  }
-  if (filterEndDate) {
-    filterEndDate = new Date(filterEndDate);
-  }
-
-  if (filterStartDate == 'Invalid Date' || filterEndDate == 'Invalid Date') {
-    failMessage('Invalid start/end date');
-    return;
-  }
 
   if (!tableBody) return;
   tableBody.innerHTML = '';
@@ -73,14 +59,24 @@ async function listAllEnroll(inputParams) {
       const student = students[id];
       const { studentName, studentEmail, program_type, enrollmentStatus } =
         student;
+      
       const learningPlans = student?.learningPlan || {};
+      const feePayable = student?.feePayable || {};
+      const totalFeePayable = Number(student?.totalFeePayable) || 0;
+      const totalModules = Number(student?.totalModules) || 0;
+      
+      const remainingCredits = getRemainingCredits(feePayable, learningPlans, totalFeePayable, totalModules)
+
       for (let key in learningPlans) {
         const learningPlan = learningPlans[key];
         const { name: term_number, startDate } = learningPlan;
 
-        const startDate1 = new Date(startDate);
-        if (startDate1 < filterStartDate || startDate1 > filterEndDate)
+        if (
+          (filterStartDate && startDate < filterStartDate) ||
+          (filterEndDate && startDate > filterEndDate)
+        ) {
           continue;
+        }
 
         const row = schema.format(
           id,
@@ -91,7 +87,7 @@ async function listAllEnroll(inputParams) {
           term_number,
           startDate,
           enrollmentStatus,
-          20
+          remainingCredits
         );
 
         if (tableBody) tableBody.innerHTML += row;
@@ -103,7 +99,7 @@ async function listAllEnroll(inputParams) {
           term_number,
           startDate,
           enrollmentStatus,
-          20
+          remainingCredits
         );
       }
     }

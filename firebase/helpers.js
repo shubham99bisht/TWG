@@ -227,3 +227,62 @@ export function getDates() {
   
   return [formatDate(startOfYear), formatDate(currentDate)];
 }
+
+// Function to read flagged students
+export async function readFlaggedStudents() {
+  const dbRef = ref(db, 'students');
+  const flaggedStudentsQuery = query(dbRef, orderByChild('flagged'), equalTo(true))
+  try {
+    const snapshot = await get(flaggedStudentsQuery);
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error reading data:", error);
+    return null;
+  }
+}
+
+export function getRemainingCredits(
+  feePayable = {},
+  learningPlan = {},
+  totalFeePayable = 0,
+  totalModules = 0
+) {
+  let totalPaid = 0,
+    remainingCredits = 0,
+    modulesCount = 0;
+  totalFeePayable = Number(totalFeePayable);
+  totalModules = Number(totalModules);
+
+  for (let key in learningPlan) {
+    const modules = learningPlan[key]?.['modules'];
+    for (let moduleKey in modules) {
+      if (modules?.[moduleKey]?.['name']) modulesCount++;
+    }
+  }
+
+  for (let key in feePayable) {
+    totalPaid += parseFloat(feePayable[key]?.['amount']) || 0;
+  }
+
+  remainingCredits =
+    totalPaid - (totalFeePayable / totalModules) * modulesCount;
+
+  if (isNaN(remainingCredits)) return "-";
+
+  return remainingCredits.toFixed(2);
+}
+
+
+export function readDateFilters(datepickerInstance) {
+  return datepickerInstance.selectedDates.map((date) => {
+    let month = date.getMonth() + 1;
+    if (month < 10) month = '0' + month;
+    let dateVal = date.getDate();
+    if (dateVal < 10) dateVal = '0' + dateVal;
+    return `${date.getFullYear()}-${month}-${dateVal}`;
+  });
+}

@@ -1,4 +1,4 @@
-import { readData, deleteData, fetchPaymentDetails, updateData, writeDataWithNewId } from "./helpers.js";
+import { readData, deleteData, fetchPaymentDetails, updateData, writeDataWithNewId, getRemainingCredits } from "./helpers.js";
 
 // Global Variables
 let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, studyStages = {}, modules = {}
@@ -171,7 +171,7 @@ function readStudentDetails(id) {
 
       loadStudyPlan(result?.studyPlan)
       loadLearningPlan(result?.learningPlan)
-      loadFeePayable(result?.learningPlan || [], result?.feePayable || 0, result?.totalFeePayable || 0, result?.totalModules || 0)
+      loadFeePayable(result?.learningPlan || {}, result?.feePayable || {}, result?.totalFeePayable || 0, result?.totalModules || 0)
 
       document.getElementById('overallGradeTWG').value = result?.overallGradeTWG || '';
 
@@ -267,7 +267,7 @@ function loadLearningPlan(learningPlan) {
         </div>
         <div class="col-lg-3 col-12 mb-3">
           <label class="form-label" for="overallGrade">Overall Grade<span class="text-danger">*</span></label>
-          <input class="form-control overallGrade" name="overallGrade" type="text" value="${data.overallGrade}" disabled />
+          <input class="form-control overallGrade" name="overallGrade" type="text" value="${data?.overallGrade || ''}" disabled />
         </div>
       </div>
 
@@ -302,13 +302,9 @@ function loadLearningPlan(learningPlan) {
   }
 
   if (modulesCount === totalModulesCount) {
-    document.getElementById('modules-check-badge').innerText += ' True';
-    document.getElementById('modules-check-badge').classList.add('btn-outline-success')
-  } else {
-    document.getElementById('modules-check-badge').innerText += ' False';
-    document.getElementById('modules-check-badge').classList.add('btn-outline-danger')
+    document.getElementById('modulesCheckSuccessBadge').classList.remove("d-none");
+    document.getElementById('modulesCheckDangerBadge').classList.add("d-none");
   }
-
 }
 
 function loadFeePayable(learningPlan, feePayable, totalFeePayable=0, totalModules=0) {
@@ -316,11 +312,8 @@ function loadFeePayable(learningPlan, feePayable, totalFeePayable=0, totalModule
   const table = document.getElementById('feePayableTable')
 
   let totalPaid = 0
-  let moduleCount = 0
   totalFeePayable = Number(totalFeePayable)
   totalModules = Number(totalModules)
-
-  learningPlan?.forEach(lp => moduleCount += lp?.modules?.length || 0)
 
   const keys = Object.keys(feePayable)
   for (let i = 0; i < keys.length; i++) {
@@ -344,8 +337,7 @@ function loadFeePayable(learningPlan, feePayable, totalFeePayable=0, totalModule
   }
 
   // [Total fee paid] - [(Total Fee Payable for hybrid) / (Total Modules enrolled for in Hybrid Component) * (# of modules where “name of module” is defined)]
-  const studyCredits = totalPaid - (totalFeePayable/(totalModules * moduleCount))
-
+ const studyCredits = getRemainingCredits(feePayable, learningPlan, totalFeePayable, totalModules);
 
   document.getElementById('totalFeePayable').value = totalFeePayable
   document.getElementById('totalFeePaid').value = totalPaid
@@ -354,7 +346,7 @@ function loadFeePayable(learningPlan, feePayable, totalFeePayable=0, totalModule
   document.getElementById('topTotalFeePayable').value = totalFeePayable
   document.getElementById('topTotalFeePaid').value = totalPaid
   document.getElementById('topTotalModules').value = totalModules
-  document.getElementById('topCreditsRemaining').value = studyCredits.toFixed(2);
+  document.getElementById('topCreditsRemaining').value = studyCredits;
 }
 
 async function readPaymentDetails(id) {
