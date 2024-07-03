@@ -58,7 +58,50 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->     
 
-        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","flaggedFor","flagNotes","resNotes","flagger"],"page":50,"pagination":true}'>
+        <button class="d-none" id="openUnflagModalBtn" data-bs-toggle="modal" data-bs-target="#unflag-student-modal">Open Unflag Modal</button>
+        <!-- Unflag Student Modal -->
+        <div class="modal fade" id="unflag-student-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+            <div class="modal-content position-relative">
+              <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+                <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body p-0">
+                <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+                  <h5 class="mb-1 modal-title">Unflag Student</h5>
+                </div>
+                <div class="p-4 pb-0">
+                  <form class="row" id="studentUnflagForm">
+                    <input type="text" name="unflaggerId" id="unflaggerId" hidden />
+
+                    <div class="col-12 mb-3">
+                      <label class="form-label" for="studentId">Student Id<span class="text-danger">*</span></label>
+                      <input class="form-control" id="studentId" name="studentId" type="text" readonly />
+                    </div>
+
+                    <div class="col-12 mb-3">
+                      <label class="form-label" for="unflaggerName">Unflagged By<span class="text-danger">*</span></label>
+                      <input class="form-control" id="unflaggerName" name="unflaggerName" type="text" readonly />
+                    </div>
+
+                    <div class="col-12 mb-3">
+                      <label class="form-label" for="resolutionNotes">Resolution Notes<span class="text-danger">*</span></label>
+                      <textarea class="form-control" id="resolutionNotes" rows="3" name="resolutionNotes" type="text" placeholder="Add resolution notes" required="required"></textarea>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="closeUnflagModal">Cancel</button>
+                      <button class="btn btn-warning" type="submit" id="unflagSubmitBtn">Unflag Student</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Unflag Student Modal Ends -->
+
+        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","flaggedFor","flagNotes","flagger"],"page":50,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
@@ -92,7 +135,6 @@
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Name</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flaggedFor">Flagged For</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flagNotes">Flag Notes</th>
-                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="resNotes">Resolution Notes</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flagger">Flagged By</th>
                     <th class="align-middle no-sort"></th>
                   </tr>

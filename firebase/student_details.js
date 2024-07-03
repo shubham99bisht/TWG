@@ -394,6 +394,9 @@ twgTermEditModal.addEventListener('show.bs.modal', event => {
 document.getElementById('flaggerId').value = localStorage.getItem('userId');
 document.getElementById('flaggerName').value = localStorage.getItem('userName');
 
+document.getElementById('unflaggerId').value = localStorage.getItem('userId');
+document.getElementById('unflaggerName').value = localStorage.getItem('userName');
+
 const flagForm = document.getElementById('studentFlagForm');
 flagForm.addEventListener('submit', async function (e) {
   e.preventDefault();
@@ -401,20 +404,16 @@ flagForm.addEventListener('submit', async function (e) {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  const { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes, resolutionNotes } =
-    data;
+  const { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes } = data;
 
-  if (!flaggerId?.trim() || !flaggerName?.trim() ||!flaggedFor?.trim() ||!flaggedDate?.trim() ||!flagNotes?.trim() ||!resolutionNotes?.trim()) {
+  if (!flaggerId?.trim() || !flaggerName?.trim() ||!flaggedFor?.trim() ||!flaggedDate?.trim() ||!flagNotes?.trim()) {
     failMessage('Please provided all details!');
     return;
   }
 
   try {
     const dbPath = `students/${studentId}/`;
-    await updateData(dbPath, {
-      flagInfo: { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes, resolutionNotes },
-      flagged: true,
-    });
+    await updateData(dbPath, { flagged: true, flagInfo: { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes } });
 
     document.getElementById('closeFlagModal').click();
     document.getElementById('remove-flag-btn').classList.remove("d-none");
@@ -426,20 +425,31 @@ flagForm.addEventListener('submit', async function (e) {
   }
 });
 
-const removeFlagBtn = document.getElementById('remove-flag-btn');
-removeFlagBtn.addEventListener('click', async function () {
-  const isConfirm = confirm('Are you sure to remove the flag?');
-  if (isConfirm) {
-    try {
-      const dbPath = `students/${studentId}/`;
-      await updateData(dbPath, { flagInfo: {}, flagged: false });
+const unflagStudentForm = document.getElementById('studentUnflagForm');
+unflagStudentForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  try {
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    const { unflaggerId, unflaggerName, resolutionNotes } = data;
 
-      successMessage('Flagged removed successfully!');
-      document.getElementById('remove-flag-btn').classList.add("d-none");
-      document.getElementById('add-flag-btn').classList.remove("d-none");
-    } catch (error) {
-      console.log(error);
-      failMessage('Failed to remove flag!');
+    if (!unflaggerId?.trim() || !unflaggerName?.trim() ||!resolutionNotes?.trim()) {
+      failMessage('Please provided all details!');
+      return;
     }
+
+    let dbPath = `students/${studentId}/`;
+    await updateData(dbPath, { flagged: false });
+
+    dbPath = `students/${studentId}/flagInfo`;
+    await updateData(dbPath, { unflaggerId, unflaggerName, resolutionNotes });
+
+    successMessage('Flagged removed successfully!');
+    document.getElementById('closeUnflagModal').click();
+    document.getElementById('remove-flag-btn').classList.add('d-none');
+    document.getElementById('add-flag-btn').classList.remove('d-none');
+  } catch (error) {
+    console.log(error);
+    failMessage('Failed to remove flag!');
   }
 });

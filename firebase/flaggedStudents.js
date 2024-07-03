@@ -1,4 +1,4 @@
-import { readData, updateData, readFlaggedStudents } from './helpers.js';
+import { updateData, readFlaggedStudents } from './helpers.js';
 
 window.onload = async () => {
   processingMessage('Fetching flagged students...');
@@ -30,7 +30,6 @@ async function listFlaggedStudents() {
         </td>
         <td class="flaggedFor align-middle white-space-nowrap py-2 text-capitalize">{}</td>
         <td class="flagNotes align-middle py-2">{}</td>
-        <td class="resNotes align-middle py-2">{}</td>
         <td class="flagger align-middle py-2">{}</td>
         <td class="align-middle white-space-nowrap py-2 text-end">
             <button class="btn btn-sm btn-danger unflagBtn" data-id={}>Unflag</button>
@@ -38,19 +37,19 @@ async function listFlaggedStudents() {
       </tr>`;
 
     let csvContent =
-      'Student,Email,Flagged For,Flag Notes,Resolution Notes, Flagged By\r\n';
-    const csvRow = '{},{},{},{},{},{}\r\n';
+      'Student,Email,Flagged For,Flag Notes,Flagged By\r\n';
+    const csvRow = '{},{},{},{},{}\r\n';
 
     for (let id in students) {
       const student = students[id];
       const { studentName, studentEmail, flagged, flagInfo } = student;
       if (!flagged) continue;
 
-      const { flaggedFor, flagNotes, resolutionNotes, flaggerName } = flagInfo;
+      const { flaggedFor, flagNotes, flaggerName } = flagInfo;
 
-      const row = schema.format( id, id, studentName, studentEmail, flaggedFor, flagNotes, resolutionNotes, flaggerName, id);
+      const row = schema.format( id, id, studentName, studentEmail, flaggedFor, flagNotes, flaggerName, id);
       if (tableBody) tableBody.innerHTML += row;
-      csvContent += csvRow.format( studentName, studentEmail, flaggedFor, flagNotes, resolutionNotes, flaggerName);
+      csvContent += csvRow.format( studentName, studentEmail, flaggedFor, flagNotes, flaggerName);
     }
 
     window.csvContent = csvContent;
@@ -58,7 +57,7 @@ async function listFlaggedStudents() {
 
     const unflagButtons = document.getElementsByClassName('unflagBtn');
     for (let button of unflagButtons) {
-      button.addEventListener('click', unflagStudent);
+      button.addEventListener('click', openUnflagModal);
     }
   } catch (error) {
     console.error('Error reading students:', error);
@@ -74,21 +73,40 @@ window.listFlaggedStudents = listFlaggedStudents;
  * --------------------------------------------------
  */
 
-async function unflagStudent(e) {
-  const isConfirm = confirm('Are you sure to remove the flag?');
+document.getElementById('unflaggerId').value = localStorage.getItem('userId');
+document.getElementById('unflaggerName').value = localStorage.getItem('userName');
+
+async function openUnflagModal(e) {
   const studentId = e.target.getAttribute('data-id');
-  if (isConfirm) {
-    processingMessage("Unflagging student...");
-    try {
-      const dbPath = `students/${studentId}/`;
-      await updateData(dbPath, { flagInfo: {}, flagged: false });
-      await listFlaggedStudents();
-      successMessage("Flag removed successfully");
-    } catch (error) {
-      console.log(error);
-      failMessage('Failed to remove flag!');
-    }
-  } else {
-    e.target.checked = true;
-  }
+  document.getElementById('studentId').value = studentId;
+  document.getElementById('openUnflagModalBtn').click();
 }
+
+const unflagStudentForm = document.getElementById('studentUnflagForm');
+unflagStudentForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  try {
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const { studentId, unflaggerId, unflaggerName, resolutionNotes } = data;
+
+    if (!studentId?.trim() || !unflaggerId?.trim() || !unflaggerName?.trim() ||!resolutionNotes?.trim()) {
+      failMessage('Please provided all details!');
+      return;
+    }
+
+    let dbPath = `students/${studentId}/`;
+    await updateData(dbPath, { flagged: false });
+
+    dbPath = `students/${studentId}/flagInfo`;
+    await updateData(dbPath, { unflaggerId, unflaggerName, resolutionNotes });
+
+    successMessage('Flagged removed successfully!');
+    document.getElementById('closeUnflagModal').click();
+    await listFlaggedStudents();
+  } catch (error) {
+    console.log(error);
+    failMessage('Failed to remove flag!');
+  }
+});

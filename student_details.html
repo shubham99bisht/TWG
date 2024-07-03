@@ -66,7 +66,7 @@
                 <h5 class="mb-0" id="name">Student Name</h5>
               </div>
               <div class="col-auto d-none" id="add-flag-btn"><a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#flag-student-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Flag Student</a></div>
-              <div class="col-auto d-none" id="remove-flag-btn"><a class="btn btn-outline-danger btn-sm"><span class="fas fa-pencil-alt fs--2 me-1"></span>Remove Flag</a></div>              
+              <div class="col-auto d-none" id="remove-flag-btn"><a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#unflag-student-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Remove Flag</a></div>
               <div class="col-auto"><a class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#update-details-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
             </div>
           </div>
@@ -236,26 +236,30 @@
               <span class="badge py-2 text-danger border border-danger" id="modulesCheckDangerBadge">Modules Check: False</span>
             </div>
             <div class="row">
-              <div class="col-lg-4 col-12 mb-3">
-                <label class="form-label" for="overallGradeTWG">Overall Grade in TWG<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="overallGradeTWG" name="overallGradeTWG" type="text" readonly />
-              </div>
-              <div class="col-lg-4 col-12 mb-3">
+              <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="totalFeePayable">Total Fee Payable<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="topTotalFeePayable" name="totalFeePayable" type="number" readonly/>
               </div>  
-              <div class="col-lg-4 col-12 mb-3">
+              <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="totalFeePaid">Total Fee Paid<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="topTotalFeePaid" name="totalFeePaid" type="number" readonly />
               </div> 
-              <div class="col-lg-4 col-12 mb-3">
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="topTotalModules">Total Modules<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="topTotalModules" name="totalModules" type="number" readonly />
-              </div>  
-              <div class="col-lg-4 col-12 mb-3">
+              </div>
+              <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label text-truncate" for="topCreditsRemaining">Remaining Study Credits<span class="text-danger">*</span></label>
                 <input class="form-control form-control-sm" id="topCreditsRemaining" name="creditsRemaining" type="number" readonly />
-              </div>                                                     
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6 col-12 mb-3">
+                <label class="form-label" for="overallGradeTWG">Overall Grade in TWG</label>
+                <input class="form-control form-control-sm" id="overallGradeTWG" name="overallGradeTWG" type="text" readonly />
+              </div>
             </div>
             <div class="mb-3" id="learningPlan">
               <!-- Dynamically add terms here -->
@@ -1105,7 +1109,43 @@
   </div>
   <!-- Payment status  Ends --> 
 
-  <!-- Update Student Modal -->
+  <!-- Unflag Student Modal -->
+  <div class="modal fade" id="unflag-student-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Unflag Student</h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form class="row" id="studentUnflagForm">
+              <input type="text" name="unflaggerId" id="unflaggerId" hidden />
+              <div class="col-12 mb-3">
+                <label class="form-label" for="unflaggerName">Unflagged By<span class="text-danger">*</span></label>
+                <input class="form-control" id="unflaggerName" name="unflaggerName" type="text" readonly />
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="resolutionNotes">Resolution Notes<span class="text-danger">*</span></label>
+                <textarea class="form-control" id="resolutionNotes" rows="3" name="resolutionNotes" type="text" placeholder="Add resolution notes" required="required"></textarea>
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="closeUnflagModal">Cancel</button>
+                <button class="btn btn-warning" type="submit" id="unflagSubmitBtn">Unflag Student</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Unflag Student Modal Ends -->
+
+  <!-- Flag Student Modal -->
   <div class="modal fade" id="flag-student-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
       <div class="modal-content position-relative">
@@ -1127,9 +1167,10 @@
               <div class="col-6 mb-3">
                 <label class="form-label" for="flaggedFor">Flagged For<span class="text-danger">*</span></label>
                 <select class="form-select" id="flaggedFor" name="flaggedFor" required>
-                  <option value="finance">Finance</option>
-                  <option value="admin">Admin</option>
-                  <option value="support">Support</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Agent">Agent</option>
+                  <option value="Student-Support">Student Support</option>
+                  <option value="Admin">Admin</option>
                 </select>
               </div>
 
@@ -1143,10 +1184,10 @@
                 <textarea class="form-control" id="flagNotes" rows="3" name="flagNotes" type="text" placeholder="Add flag notes" required="required"></textarea>
               </div>
 
-              <div class="col-12 mb-3">
+              <!-- <div class="col-12 mb-3">
                 <label class="form-label" for="resolutionNotes">Resolution Notes<span class="text-danger">*</span></label>
                 <textarea class="form-control" id="resolutionNotes" rows="3" name="resolutionNotes" type="text" placeholder="Add resolution notes" required="required"></textarea>
-              </div> 
+              </div>  -->
 
               <div class="modal-footer">
                 <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="closeFlagModal">Cancel</button>
@@ -1158,7 +1199,7 @@
       </div>
     </div>
   </div>
-  <!-- Update Student Modal Ends -->
+  <!-- Flag Student Modal Ends -->
 
 
   <!--    JavaScripts-->

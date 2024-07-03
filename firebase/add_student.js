@@ -57,7 +57,7 @@ async function createStudent() {
     !program_type || !university || !source ||
     !twgOfferLink || !universityOfferLink || !gDriveLink ||
     !universityDegree || !overseasDate ||
-    !totalFeePayable || !totalModules || !overallGradeTWG
+    !totalFeePayable || !totalModules
   ) { failMessage("Please provide all data"); return }
 
   // Verifying old entries
@@ -160,7 +160,7 @@ function updateUniversityList(pId) {
 
 function updateDegreesOffered() {
   const uid = universitySelect.value
-  universityDegree.innerHTML = '<option selected disabled>Select stage</option>'
+  universityDegree.innerHTML = '<option selected disabled>Select Degree</option>'
   const degrees = universities[uid].degrees || []
   console.log(degrees)
   if (!degrees || !degrees.length) return
