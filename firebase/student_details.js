@@ -428,6 +428,7 @@ flagForm.addEventListener('submit', async function (e) {
 const unflagStudentForm = document.getElementById('studentUnflagForm');
 unflagStudentForm.addEventListener('submit', async function (e) {
   e.preventDefault();
+  processingMessage("Removing flag...");
   try {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
