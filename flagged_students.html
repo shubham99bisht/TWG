@@ -12,6 +12,7 @@
   <script src="./assets/js/config.js"></script>
   <script src="./vendors/simplebar/simplebar.min.js"></script>
   <!-- Stylesheets-->
+  <link href="./vendors/choices/choices.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
   <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
@@ -72,7 +73,8 @@
                 </div>
                 <div class="p-4 pb-0">
                   <form class="row" id="studentUnflagForm">
-                    <input type="text" name="unflaggerId" id="unflaggerId" hidden />
+                    <input type="text" name="resolvedById" id="resolvedById" hidden />
+                    <input type="text" name="flagId" id="flagId" hidden />
 
                     <div class="col-12 mb-3">
                       <label class="form-label" for="studentId">Student Id<span class="text-danger">*</span></label>
@@ -80,8 +82,8 @@
                     </div>
 
                     <div class="col-12 mb-3">
-                      <label class="form-label" for="unflaggerName">Unflagged By<span class="text-danger">*</span></label>
-                      <input class="form-control" id="unflaggerName" name="unflaggerName" type="text" readonly />
+                      <label class="form-label" for="resolvedByName">Resolved By<span class="text-danger">*</span></label>
+                      <input class="form-control" id="resolvedByName" name="resolvedByName" type="text" readonly />
                     </div>
 
                     <div class="col-12 mb-3">
@@ -101,7 +103,7 @@
         </div>
         <!-- Unflag Student Modal Ends -->
 
-        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","flaggedFor","flagNotes","flagger"],"page":50,"pagination":true}'>
+        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","flaggedFor","flagNotes","flagger","resNotes","resolver","status"],"page":50,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
@@ -118,6 +120,21 @@
             <div class="row">
               <div class="col-12">
                 <form>
+                  <div class="my-2 row">
+                    <div class="col-md-3 mb-3">
+                      <label for="flagStatusDropdown">Flag Status</label>
+                      <select class="form-select form-select-sm js-choice" id="flagStatusDropdown" size="1" name="flagStatus" data-options='{"removeItemButton":true}'>
+                      </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="studentListDropdown">Student</label>
+                      <select class="form-select form-select-sm js-choice" id="studentListDropdown" size="1" name="stdId" data-options='{"removeItemButton":true}'>
+                      </select>
+                    </div>
+                    <div class="col-md-3 mb-3 align-self-end">
+                      <button class="btn btn-primary">Search</button>
+                    </div>
+                  </div>
                   <div class="input-group">
                     <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Students" aria-label="search" />
                     <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
@@ -136,7 +153,9 @@
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flaggedFor">Flagged For</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flagNotes">Flag Notes</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="flagger">Flagged By</th>
-                    <th class="align-middle no-sort"></th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="resNotes">Res. Notes</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="resolver">Resolved By</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="status">Status</th>
                   </tr>
                 </thead>
                 <tbody class="list" id="table-students-body">
@@ -171,6 +190,7 @@
   <script src="./vendors/anchorjs/anchor.min.js"></script>
   <script src="./vendors/is/is.min.js"></script>
   <script src="./vendors/chart/chart.min.js"></script>
+  <script src="./vendors/choices/choices.min.js"></script>
   <script src="./vendors/countup/countUp.umd.js"></script>
   <script src="./vendors/echarts/echarts.min.js"></script>
   <script src="./vendors/dayjs/dayjs.min.js"></script>
