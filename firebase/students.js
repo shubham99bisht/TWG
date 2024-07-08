@@ -175,12 +175,7 @@ function readStudentDetails(id) {
 
       document.getElementById('overallGradeTWG').value = result?.overallGradeTWG || '';
 
-      // Flag Status
-      if (result?.flagged) {
-        document.getElementById("remove-flag-btn").classList.remove("d-none");
-      } else {
-        document.getElementById("add-flag-btn").classList.remove("d-none");
-      }      
+      document.getElementById('flagPageLink').setAttribute('href', `flagged_students.html?stdId=${id}`)
 
       closeSwal()
     })

@@ -1,4 +1,35 @@
-import { readData, updateData, readFlaggedStudents } from './helpers.js';
+import { updateData, readData } from './helpers.js';
+
+const studentChoiceElement = new Choices(
+  document.getElementById('studentListDropdown'),
+  {
+    removeItems: true,
+    removeItemButton: true,
+  }
+);
+
+const flagChoiceElement = new Choices(
+  document.getElementById('flagStatusDropdown'),
+  {
+    removeItems: true,
+    removeItemButton: true,
+  }
+);
+
+const params = new URLSearchParams(window.location.search);
+const selectedStdId = params.get('stdId');
+const selectedFlag = params.get('flagStatus');
+
+const flagOptions = [
+  { value: 'all', label: 'All', selected: true },
+  { value: 'flagged', label: 'Flagged', selected: selectedFlag == 'flagged' },
+  {
+    value: 'resolved',
+    label: 'Resolved',
+    selected: selectedFlag == 'resolved',
+  },
+];
+flagChoiceElement.setChoices(flagOptions);
 
 window.onload = async () => {
   processingMessage('Fetching flagged students...');
@@ -13,11 +44,12 @@ window.onload = async () => {
  */
 
 async function listFlaggedStudents() {
+  /* Fetches & renders flagged students, Sets students options */
   const tableBody = document.getElementById('table-students-body');
   if (!tableBody) return;
-
   try {
-    const students = await readFlaggedStudents();
+    const students = await readData('students');
+    const studentsOptions = [{ value: 'all', label: 'All', selected: true }];
 
     tableBody.innerHTML = '';
     const schema = `<tr class="btn-reveal-trigger">
@@ -30,35 +62,60 @@ async function listFlaggedStudents() {
         </td>
         <td class="flaggedFor align-middle white-space-nowrap py-2 text-capitalize">{}</td>
         <td class="flagNotes align-middle py-2">{}</td>
-        <td class="resNotes align-middle py-2">{}</td>
         <td class="flagger align-middle py-2">{}</td>
-        <td class="align-middle white-space-nowrap py-2 text-end">
-            <button class="btn btn-sm btn-danger unflagBtn" data-id={}>Unflag</button>
+        <td class="resNotes align-middle py-2">{}</td>
+        <td class="resolver align-middle py-2">{}</td>
+        <td class="status align-middle white-space-nowrap">
+            <button class="{}" data-stdId={} data-flagId={}>{}</button>
         </td>
       </tr>`;
 
     let csvContent =
-      'Student,Email,Flagged For,Flag Notes,Resolution Notes, Flagged By\r\n';
-    const csvRow = '{},{},{},{},{},{}\r\n';
+      'Student,Email,Flagged For,Flag Notes,Flagged By,Resolution Notes,Resolved By\r\n';
+    const csvRow = '{},{},{},{},{},{},{}\r\n';
 
-    for (let id in students) {
-      const student = students[id];
-      const { studentName, studentEmail, flagged, flagInfo } = student;
-      if (!flagged) continue;
+    for (let stdId in students) {
+      const student = students[stdId];
+      const { studentName, studentEmail, flags } = student;
 
-      const { flaggedFor, flagNotes, resolutionNotes, flaggerName } = flagInfo;
+      studentsOptions.push({
+        value: stdId,
+        label: `${studentName} - ${stdId}`,
+        selected: stdId === selectedStdId,
+      });
 
-      const row = schema.format( id, id, studentName, studentEmail, flaggedFor, flagNotes, resolutionNotes, flaggerName, id);
-      if (tableBody) tableBody.innerHTML += row;
-      csvContent += csvRow.format( studentName, studentEmail, flaggedFor, flagNotes, resolutionNotes, flaggerName);
+      if (selectedStdId && selectedStdId !=='all' && stdId != selectedStdId)
+          continue;
+
+      if (!flags) continue;
+      for (let flagId in flags) {
+        const { flagged, flaggedFor, flagNotes, flaggerName, resolutionNotes, resolvedByName } = flags[flagId];
+        if (
+          (selectedFlag === 'flagged' && !flagged) ||
+          (selectedFlag === 'resolved' && flagged)
+        ) {
+          continue;
+        }
+
+        let row;
+        if (flagged) {
+          row = schema.format( stdId, stdId, studentName, studentEmail, flaggedFor, flagNotes, flaggerName, resolutionNotes || "-" , resolvedByName || "-" , "btn btn-sm btn-danger unflagBtn", stdId, flagId, "Unflag");
+        } else {
+          row = schema.format( stdId, stdId, studentName, studentEmail, flaggedFor, flagNotes, flaggerName, resolutionNotes || "-" , resolvedByName || "-" , "btn btn-sm btn-success pe-none", stdId, flagId, "Resolved");
+        }
+        if (tableBody) tableBody.innerHTML += row;
+
+        csvContent += csvRow.format( studentName, studentEmail, flaggedFor, flagNotes, flaggerName, resolutionNotes || "-", resolvedByName || "-");
+      }
     }
 
+    studentChoiceElement.setChoices(studentsOptions, 'value', 'label', true);
     window.csvContent = csvContent;
     listInit();
 
     const unflagButtons = document.getElementsByClassName('unflagBtn');
     for (let button of unflagButtons) {
-      button.addEventListener('click', unflagStudent);
+      button.addEventListener('click', openUnflagModal);
     }
   } catch (error) {
     console.error('Error reading students:', error);
@@ -74,21 +131,45 @@ window.listFlaggedStudents = listFlaggedStudents;
  * --------------------------------------------------
  */
 
-async function unflagStudent(e) {
-  const isConfirm = confirm('Are you sure to remove the flag?');
-  const studentId = e.target.getAttribute('data-id');
-  if (isConfirm) {
-    processingMessage("Unflagging student...");
-    try {
-      const dbPath = `students/${studentId}/`;
-      await updateData(dbPath, { flagInfo: {}, flagged: false });
-      await listFlaggedStudents();
-      successMessage("Flag removed successfully");
-    } catch (error) {
-      console.log(error);
-      failMessage('Failed to remove flag!');
-    }
-  } else {
-    e.target.checked = true;
-  }
+document.getElementById('resolvedById').value = localStorage.getItem('userId');
+document.getElementById('resolvedByName').value = localStorage.getItem('userName');
+
+async function openUnflagModal(e) {
+  const studentId = e.target.getAttribute('data-stdId');
+  const flagId = e.target.getAttribute('data-flagId');
+  document.getElementById('studentId').value = studentId;
+  document.getElementById('flagId').value = flagId;
+  document.getElementById('openUnflagModalBtn').click();
 }
+
+const unflagStudentForm = document.getElementById('studentUnflagForm');
+unflagStudentForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  processingMessage("Removing flag...");
+  try {
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const { flagId, studentId, resolvedById, resolvedByName, resolutionNotes } = data;
+
+    if (!studentId?.trim() || !resolvedById?.trim() || !resolvedByName?.trim() ||!resolutionNotes?.trim()) {
+      failMessage('Please provided all details!');
+      return;
+    }
+
+    const dbPath = `students/${studentId}/flags/${flagId}`;
+    await updateData(dbPath, {
+      flagged: false,
+      resolvedById,
+      resolvedByName,
+      resolutionNotes,
+    });
+
+    successMessage('Flagged removed successfully!');
+    document.getElementById('closeUnflagModal').click();
+    await listFlaggedStudents();
+  } catch (error) {
+    console.log(error);
+    failMessage('Failed to remove flag!');
+  }
+});

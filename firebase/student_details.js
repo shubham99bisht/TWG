@@ -401,45 +401,21 @@ flagForm.addEventListener('submit', async function (e) {
   const formData = new FormData(e.target);
   const data = Object.fromEntries(formData.entries());
 
-  const { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes, resolutionNotes } =
-    data;
+  const { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes } = data;
 
-  if (!flaggerId?.trim() || !flaggerName?.trim() ||!flaggedFor?.trim() ||!flaggedDate?.trim() ||!flagNotes?.trim() ||!resolutionNotes?.trim()) {
+  if (!flaggerId?.trim() || !flaggerName?.trim() ||!flaggedFor?.trim() ||!flaggedDate?.trim() ||!flagNotes?.trim()) {
     failMessage('Please provided all details!');
     return;
   }
 
   try {
-    const dbPath = `students/${studentId}/`;
-    await updateData(dbPath, {
-      flagInfo: { flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes, resolutionNotes },
-      flagged: true,
-    });
+    const dbPath = `students/${studentId}/flags`;
+    await writeDataWithNewId(dbPath, { flagged: true, flaggerId, flaggerName, flaggedFor, flaggedDate, flagNotes });
 
     document.getElementById('closeFlagModal').click();
-    document.getElementById('remove-flag-btn').classList.remove("d-none");
-    document.getElementById('add-flag-btn').classList.add("d-none");
     successMessage('Student flagged successfully!');
   } catch (error) {
     console.log(error);
     failMessage('Failed to flag student');
-  }
-});
-
-const removeFlagBtn = document.getElementById('remove-flag-btn');
-removeFlagBtn.addEventListener('click', async function () {
-  const isConfirm = confirm('Are you sure to remove the flag?');
-  if (isConfirm) {
-    try {
-      const dbPath = `students/${studentId}/`;
-      await updateData(dbPath, { flagInfo: {}, flagged: false });
-
-      successMessage('Flagged removed successfully!');
-      document.getElementById('remove-flag-btn').classList.add("d-none");
-      document.getElementById('add-flag-btn').classList.remove("d-none");
-    } catch (error) {
-      console.log(error);
-      failMessage('Failed to remove flag!');
-    }
   }
 });
