@@ -65,8 +65,8 @@ async function listFlaggedStudents() {
         <td class="flagger align-middle py-2">{}</td>
         <td class="resNotes align-middle py-2">{}</td>
         <td class="resolver align-middle py-2">{}</td>
-        <td class="status align-middle white-space-nowrap">
-            <button class="{}" data-stdId={} data-flagId={}>{}</button>
+        <td class="status align-middle py-2">
+            <button class="{}" data-stdId={} data-flagId={} style="font-size: 0.8rem">{}</button>
         </td>
       </tr>`;
 
@@ -101,7 +101,7 @@ async function listFlaggedStudents() {
         if (flagged) {
           row = schema.format( stdId, stdId, studentName, studentEmail, flaggedFor, flagNotes, flaggerName, resolutionNotes || "-" , resolvedByName || "-" , "btn btn-sm btn-danger unflagBtn", stdId, flagId, "Unflag");
         } else {
-          row = schema.format( stdId, stdId, studentName, studentEmail, flaggedFor, flagNotes, flaggerName, resolutionNotes || "-" , resolvedByName || "-" , "btn btn-sm btn-success pe-none", stdId, flagId, "Resolved");
+          row = schema.format( stdId, stdId, studentName, studentEmail, flaggedFor, flagNotes, flaggerName, resolutionNotes || "-" , resolvedByName || "-" , "badge rounded-pill text-bg-light opacity-50 border border-success border-2 pe-none", stdId, flagId, "Resolved");
         }
         if (tableBody) tableBody.innerHTML += row;
 

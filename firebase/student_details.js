@@ -419,3 +419,26 @@ flagForm.addEventListener('submit', async function (e) {
     failMessage('Failed to flag student');
   }
 });
+
+const learningInfoForm = document.getElementById('learningInfoForm');
+learningInfoForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  processingMessage('Updating learning plan info...');
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+  const { totalFeePayable, totalModules, overallGradeTWG } = data;
+
+  try {
+    await updateData(`students/${studentId}`, {
+      totalFeePayable,
+      totalModules,
+      overallGradeTWG,
+    });
+    await readStudentDetails(studentId);
+    successMessage('Updated learning plan info!');
+  } catch (error) {
+    console.log(error);
+    failMessage('Failed to update learning plan info!');
+  }
+});
+
