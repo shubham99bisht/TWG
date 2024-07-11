@@ -162,6 +162,8 @@
                   </div>
                   <div class="col" id="overseas_date">-</div>
                 </div>
+                <input type="text" id="studentUniversityId" hidden />
+                <input type="text" id="studentProgramId" hidden />
               </div>
             </div>
           </div>
@@ -235,32 +237,37 @@
               <span class="d-none badge py-2 text-success border border-success" id="modulesCheckSuccessBadge">Modules Check: True</span>
               <span class="badge py-2 text-danger border border-danger" id="modulesCheckDangerBadge">Modules Check: False</span>
             </div>
-            <div class="row">
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="totalFeePayable">Total Fee Payable<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="topTotalFeePayable" name="totalFeePayable" type="number" readonly/>
-              </div>  
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="totalFeePaid">Total Fee Paid<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="topTotalFeePaid" name="totalFeePaid" type="number" readonly />
-              </div> 
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="topTotalModules">Total Modules<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="topTotalModules" name="totalModules" type="number" readonly />
+            <form id="learningInfoForm">
+              <div class="row">
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="totalFeePayable">Total Fee Payable</label>
+                  <input class="form-control form-control-sm" id="topTotalFeePayable" name="totalFeePayable" type="number"/>
+                </div>
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="totalFeePaid">Total Fee Paid</label>
+                  <input class="form-control form-control-sm" id="topTotalFeePaid" name="totalFeePaid" type="number" readonly />
+                </div>
               </div>
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label text-truncate" for="topCreditsRemaining">Remaining Study Credits<span class="text-danger">*</span></label>
-                <input class="form-control form-control-sm" id="topCreditsRemaining" name="creditsRemaining" type="number" readonly />
+              <div class="row">
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="topTotalModules">Total Modules</label>
+                  <input class="form-control form-control-sm" id="topTotalModules" name="totalModules" type="number" />
+                </div>
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label text-truncate" for="topCreditsRemaining">Remaining Study Credits</label>
+                  <input class="form-control form-control-sm" id="topCreditsRemaining" name="creditsRemaining" type="number" readonly />
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-6 col-12 mb-3">
-                <label class="form-label" for="overallGradeTWG">Overall Grade in TWG</label>
-                <input class="form-control form-control-sm" id="overallGradeTWG" name="overallGradeTWG" type="text" readonly />
+              <div class="row">
+                <div class="col-lg-6 col-12 mb-3">
+                  <label class="form-label" for="overallGradeTWG">Overall Grade in TWG</label>
+                  <input class="form-control form-control-sm" id="overallGradeTWG" name="overallGradeTWG" type="text" />
+                </div>
+                <div class="col-lg-6 col-12 mb-3 align-self-end">
+                  <button type="submit" class="btn btn-primary btn-sm w-100">Update</button>
+                </div>
               </div>
-            </div>
+            </form>
             <div class="mb-3" id="learningPlan">
               <!-- Dynamically add terms here -->
             </div>

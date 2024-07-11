@@ -136,6 +136,7 @@ function readStudentDetails(id) {
       students[id] = result
       if (!result) failMessage("Student not found!");
 
+      modulesCount = 0;
       totalModulesCount = Number(result?.totalModules);
       const universityName = await readData(`universities/${result?.university}/name`)
       const programName = await readData(`program_types/${result?.program_type}/name`)
@@ -174,7 +175,8 @@ function readStudentDetails(id) {
       loadFeePayable(result?.learningPlan || {}, result?.feePayable || {}, result?.totalFeePayable || 0, result?.totalModules || 0)
 
       document.getElementById('overallGradeTWG').value = result?.overallGradeTWG || '';
-
+      document.getElementById('studentUniversityId').value = result?.university;
+      document.getElementById('studentProgramId').value = result?.program_type;
       document.getElementById('flagPageLink').setAttribute('href', `flagged_students.html?stdId=${id}`)
 
       closeSwal()
@@ -296,9 +298,12 @@ function loadLearningPlan(learningPlan) {
     table.innerHTML += Term
   }
 
-  if (modulesCount === totalModulesCount) {
+  if (modulesCount == totalModulesCount) {
     document.getElementById('modulesCheckSuccessBadge').classList.remove("d-none");
     document.getElementById('modulesCheckDangerBadge').classList.add("d-none");
+  } else {
+    document.getElementById('modulesCheckSuccessBadge').classList.add("d-none");
+    document.getElementById('modulesCheckDangerBadge').classList.remove("d-none");
   }
 }
 
@@ -782,6 +787,52 @@ computeCommission.addEventListener("click", (event) => {
   let dueDateInput = form.querySelector('#dueDate')
   let currencyInput = form.querySelector('#currency')
   let feesCurrencyInput = form.querySelector('#fees_currency')
+  const fees = form.querySelector('#fees').value
+  if (!fees) return
+
+  let dueDate = new Date()
+  dueDate.setDate(dueDate.getDate() + parseInt(commissions[isReceivable].installmentDays || 0));
+
+  dueDateInput.value = `${dueDate.toISOString().slice(0, 10)}`
+  switch (commissions[isReceivable].type) {
+    case 'fixed': {
+      amountInput.value = commissions[isReceivable].value
+      currencyInput.value = commissions[isReceivable].currency
+      break;
+    }
+    case 'percentage': {
+      amountInput.value = parseInt(fees * (commissions[isReceivable].value / 100))
+      currencyInput.value = feesCurrencyInput.value
+      break;
+    }
+    case 'na': {
+      failMessage("Commission for this stage is NA. Please select No further payments.")
+    }
+  }
+})
+
+computePayabaleCommission.addEventListener("click", (event) => {
+  const button = event.target
+  const form = button.closest('form')
+  const CommissionType = form.querySelector('#newPayableCommisionType').value
+  const selectedStage = form.querySelector('#newPaymentstage').value
+
+  const uid = document.getElementById("studentUniversityId").value;
+  const pid = document.getElementById("studentProgramId").value;
+  const pType = universities[uid].programTypes.find(pt => pt.type == pid)
+  if (!pType) return
+  availablestudyStages = pType.studyStages
+
+  const stageConfig = availablestudyStages.find(s => s.stage == selectedStage)
+  const commissions = stageConfig?.commissions
+  if (!commissions) return
+
+  const isReceivable = CommissionType == 'receivable' ? 1 : 0
+
+  let amountInput = form.querySelector('#amount')
+  let dueDateInput = form.querySelector('#dueDate')
+  let currencyInput = form.querySelector('#newPaymentcurrency')
+  let feesCurrencyInput = form.querySelector('#newPayment_fees_currency')
   const fees = form.querySelector('#fees').value
   if (!fees) return
 
