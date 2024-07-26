@@ -258,9 +258,9 @@ async function updateModule() {
         const name = formData['twgModuleName']
         const notes = formData['twgModuleNotes']
         const result = formData['twgModuleResult'] || ''
-        const grade = formData['twgModuleGrade']
+        const grade = formData['twgModuleGrade'] || ''
 
-        if (!name || !result || !grade) {
+        if (!name) {
             failMessage("Failed to update Learning Plan. Missing fields.");
             return
         }
