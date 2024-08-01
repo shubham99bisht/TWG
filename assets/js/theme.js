@@ -3482,8 +3482,11 @@ var listInit = function listInit() {
               fallback.classList.add('d-none');
             }
           }
-        }); // ---------------------------------------
 
+          listInfo && (listInfo.innerHTML = "".concat(list.i, " to ").concat(list.i + list.visibleItems.length - 1, " of ").concat(list.matchingItems.length));
+        }); // ---------------------------------------
+        
+        listInfo && (listInfo.innerHTML = "".concat(list.i, " to ").concat(list.i + list.visibleItems.length - 1, " of ").concat(list.matchingItems.length));
         var totalItem = list.items.length;
         var itemsPerPage = list.page;
         var btnDropdownClose = list.listContainer.querySelector('.btn-close');
@@ -3495,7 +3498,7 @@ var listInit = function listInit() {
         });
 
         var updateListControls = function updateListControls() {
-          listInfo && (listInfo.innerHTML = "".concat(list.i, " to ").concat(numberOfcurrentItems, " of ").concat(totalItem));
+          // listInfo && (listInfo.innerHTML = "".concat(list.i, " to ").concat(numberOfcurrentItems, " of ").concat(totalItem));
           paginationButtonPrev && togglePaginationButtonDisable(paginationButtonPrev, pageCount === 1);
           paginationButtonNext && togglePaginationButtonDisable(paginationButtonNext, pageCount === pageQuantity);
 

@@ -105,6 +105,7 @@
 
         <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","flaggedFor","flagNotes","flagger","resNotes","resolver","status"],"page":50,"pagination":true}'>
           <div class="card-header">
+            <!-- Download -->
             <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Flagged Students</h5>
@@ -117,30 +118,39 @@
                 </div>
               </div>
             </div>
+
+            <!-- Filter -->
+            <form>
+              <div class="row">
+                <div class="col-md-3 mb-3">
+                  <label for="flagStatusDropdown">Flag Status</label>
+                  <select class="form-select form-select-sm js-choice" id="flagStatusDropdown" size="1" name="flagStatus" data-options='{"removeItemButton":true}'>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="studentListDropdown">Student</label>
+                  <select class="form-select form-select-sm js-choice" id="studentListDropdown" size="1" name="stdId" data-options='{"removeItemButton":true}'>
+                  </select>
+                </div>
+                <div class="col-md-3 mb-3 align-self-end">
+                  <button class="btn btn-primary w-100">Search</button>
+                </div>
+              </div>
+            </form>
+
+            <!-- Search -->
             <div class="row">
-              <div class="col-12">
+              <div class="col-lg-8 col-12">
                 <form>
-                  <div class="my-2 row">
-                    <div class="col-md-3 mb-3">
-                      <label for="flagStatusDropdown">Flag Status</label>
-                      <select class="form-select form-select-sm js-choice" id="flagStatusDropdown" size="1" name="flagStatus" data-options='{"removeItemButton":true}'>
-                      </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label for="studentListDropdown">Student</label>
-                      <select class="form-select form-select-sm js-choice" id="studentListDropdown" size="1" name="stdId" data-options='{"removeItemButton":true}'>
-                      </select>
-                    </div>
-                    <div class="col-md-3 mb-3 align-self-end">
-                      <button class="btn btn-primary">Search</button>
-                    </div>
-                  </div>
                   <div class="input-group">
                     <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Students" aria-label="search" />
                     <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
                   </div>
                 </form>
-              </div>                
+              </div>
+              <div class="col-lg-4 col-12">
+                <h6 class="pt-2 text-end" data-list-info="data-list-info">Loading Count...</h6>              
+              </div>             
             </div>            
           </div>
           <div class="card-body p-0">

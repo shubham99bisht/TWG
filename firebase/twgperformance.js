@@ -170,9 +170,9 @@ function listAllEnroll(inputParams) {
                     const studentId = p['studentId'];
                     const UniversityName = universities[p?.university].name;
                     const ProgramName = programs[p?.program_type].name;
-                    const row = schema.format(studentId, studentId, p?.studentName, p?.studentEmail, ProgramName, UniversityName, p?.startDate, p?.name, p?.termName, p?.overallGrade || '', p?.enrollmentStatus, p?.result, p?.grade, p?.notes || '');
+                    const row = schema.format(studentId, studentId, p?.studentName, p?.studentEmail, ProgramName, UniversityName, p?.startDate, p?.name, p?.termName, p?.overallGradeTWG || '', p?.enrollmentStatus, p?.result, p?.grade, p?.notes || '');
                     if (tableBody) tableBody.innerHTML += row;
-                    csvContent += csvRow.format(studentId, studentId, p?.studentName, p?.studentEmail, ProgramName, UniversityName, p?.startDate, p?.name, p?.termName, p?.overallGrade || '', p?.result, p?.grade, p?.enrollmentStatus, p?.notes || '');
+                    csvContent += csvRow.format(studentId, studentId, p?.studentName, p?.studentEmail, ProgramName, UniversityName, p?.startDate, p?.name, p?.termName, p?.overallGradeTWG || '', p?.result, p?.grade, p?.enrollmentStatus, p?.notes || '');
                 } catch (e) {
                     console.log("ERRROR:", e)
                 }
@@ -190,7 +190,12 @@ function listAllEnroll(inputParams) {
 }
 
 window.onload = async () => {
+    const userRole = localStorage.getItem("userRole")
+
+    if (!['Admin', 'Student'].includes(userRole)) {
+        window.location = '404.html'
+    }
+
     await fetchData()
-    //listAllEnroll()
     initialise()
 }

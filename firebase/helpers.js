@@ -100,6 +100,28 @@ export async function deleteData(dbPath) {
   }
 }
 
+// Function to delete item from an array
+export async function deleteArrayData(dbPath, indexToRemove) {
+  const dbRef = ref(db, dbPath);
+  try {
+    const snapshot = await get(dbRef)
+    if (snapshot.exists()) {
+      const array = snapshot.val();
+      array.splice(indexToRemove, 1);  // Remove the element at the specified index
+      await set(dbRef, array);
+    } else {
+      console.error("Data not found to delete");
+      return false;
+    }
+    await logChange(`${dbPath}/${indexToRemove}`, "deleted", null); // Logging the deletion
+    console.log("Data deleted successfully!");
+    return true;
+  } catch (error) {
+    console.error("Error deleting data:", error);
+    return false;
+  }
+}
+
 /**
  * Custom Functions
 */

@@ -1,4 +1,4 @@
-import { deleteData, updateData, writeData, writeDataWithNewId, readData } from "./helpers.js";
+import { deleteData, deleteArrayData, updateData, writeDataWithNewId, readData } from "./helpers.js";
 
 const params = new URLSearchParams(document.location.search);
 const studentId = params.get('id')
@@ -87,6 +87,7 @@ newPaymentDetailsModal.addEventListener('show.bs.modal', async event => {
     const button = event.relatedTarget
     newPaymentDetailsForm.reset()
     try {
+        document.getElementById('newPaymentDetailsModalHeader').innerHTML = button.id == "payableNewPayment" ? "New Payable" : "New Receivable";
         updateStudyPlanStageListById(studentId, 'newPaymentstage');
         let currency = await readData("currency_types")
         let currency_options = ''
@@ -210,7 +211,7 @@ window.updateStudyPlan = updateStudyPlan
 async function removeStudyPlan(id) {
     if (confirm("Confirm delete study plan?")) {
         try {
-            if (await deleteData(`students/${studentId}/studyPlan/${id}`)) {
+            if (await deleteArrayData(`students/${studentId}/studyPlan`, id)) {
                 successMessage('Study plan successfully!').then(() => location.reload())
             } else { throw "Not deleted" }
         } catch (e) {
@@ -357,9 +358,8 @@ async function editTwgTerm() {
         const name = formData['termName']
         const startDate = formData['startDate']
         const count = formData['numberOfModules']
-        const overallGrade = formData['overallGrade']
 
-        if (updateData(`students/${studentId}/learningPlan/${termId}`, { name, startDate, count, overallGrade })) {
+        if (updateData(`students/${studentId}/learningPlan/${termId}`, { name, startDate, count })) {
             successMessage("TWG term updated!").then(() => location.reload())
         }
         else {
@@ -381,7 +381,6 @@ twgTermEditModal.addEventListener('show.bs.modal', event => {
     twgTermEditModal.querySelector('#termName').value = parentDiv?.querySelector('.termName').value || ''
     twgTermEditModal.querySelector('#startDate').value = parentDiv?.querySelector('.startDate').value || ''
     twgTermEditModal.querySelector('#numberOfModules').value = parentDiv?.querySelector('.numberOfModules').value || ''
-    twgTermEditModal.querySelector('#overallGrade').value = parentDiv?.querySelector('.overallGrade').value || ''
 })
 
 
@@ -433,9 +432,8 @@ learningInfoForm.addEventListener('submit', async function (e) {
       totalFeePayable,
       totalModules,
       overallGradeTWG,
-    });
-    await readStudentDetails(studentId);
-    successMessage('Updated learning plan info!');
+    })
+    successMessage('Updated learning plan info!').then(() => location.reload())
   } catch (error) {
     console.log(error);
     failMessage('Failed to update learning plan info!');
