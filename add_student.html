@@ -15,6 +15,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
   <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
+  <link href="vendors/flatpickr/flatpickr.min.css" rel="stylesheet" />
   <link href="./assets/css/theme.min.css" rel="stylesheet">
   <link href="./assets/css/user.css" rel="stylesheet">
 </head>
@@ -73,41 +74,6 @@
               <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="studentName">Student Name<span class="text-danger">*</span></label>
                 <input class="form-control" id="studentName" name="studentName" type="text" placeholder="Student Name" required="required" />
-              </div>                
-
-              <!-- TWG Dates -->
-              <div class="col-lg-6 mb-3">
-                <label class="form-label" for="joinMonth">Commencing Term with TWG (Month)<span class="text-danger">*</span></label>
-                <select class="form-select" id="joinMonth" name="joinMonth">
-                  <option value="0">Jan</option>
-                  <option value="1">Feb</option>
-                  <option value="2">Mar</option>
-                  <option value="3">Apr</option>
-                  <option value="4">May</option>
-                  <option value="5">June</option>
-                  <option value="6">July</option>
-                  <option value="7">Aug</option>
-                  <option value="8">Sept</option>
-                  <option value="9">Oct</option>
-                  <option value="10">Nov</option>
-                  <option value="11">Dec</option>
-                </select>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <label class="form-label" for="joinYear">Commencing Term with TWG (Year)<span class="text-danger">*</span></label>
-                <select class="form-select" id="joinYear" name="joinYear">
-                  <option value="2021">2021</option>
-                  <option value="2022">2022</option>
-                  <option value="2023">2023</option>
-                  <option value="2024" selected>2024</option>
-                  <option value="2025">2025</option>
-                  <option value="2026">2026</option>
-                  <option value="2027">2027</option>
-                  <option value="2028">2028</option>
-                  <option value="2029">2029</option>
-                  <option value="2030">2030</option>
-                  <option value="2031">2031</option>
-                </select>
               </div>
 
               <!-- University Details -->
@@ -208,41 +174,6 @@
                 <select class="form-select" id="universityDegree" name="universityDegree" required>
                   <option selected disabled>Select Degree</option>
                 </select>
-              </div> 
-              
-              <!-- Expected Dates -->
-              <div class="col-lg-6 mb-3">
-                <label class="form-label" for="overseasMonth">Expected Progression Overseas (Month)<span class="text-danger">*</span></label>
-                <select class="form-select" id="overseasMonth" name="overseasMonth" required>
-                  <option value="0">Jan</option>
-                  <option value="1">Feb</option>
-                  <option value="2">Mar</option>
-                  <option value="3">Apr</option>
-                  <option value="4">May</option>
-                  <option value="5">June</option>
-                  <option value="6">July</option>
-                  <option value="7">Aug</option>
-                  <option value="8">Sept</option>
-                  <option value="9">Oct</option>
-                  <option value="10">Nov</option>
-                  <option value="11">Dec</option>
-                </select>
-              </div>
-              <div class="col-lg-6 mb-3">
-                <label class="form-label" for="overseasYear">Expected Progression Overseas (Year)<span class="text-danger">*</span></label>
-                <select class="form-select" id="overseasYear" name="overseasYear" required>
-                  <option value="2021">2021</option>
-                  <option value="2022">2022</option>
-                  <option value="2023">2023</option>
-                  <option value="2024" selected>2024</option>
-                  <option value="2025">2025</option>
-                  <option value="2026">2026</option>
-                  <option value="2027">2027</option>
-                  <option value="2028">2028</option>
-                  <option value="2029">2029</option>
-                  <option value="2030">2030</option>
-                  <option value="2031">2031</option>
-                </select>
               </div>
 
               <!-- Fee and Modules -->
@@ -263,7 +194,7 @@
         <!-- Study Plan -->
         <div class="card mb-3">
           <div class="card-header">
-            <h5 class="mb-0">Study Plan</h5>
+            <h5 class="mb-0">Study Stages</h5>
           </div>
           <div class="card-body bg-light">
         
@@ -302,7 +233,7 @@
             <h5 class="mb-0">TWG Learning Plan</h5>
           </div>
 
-          <div class="mb-4 mx-4 col-lg-3 col-10 mb-3">
+          <div class="mb-4 mx-4 col-lg-6 col-10 mb-3">
             <label class="form-label" for="overallGradeTWG">Overall Grade in TWG Program</label>
             <input class="form-control" id="overallGradeTWG" name="overallGradeTWG" type="text" />
           </div>
@@ -353,6 +284,7 @@
   <script src="./vendors/countup/countUp.umd.js"></script>
   <script src="./vendors/echarts/echarts.min.js"></script>
   <script src="./vendors/dayjs/dayjs.min.js"></script>
+  <script src="./assets/js/flatpickr.js"></script>
   <script src="./vendors/fontawesome/all.min.js"></script>
   <script src="./vendors/lodash/lodash.min.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>

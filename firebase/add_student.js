@@ -28,7 +28,7 @@ async function createStudent() {
   const enrollmentInfoData = Object.fromEntries(new FormData(enrollmentInfo));
 
   const {
-    studentId, studentName, joinMonth, joinYear,
+    studentId, studentName,
     universityStudentId, enrollmentStatus,
     studentEmail, studentPhone, 
     studentAddress, studentCity, studentState
@@ -36,28 +36,20 @@ async function createStudent() {
   let {
     program_type, university, source, agent,
     twgOfferLink, universityOfferLink, gDriveLink,
-    universityDegree, overseasMonth, overseasYear, 
-    totalFeePayable, totalModules
+    universityDegree, totalFeePayable, totalModules
   } = enrollmentInfoData
 
   const overallGradeTWG = document.getElementById('overallGradeTWG').value;
 
-  //  Convert Dates
-  let date = new Date(joinYear, joinMonth, 2)
-  const joinDate = `${date.toISOString().slice(0, 10)}`
-  date = new Date(overseasYear, overseasMonth, 2)
-  const overseasDate = `${date.toISOString().slice(0, 10)}`
-
   // Validation
   if (
-    !studentId || !studentName || !joinDate || 
+    !studentId || !studentName ||
     !universityStudentId || !enrollmentStatus ||
     !studentPhone || !studentEmail || 
     !studentAddress || !studentCity || !studentState || 
     !program_type || !university || !source ||
     !twgOfferLink || !universityOfferLink || !gDriveLink ||
-    !universityDegree || !overseasDate ||
-    !totalFeePayable || !totalModules
+    !universityDegree || !totalFeePayable || !totalModules
   ) { failMessage("Please provide all data"); return }
 
   // Verifying old entries
@@ -80,12 +72,12 @@ async function createStudent() {
 
   // Create Student
   const newStudent = {
-    studentId, studentName, joinDate,
+    studentId, studentName,
     universityStudentId, enrollmentStatus, studentPhone, studentEmail,
     studentAddress, studentCity, studentState,
     program_type, university, source,
     twgOfferLink, universityOfferLink, gDriveLink,
-    universityDegree, overseasDate, totalFeePayable, totalModules,
+    universityDegree, totalFeePayable, totalModules,
     studyPlan, learningPlan, overallGradeTWG,
   }
   if (source == "Agent") newStudent["agent"] = agent
@@ -209,7 +201,7 @@ function addstudyStage(event) {
       </select>
     </td>
     <td>
-      <input class="form-control form-control-sm start_date" type="text" placeholder="YYYY-MM-DD" required="required"/>
+      <input class="form-control form-control-sm start_date datetimepicker" type="text" placeholder="YYYY-MM-DD" required="required"/>
     </td>
     <td>
       <select class="form-select form-select-sm status" required="required">
@@ -229,8 +221,8 @@ function addstudyStage(event) {
     newRow.classList.add('align-middle')
     newRow.innerHTML += studyStage
 
+    // Study stage dropdown
     const newSelect = newRow.querySelector(".study_stage")
-
     const stageIds = getLatestStudyStage()
     stageIds.forEach(stageId => {
       let studyStage = studyStages[stageId]
@@ -241,6 +233,10 @@ function addstudyStage(event) {
         newSelect.appendChild(option);
       }
     });
+
+    // startDate selection
+    const startDateInp = newRow.querySelector('.start_date')
+    flatpickr(startDateInp, {disableMobile: true});
   }
 }
 window.addstudyStage = addstudyStage;
@@ -257,12 +253,18 @@ function readStudyPlan() {
     const status = row.querySelector('.status').value;
     const notes = row.querySelector('.notes').value;
   
-    if (!studyStage || !startDate || !status) { failMessage("Please complete Study Plan fields."); return }
+    if (!studyStage || !startDate || !status) { failMessage("Please complete Study Stage fields."); return }
     data.push({ studyStage, startDate, status, notes });
+  }
+
+  // Atleast one Study Stage needed
+  if (!data.length) {
+    failMessage("Atleast one Study Stage is required."); return
   }
 
   return data
 }
+window.readStudyPlan = readStudyPlan
 
 /**
  * --------------------------------------------------
@@ -350,7 +352,7 @@ function addTerm(event) {
     </div>
 
     <div class="row form-group">
-      <div class="col-lg-3 col-12 mb-3">
+      <div class="col-lg-4 col-12 mb-3">
         <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>
         <select class="form-select form-select-sm" id="termName" name="termName" required="required">
           <option value="1">1</option>
@@ -365,17 +367,13 @@ function addTerm(event) {
           <option value="10">10</option>
         </select>
       </div>
-      <div class="col-lg-3 col-12 mb-3">
+      <div class="col-lg-4 col-12 mb-3">
         <label class="form-label" for="startDate">Start Date<span class="text-danger">*</span></label>
-        <input class="form-control startDate" name="startDate" type="text" placeholder="YYYY-MM-DD" required="required" />
+        <input class="form-control startDate datetimepicker" name="startDate" type="text" placeholder="YYYY-MM-DD" required="required" />
       </div>
-      <div class="col-lg-3 col-12 mb-3">
+      <div class="col-lg-4 col-12 mb-3">
         <label class="form-label" for="numberOfModules">Module Count<span class="text-danger">*</span></label>
         <input class="form-control numberOfModules" name="numberOfModules" type="number" required="required" />
-      </div>
-      <div class="col-lg-3 col-12 mb-3">
-        <label class="form-label" for="overallGrade">Overall Grade</label>
-        <input class="form-control overallGrade" name="overallGrade" type="text" required="required" />
       </div>
     </div>
 
@@ -407,6 +405,10 @@ function addTerm(event) {
   newDiv.classList.add('border', 'rounded-1', 'position-relative', 'bg-white', 'dark__bg-1100', 'p-3', 'mb-3', 'Term');
   newDiv.innerHTML = Term
 
+  // startDate selection
+  const startDateInp = newDiv.querySelector('.startDate')
+  flatpickr(startDateInp, {disableMobile: true});
+
   button.parentNode.insertBefore(newDiv, button);
 }
 window.addTerm = addTerm
@@ -422,7 +424,6 @@ function readLearningPlan() {
       name: term.querySelector('select#termName').value,
       startDate: term.querySelector('.startDate').value,
       count: term.querySelector('.numberOfModules').value,
-      overallGrade: term.querySelector('.overallGrade').value,
       modules: []
     };
   

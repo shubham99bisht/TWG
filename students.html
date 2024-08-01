@@ -12,6 +12,8 @@
   <script src="./assets/js/config.js"></script>
   <script src="./vendors/simplebar/simplebar.min.js"></script>
   <!-- Stylesheets-->
+  <link href="./vendors/choices/choices.min.css" rel="stylesheet">
+  <link href="./vendors/flatpickr/flatpickr.min.css" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
   <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
@@ -58,8 +60,9 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->     
 
-        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","university","program","source"],"page":50,"pagination":true}'>
+        <div class="card mb-3" id="studentsTable" data-list='{"valueNames":["id","name","university","program","source","joinDate","enrollmentStatus"],"page":50,"pagination":true}'>
           <div class="card-header">
+            <!-- Downloads -->
             <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Students</h5>
@@ -72,15 +75,50 @@
                 </div>
               </div>
             </div>
+
+            <!-- Filter -->
             <div class="row">
-              <div class="col-12">
+              <!-- Status Dropdown Column -->
+              <div class="col-md-4 mb-3">
+                <label for="enrollmentStatusDropdown">Enrollment Status</label>
+                <select class="form-select form-select-sm js-choice" id="enrollmentStatusDropdown" multiple="multiple" size="1" name="enrollmentStatusDropdown" data-options='{"removeItemButton":true}'>
+                  <option value=""></option>
+                  <option value="Admitted">Admitted</option>
+                  <option value="Enrolled">Enrolled</option>
+                  <option value="Withdrawn">Withdrawn</option>
+                </select>
+              </div>
+          
+              <!-- Date Range Column -->
+              <div class="col-md-4">
+                <label for="datepicker">Commencing Term Range</label>
+                <div class="position-relative">
+                  <input class="form-control form-control-sm datetimepicker ps-4" id="datepicker" type="text" />
+                  <span class="fas fa-calendar-alt text-primary position-absolute top-50 translate-middle-y ms-2"> </span>
+                </div>
+              </div>
+          
+              <!-- Search Button Column -->
+              <div class="col-md-4 mt-md-4 mt-2">
+                <div class="d-grid">
+                  <button id="searchButton" class="btn btn-primary btn-sm">Search</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Search -->
+            <div class="row">
+              <div class="col-lg-8 col-12">
                 <form>
                   <div class="input-group">
                     <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Students" aria-label="search" />
                     <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
                   </div>
                 </form>
-              </div>                
+              </div>
+              <div class="col-lg-4 col-12">
+                <h6 class="pt-2 text-end" data-list-info="data-list-info">Loading Count...</h6>              
+              </div>
             </div>            
           </div>
           <div class="card-body p-0">
@@ -93,11 +131,13 @@
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="university">University</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="program" >Program Level</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="source">Source</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="joinDate">Commencing Term</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="enrollmentStatus">Enrollment Status</th>
                     <th class="align-middle no-sort"></th>
                   </tr>
                 </thead>
                 <tbody class="list" id="table-students-body">
-                  <tr class="text-center"><td colspan="6">Loading...</td></tr>
+                  <tr class="text-center"><td colspan="8">Loading...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -127,10 +167,12 @@
   <script src="./vendors/bootstrap/bootstrap.min.js"></script>
   <script src="./vendors/anchorjs/anchor.min.js"></script>
   <script src="./vendors/is/is.min.js"></script>
+  <script src="./vendors/choices/choices.min.js"></script>
   <script src="./vendors/chart/chart.min.js"></script>
   <script src="./vendors/countup/countUp.umd.js"></script>
   <script src="./vendors/echarts/echarts.min.js"></script>
   <script src="./vendors/dayjs/dayjs.min.js"></script>
+  <script src="./assets/js/flatpickr.js"></script>  
   <script src="./vendors/fontawesome/all.min.js"></script>
   <script src="./vendors/lodash/lodash.min.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>

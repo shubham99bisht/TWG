@@ -62,12 +62,7 @@ async function createAgent(data) {
     accountName, accountNumber, bank, ifsc
   } = data
 
-  console.log(data)
-
-  if (!agentId || !name || !phone || !email 
-    || !contactPerson || !address || !accountName
-    || !accountNumber || !bank || !ifsc
-  ) {
+  if (!agentId || !name || !phone || !email || !contactPerson || !address ) {
     failMessage("Please provide all data"); return
   }
 
@@ -76,8 +71,7 @@ async function createAgent(data) {
     name, phone, email, contactPerson, address,
     billing: {
       accountName, accountNumber, bank, ifsc
-    },
-    // createdAt: date, updatedAt: date
+    }
   }
 
   const params = new URLSearchParams(document.location.search);
@@ -119,9 +113,9 @@ function listAllAgents() {
       const schema = `
           <tr class="btn-reveal-trigger">
           <td class="name align-middle white-space-nowrap py-2">
-              <h5 class="mb-0 fs--1">{}</h5>
+            <h5 class="mb-0 fs--1"><a href="agent.html?id={}">{}</a></h5>
           </td>
-          <td class="email align-middle py-2"><a href="mailto:{}">{}</a></td>
+          <td class="email align-middle py-2">{}</a></td>
           <td class="phone align-middle white-space-nowrap py-2">{}</td>
           <td class="payable align-middle text-center py-2">{}</td>
           <td class="receivable align-middle text-center py-2">{}</td>
@@ -138,8 +132,8 @@ function listAllAgents() {
           </td>
         </tr>`
 
-      let csvContent = 'Name,Email,Phone,Payable,Receivable\r\n'
-      const csvRow = '{},{},{},{},{}\r\n'  
+      let csvContent = 'ID,Name,Email,Phone,Payable,Receivable\r\n'
+      const csvRow = '{},{},{},{},{},{}\r\n'  
 
       Object.keys(agents).forEach(id => {
         try {          
@@ -147,11 +141,11 @@ function listAllAgents() {
           let payable = agent_summary[id]?.payable || 0
           let receivable = agent_summary[id]?.receivable || 0;
 
-          const row = schema.format(a.name, a.email, a.email, a.phone, payable, receivable, id, id, id)
+          const row = schema.format(id, a.name, a.email, a.phone, payable, receivable, id, id, id)
           if (tableBody) tableBody.innerHTML += row
 
           const name =  a.name.includes(',') ? `"${a.name}"` : a.name
-          csvContent += csvRow.format(name, a.email, a.phone, payable, receivable)
+          csvContent += csvRow.format(id, name, a.email, a.phone, payable, receivable)
         } catch {}
       });
 

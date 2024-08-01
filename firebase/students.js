@@ -1,4 +1,4 @@
-import { readData, deleteData, fetchPaymentDetails, updateData, writeDataWithNewId, getRemainingCredits } from "./helpers.js";
+import { readData, deleteData, fetchPaymentDetails, getDates, getRemainingCredits, readDateFilters, updateData, writeDataWithNewId } from "./helpers.js";
 
 // Global Variables
 let students = {}, universities = {}, agents = {}, programs = {}, payments = {}, studyStages = {}, modules = {}
@@ -60,7 +60,13 @@ window.downloadCommissions = downloadCommissions
  * --------------------------------------------------
  */
 
-function listAllStudents() {
+function listAllStudents(startDate, endDate) {
+  let status = [];
+  for(let i = 0; i < enrollmentStatusDropdown.options.length; i++) {
+    const value = enrollmentStatusDropdown.options[i]?.value;
+    status.push(value)
+  }
+
   const tableBody = document.getElementById("table-students-body");
   if (!tableBody) return
   readData("students")
@@ -77,6 +83,8 @@ function listAllStudents() {
             <td class="university align-middle white-space-nowrap py-2">{}</td>
             <td class="program align-middle py-2">{}</td>
             <td class="source align-middle py-2">{}</td>
+            <td class="joinDate align-middle py-2">{}</td>
+            <td class="enrollmentStatus align-middle py-2">{}</td>
             <td class="align-middle white-space-nowrap py-2 text-end">
                 <div class="dropdown font-sans-serif position-static">
                     <button class="btn btn-link text-600 btn-sm dropdown-toggle btn-reveal" type="button" id="customer-dropdown-0" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true" aria-expanded="false"><span class="fas fa-ellipsis-h fs--1"></span></button>
@@ -98,15 +106,26 @@ function listAllStudents() {
           const u = universities[s.university].name
           const p = programs[s.program_type].name
           let source = s.source
-          if (source == 'Agent') {
-            source += '<br>' + s.agent
+          if (source == 'Agent') { source += '<br>' + s.agent }
+
+          // Read Commencing date from first Study Plan
+          let date = new Date(s?.studyPlan?.[0]?.startDate)
+          let joinDate = '-'
+          if (date != 'Invalid Date') {
+            joinDate = `${date.toISOString().slice(0, 10)}` 
+          }
+
+          // Run Filters
+          if (status && status.length && !status.includes(s.enrollmentStatus)) return
+          if (startDate != 'Invalid Date' && endDate != 'Invalid Date') {
+            if (date < startDate || date > endDate) return
           }
 
           const row_id = `LSQ: ${id}<br>Univ: ${s.universityStudentId}`
-          const row = schema.format(id, row_id, s.studentName, s?.studentEmail || '-', u, p, source, id, id)
+          const row = schema.format(id, row_id, s.studentName, s?.studentEmail || '-', u, p, source, joinDate, s?.enrollmentStatus || '', id, id)
           if (tableBody) tableBody.innerHTML += row
 
-          csvContent += csvRow.format(s.studentName, s?.studentEmail || '-', u, p, source)
+          csvContent += csvRow.format(s.studentName, s?.studentEmail || '-', u, p, source, joinDate, s?.enrollmentStatus || '')
         } catch (e) {
           console.log(e)
         }
@@ -136,6 +155,14 @@ function readStudentDetails(id) {
       students[id] = result
       if (!result) failMessage("Student not found!");
 
+      // Read Commencing date from first Study Plan
+      let date = new Date(result?.studyPlan?.[0]?.startDate)
+      console.log(date)
+      let joinDate = '-'
+      if (date != 'Invalid Date') {
+        joinDate = `${date.toISOString().slice(0, 10)}` 
+      }
+
       modulesCount = 0;
       totalModulesCount = Number(result?.totalModules);
       const universityName = await readData(`universities/${result?.university}/name`)
@@ -147,7 +174,7 @@ function readStudentDetails(id) {
       // Basic Info
       document.getElementById("student_id").innerHTML = id
       document.getElementById("university_id").innerHTML = result.universityStudentId
-      document.getElementById("join_date").innerHTML = result?.joinDate || '-'
+      document.getElementById("join_date").innerHTML = joinDate || '-'
       document.getElementById("enrollment_status").innerHTML = result?.enrollmentStatus || '-'
       document.getElementById("student_email").innerHTML = result?.studentEmail || '-'
       document.getElementById("student_phone").innerHTML = result?.studentPhone || '-'
@@ -160,7 +187,6 @@ function readStudentDetails(id) {
       document.getElementById("source").innerHTML = result?.source
       document.getElementById("agent").innerHTML = result?.agent || '-'
       document.getElementById('degree').innerHTML = result?.universityDegree || '-'
-      document.getElementById("overseas_date").innerHTML = result?.overseasDate || '-'
 
       // GDrive Links
       document.getElementById("twgOfferLink").value = result?.twgOfferLink || ''
@@ -250,21 +276,17 @@ function loadLearningPlan(learningPlan) {
     const Term = `
     <div class="border rounded-1 mt-3 position-relative bg-white dark__bg-1100 p-3 mb-3 Term">
       <div class="row form-group">
-        <div class="col-lg-3 col-12 mb-3">
+        <div class="col-lg-4 col-12 mb-3">
           <label class="form-label" for="termName">Term Number<span class="text-danger">*</span></label>
           <input class="form-control termName" name="termName" type="text" value="${data.name}" disabled />
         </div>
-        <div class="col-lg-3 col-12 mb-3">
+        <div class="col-lg-4 col-12 mb-3">
           <label class="form-label" for="startDate">Start Date<span class="text-danger">*</span></label>
           <input class="form-control startDate" name="startDate" type="text" value="${data.startDate}" disabled />
         </div>
-        <div class="col-lg-3 col-12 mb-3">
+        <div class="col-lg-4 col-12 mb-3">
           <label class="form-label" for="numberOfModules">Module Count<span class="text-danger">*</span></label>
           <input class="form-control numberOfModules" name="numberOfModules" type="number" value="${data.count}" disabled />
-        </div>
-        <div class="col-lg-3 col-12 mb-3">
-          <label class="form-label" for="overallGrade">Overall Grade<span class="text-danger">*</span></label>
-          <input class="form-control overallGrade" name="overallGrade" type="text" value="${data?.overallGrade || ''}" disabled />
         </div>
       </div>
 
@@ -469,24 +491,16 @@ if (updateStudentModal)
     const params = new URLSearchParams(document.location.search);
     const id = params.get('id')
     const student = students[id]
-    const joinDate = new Date(student.joinDate)
-    const overseasDate = new Date(student?.overseasDate)
     updateStudentModal.querySelector('#studentId').value = id
     
     updateStudentModal.querySelector('#studentName').value = student.studentName
     updateStudentModal.querySelector('#universityStudentId').value = student.universityStudentId
-    updateStudentModal.querySelector('#joinMonth').value = joinDate.getMonth()
-    updateStudentModal.querySelector('#joinYear').value = joinDate.getFullYear()
     updateStudentModal.querySelector('#enrollmentStatus').value = student?.enrollmentStatus
     updateStudentModal.querySelector('#studentEmail').value = student?.studentEmail || ''
     updateStudentModal.querySelector('#studentPhone').value = student?.studentPhone || ''
     updateStudentModal.querySelector('#studentAddress').value = student?.studentAddress || ''
     updateStudentModal.querySelector('#studentCity').value = student?.studentCity || ''
     updateStudentModal.querySelector('#studentState').value = student?.studentState || ''
-    if (overseasDate != 'Invalid Date') {
-      updateStudentModal.querySelector('#overseasMonth').value = overseasDate.getMonth()
-      updateStudentModal.querySelector('#overseasYear').value = overseasDate.getFullYear()
-    }
   })
 
 async function updateStudent() {
@@ -499,21 +513,17 @@ async function updateStudent() {
 
     const studentId = updateStudentForm.querySelector('#studentId').value
     const { 
-      studentName, universityStudentId, joinMonth, joinYear, overseasMonth, overseasYear,
+      studentName, universityStudentId,
       studentEmail, studentPhone, studentAddress, studentCity, studentState 
     } = basicInfoData
-    const date = new Date(joinYear, joinMonth, 2)
-    const joinDate = `${date.toISOString().slice(0, 10)}`
-    const odate = new Date(overseasYear, overseasMonth, 2)
-    const overseasDate = `${odate.toISOString().slice(0, 10)}`
 
     const enrollmentStatus = updateStudentForm.querySelector('#enrollmentStatus').value;
     // Validation
     if (id != studentId) failMessage("Can't update Student Id")
-    if (!studentId || !studentName || !studentEmail || !joinMonth || !joinYear || !universityStudentId) { failMessage("Please provide all data"); return }
+    if (!studentId || !studentName || !studentEmail || !universityStudentId) { failMessage("Please provide all data"); return }
 
     const newStudent = { 
-      studentId, joinDate, overseasDate, studentName, universityStudentId,
+      studentId, studentName, universityStudentId,
       studentEmail, studentPhone, studentAddress, studentCity, studentState 
     }
     updateData(`students/${studentId}`, newStudent)
@@ -569,7 +579,22 @@ window.onload = async () => {
   await fetchData()
   switch (pageName) {
     case "students": {
-      listAllStudents();
+      // Initialize Datepicker
+      const [startOfYear, currentDate] = getDates();
+      const datepickerInstance = flatpickr("#datepicker", {
+        mode: 'range', dateFormat: 'M d Y', 'disableMobile':true,
+        'defaultDate': [startOfYear, currentDate] 
+      });
+
+      // Initialise Search button
+      const searchStudents = document.getElementById('searchButton')
+      searchStudents.addEventListener('click', () => {
+        const dateRange = readDateFilters(datepickerInstance);
+        const startDate = new Date(dateRange[0]); const endDate = new Date(dateRange[1]);
+        listAllStudents(startDate, endDate)
+      })
+
+      listAllStudents(startOfYear, currentDate);
       break;
     }
     case "student_details": {
@@ -603,8 +628,6 @@ editDetailsModel.addEventListener('show.bs.modal', event => {
   editDetailsModel.querySelector('#payment-id').value = row.id
   editDetailsModel.querySelector('#commissionType').value = CommissionType
   editDetailsModel.querySelector('#student-name').value = row?.querySelector('.student').textContent
-  editDetailsModel.querySelector('#university-name').value = row?.querySelector('.university').textContent
-  editDetailsModel.querySelector('#agent-name').value = row?.querySelector('.agent').textContent
   editDetailsModel.querySelector('#stage').value = row?.querySelector('.stage').textContent
   editDetailsModel.querySelector('#duedate').value = row?.querySelector('.duedate').textContent
   editDetailsModel.querySelector('#amount').value = payments[CommissionType][row.id]?.amount || ''
@@ -984,7 +1007,6 @@ function readLearningPlan() {
     name: term.querySelector('select#termName').value,
     startDate: term.querySelector('.startDate').value,
     count: term.querySelector('.numberOfModules').value,
-    overallGrade: term.querySelector('.overallGrade').value,
     modules: []
   }
 

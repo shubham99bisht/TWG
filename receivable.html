@@ -64,20 +64,12 @@
           <div class="card-header">
             <div class="row flex-between-center mb-3">
               <div class="col-6 col-md-auto d-flex align-items-center">
-                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Commissions Receivable</h5>
+                <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Receivable Report</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
                 <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('receivable')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
                 <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSVData('receivable')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
-              </div>
-              <div class="col-12 col-md-5 mt-1 mt-md-0 ms-auto text-end">
-                <form>
-                  <div class="input-group">
-                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for a page" aria-label="search" />
-                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
-                  </div>
-                </form>
-              </div>              
+              </div>             
             </div>
 
             <div class="row">
@@ -108,7 +100,22 @@
                   <button id="searchButton" class="btn btn-primary btn-sm">Search</button>
                 </div>
               </div>
-            </div>            
+            </div>  
+            
+            <!-- Search -->
+            <div class="row">
+              <div class="col-lg-8 col-12">
+                <form>
+                  <div class="input-group">
+                    <input class="form-control form-control-sm shadow-none search" type="search" placeholder="Search for Receivable" aria-label="search" />
+                    <button class="btn btn-sm btn-outline-secondary border-300 hover-border-secondary"><span class="fa fa-search fs--1"></span></button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-lg-4 col-12">
+                <h6 class="pt-2 text-end" data-list-info="data-list-info">Loading Count...</h6>              
+              </div>             
+            </div>             
           </div>
           <div class="card-body px-0 py-0">
             <div class="table-responsive scrollbar">

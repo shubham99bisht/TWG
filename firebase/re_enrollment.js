@@ -1,29 +1,43 @@
 import { readData, getDates, getRemainingCredits, readDateFilters } from './helpers.js';
 
-const programsData = {};
+let universities = {}, programs = {}, studyStages = {};
 
-window.addEventListener('load', async function () {
-  await initialise();
-});
+const twgProgramChoices = new Choices(document.getElementById("twgProgramDropdown"),
+  {
+    removeItems: true,
+    removeItemButton: true
+  }
+);
 
 async function initialise() {
+  let choices = Object.keys(programs).map(pId => {return { value: pId, label: programs[pId].name }});
+  twgProgramChoices.setChoices(choices)
+
   const [startOfYear, currentDate] = getDates();
-  const datepickerInstance = flatpickr('#datepicker', {
-    mode: 'range',
-    dateFormat: 'M d Y',
-    disableMobile: true,
-    defaultDate: [startOfYear, currentDate],
+  const datepickerInstance = flatpickr("#datepicker", {
+    mode: 'range', dateFormat: 'M d Y', 'disableMobile': true,
+    'defaultDate': [startOfYear, currentDate]
   });
 
-  await setProgramData();
+  document.getElementById('searchButton').addEventListener('click', async function () {
+    let enrollStatus = []
+    let twgProgram = [];
 
-  const searchBtn = document.getElementById('searchButton');
-  searchBtn.addEventListener('click', async function () {
+    let source = sourceDropdown?.value || ''
+
+    for (let i = 0; i < enrollStatusDropdown.options.length; i++) {
+      const value = enrollStatusDropdown.options[i]?.value;
+      enrollStatus.push(value)
+    }
+
+    for (let i = 0; i < twgProgramDropdown.options.length; i++) {
+      const value = twgProgramDropdown.options[i]?.value;
+      twgProgram.push(value)
+    }
     const dateRange = readDateFilters(datepickerInstance);
 
     const inputParams = {
-      filterStartDate: dateRange[0],
-      filterEndDate: dateRange[1],
+      enrollStatus, twgProgram, startDate: dateRange[0], endDate: dateRange[1], source
     };
     processingMessage('Fetching students records...');
     await listAllEnroll(inputParams);
@@ -33,14 +47,17 @@ async function initialise() {
 
 async function listAllEnroll(inputParams) {
   const tableBody = document.getElementById('table-payable-body');
-  let { filterStartDate, filterEndDate } = inputParams;
+  const { enrollStatus, source, twgProgram, startDate: filterStartDate, endDate: filterEndDate } = inputParams;
 
-  if (!tableBody) return;
+  console.log(inputParams)
+
+  if (!tableBody) return
   tableBody.innerHTML = '';
 
   const schema = `<tr class="btn-reveal-trigger" id="{}">
                 <td class="align-middle student"><a href="student_details.html?id={}">{}</a></td>
                 <td class="align-middle studentEmail">{}</td>
+                <td class="align-middle source">{}</td>
                 <td class="align-middle program_type">{}</td>
                 <td class="align-middle term_number">{}</td>
                 <td class="align-middle term_start_date">{}</td>
@@ -48,17 +65,21 @@ async function listAllEnroll(inputParams) {
                 <td class="align-middle remaining_credits">{}</td>
             </tr>`;
 
-  let csvContent =
-    'Student, Student Email,Program Type, Term #, Term State Date, Status, Remaining Credits\r\n';
+  let csvContent = 'Student,Student Email,Source,Program Type, Term #, Term State Date, Status, Remaining Credits\r\n';
 
-  const csvRow = '{},{},{},{},{},{},{},{},{},{}\r\n';
+  const csvRow = '{},{},{},{},{},{},{},{}\r\n';
 
   try {
     const students = await readData('students');
     for (let id in students) {
       const student = students[id];
-      const { studentName, studentEmail, program_type, enrollmentStatus } =
-        student;
+      const { studentName, studentEmail, program_type, enrollmentStatus } = student;
+
+      if (
+        (source && source != student?.source) || 
+        (twgProgram && twgProgram.length  && !twgProgram.includes(program_type)) ||
+        (enrollStatus && enrollStatus.length && !enrollStatus.includes(enrollmentStatus))
+      ) continue;
       
       const learningPlans = student?.learningPlan || {};
       const feePayable = student?.feePayable || {};
@@ -79,27 +100,16 @@ async function listAllEnroll(inputParams) {
         }
 
         const row = schema.format(
-          id,
-          id,
-          studentName,
-          studentEmail,
-          programsData[program_type],
-          term_number,
-          startDate,
-          enrollmentStatus,
-          remainingCredits
+          id, id,
+          studentName,studentEmail,student?.source,programs[program_type]?.name || '',
+          term_number,startDate,enrollmentStatus,remainingCredits
         );
 
         if (tableBody) tableBody.innerHTML += row;
 
         csvContent += csvRow.format(
-          studentName,
-          studentEmail,
-          programsData[program_type],
-          term_number,
-          startDate,
-          enrollmentStatus,
-          remainingCredits
+          studentName,studentEmail,student?.source,programs[program_type]?.name || '',
+          term_number,startDate,enrollmentStatus,remainingCredits
         );
       }
     }
@@ -113,13 +123,13 @@ async function listAllEnroll(inputParams) {
   }
 }
 
-async function setProgramData() {
-  try {
-    const programs = await readData('program_types');
-    for (let key in programs) {
-      programsData[key] = programs[key]['name'];
-    }
-  } catch (error) {
-    console.log(error);
-  }
+async function fetchData() {
+  universities = await readData("universities")
+  programs = await readData("program_types")
+  studyStages = await readData("study_stages")
+}
+
+window.onload = async () => {
+  await fetchData()
+  initialise()
 }
