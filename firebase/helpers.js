@@ -145,6 +145,30 @@ export async function removeProgramFromUniversity(pId) {
 }
 window.removeProgramFromUniversity = removeProgramFromUniversity
 
+export async function deleteFilteredCommissions(studentId) {
+  const Rquery = query(ref(db, "receivable"), orderByChild("student"), equalTo(studentId));
+  const Pquery = query(ref(db, "payable"), orderByChild("student"), equalTo(studentId));
+
+  try {
+    const snapshot = await get(Rquery);
+    if (snapshot.exists()) {
+      snapshot.forEach((childSnapshot) => {
+        remove(ref(db, `receivable/${childSnapshot.key}`));
+      });
+    } 
+  } catch {}
+
+  try {
+    const snapshot = await get(Pquery);
+    if (snapshot.exists()) {
+      snapshot.forEach((childSnapshot) => {
+        remove(ref(db, `payable/${childSnapshot.key}`));
+      });
+    } 
+  } catch {} 
+}
+window.deleteFilteredCommissions = deleteFilteredCommissions
+
 export async function fetchPaymentDetails(type, id) {
   if (!['student', 'agent', 'university'].includes(type)) return
 

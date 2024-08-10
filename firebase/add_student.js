@@ -417,6 +417,7 @@ function readLearningPlan() {
   const termsContainer = document.getElementById('learningPlans');
   const terms = termsContainer.querySelectorAll('.Term');
   const allData = [];
+  const startDates = [];
 
   for (let i=0; i<terms.length; i++) {
     const term = terms[i]
@@ -428,6 +429,8 @@ function readLearningPlan() {
     };
   
     if (!termData.name || !termData.startDate || !termData.count) { failMessage("Please complete Term information."); return }
+    if (startDates.includes(termData.startDate)) { failMessage(`Term ${termData?.name}: Start Date can't be repeated.`); return }
+    startDates.push(termData.startDate)
   
     const rows = term.querySelectorAll('tbody tr');
     for (let j=0; j<rows.length; j++) {

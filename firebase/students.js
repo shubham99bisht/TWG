@@ -550,21 +550,23 @@ window.updateStudent = updateStudent
  * --------------------------------------------------
  */
 
-function deleteStudent(id) {
+async function deleteStudent() {
+  const params = new URLSearchParams(document.location.search);
+  const id = params.get('id')
   if (confirm(`Confirm delete student with id: ${id}`))
-    deleteData(`students/${id}`)
-      .then((result) => {
-        if (result) {
-          successMessage("Agent deleted successfully!")
-            .then(() => location.reload())
-        } else {
-          failMessage("Failed deleting student");
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-        failMessage("Error deleting student");
-      });
+  try {
+    await deleteFilteredCommissions(id)
+    const result = await deleteData(`students/${id}`)
+    if (result) {
+      successMessage("Student deleted successfully!")
+        .then(() => location.reload())
+    } else {
+      failMessage("Failed deleting student");
+    }
+  } catch  (error) {
+    console.log(error)
+    failMessage("Error deleting student");
+  }
 }
 
 /**
@@ -601,6 +603,12 @@ window.onload = async () => {
       const params = new URLSearchParams(document.location.search);
       const id = params.get('id')
       if (!id) location.href = "students.html"
+
+      const deleteStudentBtn = document.getElementById("deleteStudent")
+      const userRole = localStorage.getItem("userRole")
+      if (userRole != 'Admin') { deleteStudentBtn.classList.add("d-none") }
+      else { deleteStudentBtn.onclick = deleteStudent }
+
       readStudentDetails(id)
       readPaymentDetails(id)
       break;

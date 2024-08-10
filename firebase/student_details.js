@@ -317,7 +317,7 @@ window.removeModule = removeModule;
 async function removeTerm(termId) {
     if (confirm("Confirm delete TWG Term?")) {
         try {
-            if (await deleteData(`students/${studentId}/learningPlan/${termId}`)) {
+            if (await deleteArrayData(`students/${studentId}/learningPlan/`, termId)) {
                 successMessage('TWG Term deleted successfully!').then(() => location.reload())
             } else { throw "Not deleted" }
         } catch (e) {
@@ -359,7 +359,16 @@ async function editTwgTerm() {
         const startDate = formData['startDate']
         const count = formData['numberOfModules']
 
-        if (updateData(`students/${studentId}/learningPlan/${termId}`, { name, startDate, count })) {
+        const studentLearningPlan = await readData(`students/${studentId}/learningPlan/`)
+        for (let i=0; i<studentLearningPlan.length; i++) {
+            if (termId == i) continue
+            if (studentLearningPlan[i].startDate == startDate) {
+                failMessage("Start Date can't be repeated.");
+                return
+            }
+        }
+
+        if (await updateData(`students/${studentId}/learningPlan/${termId}`, { name, startDate, count })) {
             successMessage("TWG term updated!").then(() => location.reload())
         }
         else {
