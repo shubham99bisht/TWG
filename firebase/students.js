@@ -185,7 +185,7 @@ function readStudentDetails(id) {
       document.getElementById("university").innerHTML = universityName || ''
       document.getElementById("program_type").innerHTML = programName || ''
       document.getElementById("source").innerHTML = result?.source
-      document.getElementById("agent").innerHTML = result?.agent || '-'
+      document.getElementById("agent").innerHTML = result?.agent ? `${agents?.[result?.agent]?.name || ''} [${result?.agent}]` : '-'
       document.getElementById('degree').innerHTML = result?.universityDegree || '-'
 
       // GDrive Links
@@ -203,6 +203,8 @@ function readStudentDetails(id) {
       document.getElementById('overallGradeTWG').value = result?.overallGradeTWG || '';
       document.getElementById('studentUniversityId').value = result?.university;
       document.getElementById('studentProgramId').value = result?.program_type;
+      document.getElementById('agentId').value = result?.agent || '';
+      document.getElementById('universityId').value = result?.university || '';
       document.getElementById('flagPageLink').setAttribute('href', `flagged_students.html?stdId=${id}`)
 
       closeSwal()
@@ -559,7 +561,7 @@ async function deleteStudent() {
     const result = await deleteData(`students/${id}`)
     if (result) {
       successMessage("Student deleted successfully!")
-        .then(() => location.reload())
+        .then(() => window.location = 'students.html')
     } else {
       failMessage("Failed deleting student");
     }
@@ -611,6 +613,7 @@ window.onload = async () => {
 
       readStudentDetails(id)
       readPaymentDetails(id)
+      await fetchStudentDetailsData()
       break;
     }
   }

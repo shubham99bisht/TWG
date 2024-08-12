@@ -123,27 +123,8 @@ export async function deleteArrayData(dbPath, indexToRemove) {
 }
 
 /**
- * Custom Functions
+ * Update Student Functions
 */
-
-// Function to remove a program ID from universities' program_types
-export async function removeProgramFromUniversity(pId) {
-  const dbRef = ref(db, 'universities');
-  try {
-    const dataSnapshot = await get(dbRef);
-    dataSnapshot.forEach(dataSnapshotChild => {
-      const key = dataSnapshotChild.key;
-      const list = dataSnapshotChild.child('program_types').val() || [];
-      const updatedList = list.filter(item => item !== pId);
-      set(child(dbRef, `${key}/program_types`), updatedList);
-    });
-    console.log(`Removed ${pId} from all universities`);
-  } catch (error) {
-    console.error('Error:', error);
-    throw error
-  }
-}
-window.removeProgramFromUniversity = removeProgramFromUniversity
 
 export async function deleteFilteredCommissions(studentId) {
   const Rquery = query(ref(db, "receivable"), orderByChild("student"), equalTo(studentId));
@@ -168,6 +149,57 @@ export async function deleteFilteredCommissions(studentId) {
   } catch {} 
 }
 window.deleteFilteredCommissions = deleteFilteredCommissions
+
+
+export async function updateFilteredCommissions(studentId, universityId, agentId) {
+  const Rquery = query(ref(db, "receivable"), orderByChild("student"), equalTo(studentId));
+  const Pquery = query(ref(db, "payable"), orderByChild("student"), equalTo(studentId));
+
+  try {
+    const snapshot = await get(Rquery);
+    if (snapshot.exists()) {
+      snapshot.forEach((childSnapshot) => {
+        set(ref(db, `receivable/${childSnapshot.key}/university`), universityId);
+        set(ref(db, `receivable/${childSnapshot.key}/agent`), agentId);
+      });
+    } 
+  } catch (error) { console.log(error) }
+
+  try {
+    const snapshot = await get(Pquery);
+    if (snapshot.exists()) {
+      snapshot.forEach((childSnapshot) => {
+        set(ref(db, `payable/${childSnapshot.key}/university`), universityId);
+        set(ref(db, `payable/${childSnapshot.key}/agent`), agentId);
+      });
+    } 
+  } catch (error) { console.log(error) }
+}
+window.updateFilteredCommissions = updateFilteredCommissions
+
+
+/**
+ * Custom Functions
+*/
+
+// Function to remove a program ID from universities' program_types
+export async function removeProgramFromUniversity(pId) {
+  const dbRef = ref(db, 'universities');
+  try {
+    const dataSnapshot = await get(dbRef);
+    dataSnapshot.forEach(dataSnapshotChild => {
+      const key = dataSnapshotChild.key;
+      const list = dataSnapshotChild.child('program_types').val() || [];
+      const updatedList = list.filter(item => item !== pId);
+      set(child(dbRef, `${key}/program_types`), updatedList);
+    });
+    console.log(`Removed ${pId} from all universities`);
+  } catch (error) {
+    console.error('Error:', error);
+    throw error
+  }
+}
+window.removeProgramFromUniversity = removeProgramFromUniversity
 
 export async function fetchPaymentDetails(type, id) {
   if (!['student', 'agent', 'university'].includes(type)) return

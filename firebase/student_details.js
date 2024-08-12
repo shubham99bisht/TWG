@@ -1,4 +1,4 @@
-import { deleteData, deleteArrayData, updateData, writeDataWithNewId, readData } from "./helpers.js";
+import { deleteData, deleteArrayData, updateData, writeDataWithNewId, readData, updateFilteredCommissions } from "./helpers.js";
 
 const params = new URLSearchParams(document.location.search);
 const studentId = params.get('id')
@@ -9,6 +9,138 @@ const updateFeePayableForm = document.getElementById("updateFeePayableForm")
 const updateStudyPlanForm = document.getElementById("studyPlanForm");
 const updateTwgModuleForm = document.getElementById("updateTwgModuleForm");
 const editTwgForm = document.getElementById("editTwgTermForm");
+
+// // Select Options
+const agentSelect = document.getElementById("agent_select")
+const programSelect = document.getElementById("program_type_select")
+const universitySelect = document.getElementById("university_select")
+const degreeSelect = document.getElementById("degree_select")
+
+// Global Variables
+let programs = {}, universities = {}, agents = {}
+
+/**
+ * --------------------------------------------------
+ * Event Listeners
+ * --------------------------------------------------
+ */
+
+async function fetchStudentDetailsData() {
+  programs = await readData("program_types")
+  universities = await readData("universities")
+  agents = await readData("agents")
+
+  updateAgentList()
+  updateProgramsList()
+}
+window.fetchStudentDetailsData = fetchStudentDetailsData
+
+/**
+ * --------------------------------------------------
+ * Update Student Enrollment Details
+ * --------------------------------------------------
+ */
+
+function updateAgentList() {
+  agentSelect.innerHTML = '<option selected disabled>Select an agent</option>'
+  for (const id in agents) {
+    const option = document.createElement("option");
+    option.id = id;
+    option.value = id;
+    option.textContent = `${agents[id]?.name} [${id}]`;
+    agentSelect.appendChild(option);
+  }
+  agentSelect.removeAttribute("disabled")
+}
+
+function updateProgramsList() {
+  programSelect.innerHTML = '<option selected disabled>Select a program type</option>'
+  for (const id in programs) {
+    const option = document.createElement("option");
+    option.id = id;
+    option.value = id;
+    option.textContent = programs[id].name;
+    programSelect.appendChild(option);
+  }
+  programSelect.removeAttribute("disabled")
+}
+
+function updateUniversityList(pId) {
+  universitySelect.innerHTML = '<option selected disabled>Select a university</option>'
+  for (const id in universities) {
+
+    const univ = universities[id]
+    const pTypes = univ.programTypes.map(p => p.type)
+    if (!pTypes.includes(programSelect.value)) continue;
+    
+    const option = document.createElement("option");
+    option.id = id;
+    option.value = id;
+    option.textContent = universities[id].name;
+    universitySelect.appendChild(option);
+  }
+  universitySelect.removeAttribute("disabled")
+}
+
+function updateDegreeList(uId) {
+    degreeSelect.innerHTML = '<option selected disabled>Select a degree</option>'
+    const univ = universities[uId]
+    for (let degree of univ?.degrees) {
+        const option = document.createElement("option");
+        option.value = degree;
+        option.textContent = degree;
+        degreeSelect.appendChild(option);
+    }
+    degreeSelect.removeAttribute("disabled")
+}
+
+programSelect.addEventListener("change", (event) => {
+    const pId = event.target.value;
+    updateUniversityList(pId);
+})
+
+universitySelect.addEventListener("change", (event) => {
+    const uId = event.target.value;
+    updateDegreeList(uId);
+})
+
+
+updateUniversityBtn.addEventListener("click", async () => {
+    if (confirm("Confirm updating student University details")) {
+        const formProps = new FormData(updateUniversityForm);
+        const formData = Object.fromEntries(formProps);
+        const { program_type_select: program_type, university_select: university, degree_select: universityDegree } = formData
+        const agent = document.getElementById('agentId').value || ''
+
+        // Update Receivable
+        await updateFilteredCommissions(studentId, university, agent)
+
+        if (await updateData(`students/${studentId}`, { agent, program_type, university, universityDegree })) {
+            successMessage("Student University details updated!").then(() => location.reload())
+        } else {
+            failMessage("Student University details failed.")
+        }        
+    }
+})
+
+updateAgentBtn.addEventListener("click", async () => {
+    if (confirm("Confirm updating Agent")) {
+        const formProps = new FormData(updateAgentForm);
+        const formData = Object.fromEntries(formProps);
+        const { agent_select: agent } = formData
+        const university = document.getElementById('universityId').value || ''
+
+        // Update Receivable
+        await updateFilteredCommissions(studentId, university, agent)
+
+        if (await updateData(`students/${studentId}`, { agent, university })) {
+            successMessage("Agent updated!").then(() => location.reload())
+        } else {
+            failMessage("Agent update failed.")
+        }        
+    }
+})
+
 
 /**
  * --------------------------------------------------
@@ -100,6 +232,7 @@ newPaymentDetailsModal.addEventListener('show.bs.modal', async event => {
         }
         document.getElementById('newPayableCommisionType').value = button.id == "payableNewPayment" ? "payable" : "receivable";
     } catch (error) {
+        console.log(error)
         failMessage('Failed to Open payment form')
     }
 

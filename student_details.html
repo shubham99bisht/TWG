@@ -69,13 +69,21 @@
               <div class="col-auto"><a class="btn btn-danger btn-sm" id="deleteStudent"><span class="fas fa-trash fs--2 me-1"></span>Delete Student</a></div>
               <div class="col-auto"><a class="btn btn-outline-warning btn-sm" id="flagPageLink">View Flags</a></div>
               <div class="col-auto" id="add-flag-btn"><a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#flag-student-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Flag Student</a></div>
-              <div class="col-auto"><a class="btn btn-falcon-default btn-sm" data-bs-toggle="modal" data-bs-target="#update-details-modal"><span class="fas fa-pencil-alt fs--2 me-1"></span>Update details</a></div>
             </div>
           </div>
           <div class="card-body bg-light border-top">
             <div class="row">
               <div class="col-lg col-xxl-5">
-                <h6 class="fw-semi-bold ls mb-3 text-uppercase">Basic Information</h6>
+                <div class="row">
+                  <div class="col-6">
+                    <h6 class="fw-semi-bold ls text-uppercase mt-2">Basic Information</h6>
+                  </div>
+                  <div class="col-6">
+                    <a class="btn btn-falcon-default btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#update-details-modal">
+                      <span class="fas fa-pencil-alt fs--2 me-1"></span>Update details
+                    </a>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-6">
                     <p class="fw-semi-bold mb-1">Student ID</p>
@@ -125,8 +133,18 @@
                   <div class="col" id="student_city_state">-</div>
                 </div>
               </div>
+
               <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1">
-                <h6 class="fw-semi-bold ls mb-3 text-uppercase">Enrollment Information</h6>
+                <div class="row">
+                  <div class="col-6">
+                    <h6 class="fw-semi-bold ls text-uppercase mt-2">Enrollment Information</h6>
+                  </div>
+                  <div class="col-6">
+                    <a class="btn btn-falcon-default btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#update-university-modal">
+                      <span class="fas fa-pencil-alt fs--2 me-1"></span>Update details
+                    </a>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-5 col-sm-4">
                     <p class="fw-semi-bold mb-1">University</p>
@@ -138,8 +156,13 @@
                     <p class="fw-semi-bold mb-1">Program</p>
                   </div>
                   <div class="col" id="program_type">-</div>
-                  <input type="hidden" id="programId" name="programId" />
                 </div>
+                <div class="row">
+                  <div class="col-5 col-sm-4">
+                    <p class="fw-semi-bold mb-0">Degree</p>
+                  </div>
+                  <div class="col" id="degree">-</div>
+                </div>                
                 <div class="row">
                   <div class="col-5 col-sm-4">
                     <p class="fw-semi-bold mb-1">Source</p>
@@ -151,15 +174,16 @@
                     <p class="fw-semi-bold mb-0">Agent</p>
                   </div>
                   <div class="col" id="agent">-</div>
-                </div>
-                <div class="row">
-                  <div class="col-5 col-sm-4">
-                    <p class="fw-semi-bold mb-0">Degree</p>
+                  <div class="col-1">
+                    <a class="mb-2" data-bs-toggle="modal" data-bs-target="#update-agent-modal">
+                      <span class="fas fa-pencil-alt fs--2 me-1"></span>
+                    </a>
                   </div>
-                  <div class="col" id="degree">-</div>
                 </div>
                 <input type="text" id="studentUniversityId" hidden />
                 <input type="text" id="studentProgramId" hidden />
+                <input type="text" id="agentId" hidden />
+                <input type="text" id="universityId" hidden />
               </div>
             </div>
           </div>
@@ -452,40 +476,7 @@
     <img src="./assets/img/logo.png" style="width: 25vh;margin-bottom: 15vh;">
   </div>
 
-  <!-- Update Links Modal -->
-  <div class="modal fade" id="student-links-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="mb-1 modal-title">Update Links</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="studentsLinkForm">
-            <div class="col-12 mb-3">
-              <label class="form-label" for="twgModalLink">TWG Offer Letter<span class="text-danger">*</span></label>
-              <input class="form-control" id="twgModalLink" name="twgModalLink" type="url" />
-            </div>
-            <div class="col-12 mb-3">
-              <label class="form-label" for="universityModalLink">University Offer Letter<span class="text-danger">*</span></label>
-              <input class="form-control" id="universityModalLink" name="universityModalLink" type="url" />
-            </div>
-            <div class="col-12 mb-3">
-              <label class="form-label" for="gDriveModalLink">Google Drive Link<span class="text-danger">*</span></label>
-              <input class="form-control" id="gDriveModalLink" name="gDriveModalLink" type="url" />
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="linksModalCloseBtn">Cancel</button>
-              <button class="btn btn-warning" type="submit">Update</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End Links Modal -->
-
-  <!-- Update Student Modal -->
+  <!-- Update Basic Details Modal -->
   <div class="modal fade" id="update-details-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
       <div class="modal-content position-relative">
@@ -550,7 +541,150 @@
       </div>
     </div>
   </div>
-  <!-- Add Update Student Ends -->  
+  <!-- Add Update Basic Details Ends -->  
+
+  <!-- Update University Modal -->
+  <div class="modal fade" id="update-university-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="mb-1 modal-title">Update University</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="updateUniversityForm">
+            <div class="col-12 mb-3">
+              <label class="form-label" for="program_type_select">Program Type<span class="text-danger">*</span></label>
+              <select class="form-select" id="program_type_select" name="program_type_select" disabled></select>
+            </div>
+            <div class="col-12 mb-3">
+              <label class="form-label" for="university_select">University<span class="text-danger">*</span></label>
+              <select class="form-select" id="university_select" name="university_select" disabled></select>
+            </div>
+            <div class="col-12 mb-3">
+              <label class="form-label" for="degree_select">Degree<span class="text-danger">*</span></label>
+              <select class="form-select" id="degree_select" name="degree_select" disabled></select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-warning" id="updateUniversityBtn">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Update University Modal -->
+
+  <!-- Update Agent Modal -->
+  <div class="modal fade" id="update-agent-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="mb-1 modal-title">Update Agent</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="updateAgentForm">
+            <div class="col-12 mb-3">
+              <label class="form-label" for="agent_select">Agent<span class="text-danger">*</span></label>
+              <select class="form-select" id="agent_select" name="agent_select"></select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-warning" id="updateAgentBtn">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Update Agent Modal -->  
+
+  <!-- Flag Student Modal -->
+  <div class="modal fade" id="flag-student-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Flag Student</h5>
+          </div>
+          <div class="p-4 pb-0">
+            <form class="row" id="studentFlagForm">
+              <input type="text" name="flaggerId" id="flaggerId" hidden />
+              <div class="col-12 mb-3">
+                <label class="form-label" for="flaggerName">Flagged By<span class="text-danger">*</span></label>
+                <input class="form-control" id="flaggerName" name="flaggerName" type="text" readonly />
+              </div>
+
+              <div class="col-6 mb-3">
+                <label class="form-label" for="flaggedFor">Flagged For<span class="text-danger">*</span></label>
+                <select class="form-select" id="flaggedFor" name="flaggedFor" required>
+                  <option value="Finance">Finance</option>
+                  <option value="Agent">Agent</option>
+                  <option value="Student-Support">Student Support</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
+
+              <div class="col-6 mb-3">
+                <label class="form-label" for="flaggedDate">Flagged Date<span class="text-danger">*</span></label>
+                <input class="form-control datetimepicker" id="flaggedDate" type="text" name="flaggedDate" required>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="form-label" for="flagNotes">Flag Notes<span class="text-danger">*</span></label>
+                <textarea class="form-control" id="flagNotes" rows="3" name="flagNotes" type="text" placeholder="Add flag notes" required="required"></textarea>
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="closeFlagModal">Cancel</button>
+                <button class="btn btn-warning" type="submit" id="createFlagBtn">Create Flag</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Flag Student Modal Ends -->
+
+  <!-- Update Links Modal -->
+  <div class="modal fade" id="student-links-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="mb-1 modal-title">Update Links</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="studentsLinkForm">
+            <div class="col-12 mb-3">
+              <label class="form-label" for="twgModalLink">TWG Offer Letter<span class="text-danger">*</span></label>
+              <input class="form-control" id="twgModalLink" name="twgModalLink" type="url" />
+            </div>
+            <div class="col-12 mb-3">
+              <label class="form-label" for="universityModalLink">University Offer Letter<span class="text-danger">*</span></label>
+              <input class="form-control" id="universityModalLink" name="universityModalLink" type="url" />
+            </div>
+            <div class="col-12 mb-3">
+              <label class="form-label" for="gDriveModalLink">Google Drive Link<span class="text-danger">*</span></label>
+              <input class="form-control" id="gDriveModalLink" name="gDriveModalLink" type="url" />
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="linksModalCloseBtn">Cancel</button>
+              <button class="btn btn-warning" type="submit">Update</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Links Modal -->
+
 
   <!-- Add Study Plan Modal -->
   <div class="modal fade" id="studyPlanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
@@ -774,61 +908,6 @@
   </div>
   <!-- Edit TWG Term  Ends --> 
 
-  <!-- Flag Student Modal -->
-  <div class="modal fade" id="flag-student-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 500px">
-      <div class="modal-content position-relative">
-        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
-          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body p-0">
-          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
-            <h5 class="mb-1 modal-title">Flag Student</h5>
-          </div>
-          <div class="p-4 pb-0">
-            <form class="row" id="studentFlagForm">
-              <input type="text" name="flaggerId" id="flaggerId" hidden />
-              <div class="col-12 mb-3">
-                <label class="form-label" for="flaggerName">Flagged By<span class="text-danger">*</span></label>
-                <input class="form-control" id="flaggerName" name="flaggerName" type="text" readonly />
-              </div>
-
-              <div class="col-6 mb-3">
-                <label class="form-label" for="flaggedFor">Flagged For<span class="text-danger">*</span></label>
-                <select class="form-select" id="flaggedFor" name="flaggedFor" required>
-                  <option value="Finance">Finance</option>
-                  <option value="Agent">Agent</option>
-                  <option value="Student-Support">Student Support</option>
-                  <option value="Admin">Admin</option>
-                </select>
-              </div>
-
-              <div class="col-6 mb-3">
-                <label class="form-label" for="flaggedDate">Flagged Date<span class="text-danger">*</span></label>
-                <input class="form-control datetimepicker" id="flaggedDate" type="text" name="flaggedDate" required>
-              </div>
-
-              <div class="col-12 mb-3">
-                <label class="form-label" for="flagNotes">Flag Notes<span class="text-danger">*</span></label>
-                <textarea class="form-control" id="flagNotes" rows="3" name="flagNotes" type="text" placeholder="Add flag notes" required="required"></textarea>
-              </div>
-
-              <!-- <div class="col-12 mb-3">
-                <label class="form-label" for="resolutionNotes">Resolution Notes<span class="text-danger">*</span></label>
-                <textarea class="form-control" id="resolutionNotes" rows="3" name="resolutionNotes" type="text" placeholder="Add resolution notes" required="required"></textarea>
-              </div>  -->
-
-              <div class="modal-footer">
-                <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal" id="closeFlagModal">Cancel</button>
-                <button class="btn btn-warning" type="submit" id="createFlagBtn">Create Flag</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Flag Student Modal Ends -->
 
 
   <!-- Add Fee Payable Modal -->
