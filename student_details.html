@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TheWorldGrad | Commissions Portal</title>
+  <title>TheWorldGrad | Student Management Portal</title>
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="./assets/img/favicon.png">
   <meta name="theme-color" content="#ffffff">
@@ -140,7 +140,7 @@
                     <h6 class="fw-semi-bold ls text-uppercase mt-2">Enrollment Information</h6>
                   </div>
                   <div class="col-6">
-                    <a class="btn btn-falcon-default btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#update-university-modal">
+                    <a class="btn btn-falcon-default btn-sm mb-2" id="updateUniversityBtn" data-bs-toggle="modal" data-bs-target="#update-university-modal">
                       <span class="fas fa-pencil-alt fs--2 me-1"></span>Update details
                     </a>
                   </div>
@@ -175,7 +175,7 @@
                   </div>
                   <div class="col" id="agent">-</div>
                   <div class="col-1">
-                    <a class="mb-2" data-bs-toggle="modal" data-bs-target="#update-agent-modal">
+                    <a class="mb-2" data-bs-toggle="modal"  id="updateAgentBtn" data-bs-target="#update-agent-modal">
                       <span class="fas fa-pencil-alt fs--2 me-1"></span>
                     </a>
                   </div>
@@ -569,7 +569,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-          <button class="btn btn-warning" id="updateUniversityBtn">Update</button>
+          <button class="btn btn-warning" id="updateUniversityDetailsBtn">Update</button>
         </div>
       </div>
     </div>
@@ -594,7 +594,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
-          <button class="btn btn-warning" id="updateAgentBtn">Update</button>
+          <button class="btn btn-warning" id="updateAgentDetailsBtn">Update</button>
         </div>
       </div>
     </div>

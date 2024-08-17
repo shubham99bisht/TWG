@@ -105,7 +105,7 @@ function listAllPayables(inputParams) {
           if (tableBody) tableBody.innerHTML += row
 
           csvContent += csvRow.format(StudentName, UniversityName,  AgentName, ProgramName, stage.name, `${p.fees} ${currency[p.feesCurrency].name}`, amount, p.dueDate, p?.status, p?.notes || '')
-        } catch {}
+        } catch (err) { console.log(err) }
       });
 
       await Promise.all(promises)

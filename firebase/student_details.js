@@ -105,7 +105,7 @@ universitySelect.addEventListener("change", (event) => {
 })
 
 
-updateUniversityBtn.addEventListener("click", async () => {
+updateUniversityDetailsBtn.addEventListener("click", async () => {
     if (confirm("Confirm updating student University details")) {
         const formProps = new FormData(updateUniversityForm);
         const formData = Object.fromEntries(formProps);
@@ -123,7 +123,7 @@ updateUniversityBtn.addEventListener("click", async () => {
     }
 })
 
-updateAgentBtn.addEventListener("click", async () => {
+updateAgentDetailsBtn.addEventListener("click", async () => {
     if (confirm("Confirm updating Agent")) {
         const formProps = new FormData(updateAgentForm);
         const formData = Object.fromEntries(formProps);
@@ -220,6 +220,7 @@ newPaymentDetailsModal.addEventListener('show.bs.modal', async event => {
     newPaymentDetailsForm.reset()
     try {
         document.getElementById('newPaymentDetailsModalHeader').innerHTML = button.id == "payableNewPayment" ? "New Payable" : "New Receivable";
+        document.getElementById('newPayable').innerHTML = button.id == "payableNewPayment" ? "Add Payable" : "Add Receivable";
         updateStudyPlanStageListById(studentId, 'newPaymentstage');
         let currency = await readData("currency_types")
         let currency_options = ''
@@ -252,7 +253,7 @@ async function newPayable() {
         const CommissionType = formData['newPayableCommisionType'];
         const student = studentId;
         const result = await readData(`students/${student}`)
-        const programName = result?.program_type
+        const program_type = result?.program_type
         const university = result?.university
         const agent = result.agent ? result.agent : '';
 
@@ -262,7 +263,7 @@ async function newPayable() {
         }
 
         if (await writeDataWithNewId(`${CommissionType}`, {
-            stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency, notes: '', student, agent, university, programName
+            stage, fees, feesCurrency, dueDate, amount, status: newStatus, currency, notes: '', student, agent, university, program_type
         })) {
             successMessage('Payment status updated!').then(() => location.reload())
         }

@@ -198,6 +198,45 @@ function addNewDegree() {
 window.addNewDegree = addNewDegree;
 
 
+// Degree Bulk Input
+const bulkDegreeModal = document.getElementById("degreesBulkUpload")
+if (bulkDegreeModal) {
+  bulkDegreeModal.addEventListener('show.bs.modal', event => {
+    const degreesInputDiv = document.getElementById("degreesInput")
+    const inputs = degreesInputDiv.querySelectorAll('input')
+    let degreesList = ""
+
+    for (let i = 0; i < inputs.length; i++) {
+      const element = inputs[i];
+
+      // Degrees
+      if (element.classList.contains('degreeInput')) {
+        let degreeName = element.value
+        console.log(degreeName)
+        if (degreeName) degreesList += `${degreeName}\n`
+      }
+    }    
+    bulkDegreesInput.value = degreesList
+  })
+}
+
+function processBulkUpload() {
+  const inputText = document.getElementById('bulkDegreesInput').value;
+  const lines = inputText.split('\n');
+
+  degreesInputDiv.innerHTML = ''
+  lines.forEach(l => {
+    if (!l || !l.length) return
+    const input = document.createElement('input');
+    input.setAttribute('class', 'form-control mb-2 degreeInput');
+    input.setAttribute('type', 'text');
+    input.setAttribute('value', l);
+    degreesInputDiv.appendChild(input);  
+  })
+}
+window.processBulkUpload = processBulkUpload
+
+
 // Submit Form
 const universityForm = document.getElementById('UniversityForm')
 universityForm.addEventListener('submit', function (event) {

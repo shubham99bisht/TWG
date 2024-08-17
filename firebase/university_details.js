@@ -2,7 +2,7 @@ import { readData, fetchPaymentDetails, updateData, writeDataWithNewId, writeDat
 import { auth } from "./index.js";
 
 let programs = {}, students = {}, agents = {}, studyStages = {}
-let university = {}, currencies = {}
+let university = {}, currencies = {}, university_id = ''
 
 
 /**
@@ -414,7 +414,6 @@ if (degreeModal) {
   })
 }
 
-
 function listDegree(id) {
   const tableBody = document.getElementById("table-degree-body");
   tableBody.innerHTML = ''
@@ -441,7 +440,7 @@ function listDegree(id) {
 }
 window.listDegree = listDegree
 
-function updateDegree() {
+async function updateDegree() {
   try {
     const formProps = new FormData(degreeForm);
     const formData = Object.fromEntries(formProps);
@@ -452,7 +451,7 @@ function updateDegree() {
     }
 
     console.log(id, degreeId, degreeName)
-    if (writeData(`universities/${id}/degrees/${degreeId}`, degreeName)) {
+    if (await writeData(`universities/${id}/degrees/${degreeId}`, degreeName)) {
       successMessage("Updated Degree details").then(() => location.reload())
     } else {
       failMessage("Failed Degree commissions")
@@ -540,6 +539,41 @@ async function updatePayables(tableBody, payables, type) {
   await Promise.all(promises)
 }
 
+// Degree Bulk Input
+const bulkDegreeModal = document.getElementById("degreesBulkUpload")
+if (bulkDegreeModal) {
+  bulkDegreeModal.addEventListener('show.bs.modal', event => {
+    let degreesList = ''
+    readData(`universities/${university_id}/degrees`)
+    .then((data) => {
+      data && data?.forEach(val => {
+        degreesList += `${val}\n`
+      });
+      bulkDegreesInput.value = degreesList
+    })
+    .catch((error) => {
+      failMessage("Error reading University degrees")
+    })
+  })
+}
+
+async function processBulkUpload() {
+  try {
+    const inputText = document.getElementById('bulkDegreesInput').value;
+    let degreesList = inputText.split('\n').filter(x => x);
+    console.log(degreesList)
+    if (await writeData(`universities/${university_id}/degrees`, degreesList)) {
+      successMessage("Updated Degree details").then(() => location.reload())
+    } else {
+      failMessage("Failed to update Degrees")
+    }
+  } catch (e) {
+    console.log(e);
+    failMessage("Failed to update Degrees.");
+  }
+}
+window.processBulkUpload = processBulkUpload
+
 /**
  * --------------------------------------------------
  * On load events
@@ -552,7 +586,6 @@ async function fetchData() {
   agents = await readData("agents")
   studyStages = await readData("study_stages")
   currencies = await readData("currency_types")
-  console.log(currencies)
 
   updateSelectors()
   addProgramBtn.disabled = false
@@ -595,6 +628,7 @@ window.onload = async function () {
   const params = new URLSearchParams(document.location.search);
   const id = params.get('id')
   if (!id) location.href = "universities.html"
+  university_id = id
   listOne(id); 
   listDegree(id)
   await readPaymentDetails(id);

@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TheWorldGrad | Commissions Portal</title>
+  <title>TheWorldGrad | Student Management Portal</title>
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="./assets/img/favicon.png">
   <meta name="theme-color" content="#ffffff">
@@ -237,6 +237,10 @@
                 <h5 class="mb-0 text-nowrap py-2 py-xl-0">Degrees</h5>
               </div>
               <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
+                <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#degreesBulkUpload">
+                  <span class="fas fa-bars" data-fa-transform="shrink-3 down-2"></span>
+                  <span class="d-none d-sm-inline-block ms-1">Bulk Edit</span>
+                </button>                
                 <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#degree-modal" id="add-degree">
                   <span class="fas fa-plus fs--2 me-1"></span>Add Degree
                 </button>
@@ -267,9 +271,10 @@
             </div>
           </div>
           <div class="card-footer">
-            <div class="d-flex justify-content-center mt-3"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
+            <div class="d-flex justify-content-center mt-3 mb-2"><button class="btn btn-sm btn-falcon-default me-1" type="button" title="Previous" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
               <ul class="pagination mb-0"></ul><button class="btn btn-sm btn-falcon-default ms-1" type="button" title="Next" data-list-pagination="next"><span class="fas fa-chevron-right"> </span></button>
             </div>
+            <small><b>NOTE:</b> Use Bulk Edit feature to remove degrees. Empty degrees will not be saved.</small>
           </div>
         </div>
 
@@ -481,6 +486,33 @@
   </div>
   <!-- Update Program Types Ends -->
 
+  <!-- Update Bulk Degree Modal -->
+  <div class="modal fade" id="degreesBulkUpload" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document" style="max-width: 550px">
+      <div class="modal-content position-relative">
+        <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
+          <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h5 class="mb-1 modal-title">Bulk Degree Upload</h5>
+          </div>
+          <div class="px-4 py-2">
+            <form id="degreesBulkUploadForm">
+              <div class="col-12 mb-3">
+                <textarea class="form-control" id="bulkDegreesInput" rows="10" placeholder="Enter list of degrees as new lines"></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" type="button" onclick="processBulkUpload()" data-bs-dismiss="modal">Save Updates</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Update Bulk Degree Ends -->
 
   <!--    JavaScripts-->
   <script src="./vendors/popper/popper.min.js"></script>

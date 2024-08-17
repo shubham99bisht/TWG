@@ -515,17 +515,16 @@ async function updateStudent() {
 
     const studentId = updateStudentForm.querySelector('#studentId').value
     const { 
-      studentName, universityStudentId,
+      studentName, universityStudentId, enrollmentStatus,
       studentEmail, studentPhone, studentAddress, studentCity, studentState 
     } = basicInfoData
 
-    const enrollmentStatus = updateStudentForm.querySelector('#enrollmentStatus').value;
     // Validation
     if (id != studentId) failMessage("Can't update Student Id")
-    if (!studentId || !studentName || !studentEmail || !universityStudentId) { failMessage("Please provide all data"); return }
+    if (!studentId || !studentName || !enrollmentStatus || !studentEmail || !universityStudentId) { failMessage("Please provide all data"); return }
 
     const newStudent = { 
-      studentId, studentName, universityStudentId,
+      studentId, studentName, universityStudentId, enrollmentStatus,
       studentEmail, studentPhone, studentAddress, studentCity, studentState 
     }
     updateData(`students/${studentId}`, newStudent)
@@ -607,8 +606,14 @@ window.onload = async () => {
       if (!id) location.href = "students.html"
 
       const deleteStudentBtn = document.getElementById("deleteStudent")
+      const updateUniversityBtn = document.getElementById("updateUniversityBtn")
+      const updateAgentBtn = document.getElementById("updateAgentBtn")
       const userRole = localStorage.getItem("userRole")
-      if (userRole != 'Admin') { deleteStudentBtn.classList.add("d-none") }
+      if (userRole != 'Admin') { 
+        deleteStudentBtn.classList.add("d-none") 
+        updateUniversityBtn.classList.add("d-none") 
+        updateAgentBtn.classList.add("d-none") 
+      }
       else { deleteStudentBtn.onclick = deleteStudent }
 
       readStudentDetails(id)
