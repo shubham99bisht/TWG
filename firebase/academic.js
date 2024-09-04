@@ -65,9 +65,15 @@ async function initialise() {
     });
 
     document.getElementById('searchButton').addEventListener('click', function () {
-        let twgDatas = []
+        let enrollStatus = [];
+        let twgDatas = [];
         let twgUniversity = [];
         let twgModule = [];
+
+        for (let i = 0; i < enrollStatusDropdown.options.length; i++) {
+            const value = enrollStatusDropdown.options[i]?.value;
+            enrollStatus.push(value)
+        }
 
         for(let i = 0; i < twgModuleDropdown.options.length; i++) {
           const value = twgModuleDropdown.options[i]?.value;
@@ -87,7 +93,7 @@ async function initialise() {
         const dateRange = readDateFilters(datepickerInstance);
     
         const inputParams = {
-            twgDatas, twgUniversity, twgModule, startDate: dateRange[0], endDate: dateRange[1]
+            enrollStatus, twgDatas, twgUniversity, twgModule, startDate: dateRange[0], endDate: dateRange[1]
         }
         listAllEnroll(inputParams)
       });  
@@ -101,7 +107,7 @@ async function fetchData() {
 
 function listAllEnroll(inputParams) {
     const tableBody = document.getElementById("table-payable-body");
-    const { twgDatas, twgUniversity, twgModule, startDate, endDate } = inputParams;
+    const { enrollStatus, twgDatas, twgUniversity, twgModule, startDate, endDate } = inputParams;
     if (!tableBody) return
     tableBody.innerHTML = ''
 
@@ -145,22 +151,14 @@ function listAllEnroll(inputParams) {
             });
 
             const filteredData = transformedData.filter(user => {
-                if (twgDatas && twgDatas.length && !twgDatas.includes(user.program_type)) {
-                    return false;
-                }
-                if (twgUniversity && twgUniversity.length && !twgUniversity.includes(user.university)) {
-                    return false;
-                }
-                if (twgModule && twgModule.length && !twgModule.includes(user.name)) {
-                    return false;
-                }
-                if (startDate && !(user.startDate >= startDate)) {
-                    return false;
-                }
-
-                if (endDate && !(user.startDate <= endDate)) {
-                    return false;
-                }
+                if (
+                    (enrollStatus && enrollStatus.length && !enrollStatus.includes(user.enrollmentStatus)) ||
+                    (twgDatas && twgDatas.length && !twgDatas.includes(user.program_type)) ||
+                    (twgUniversity && twgUniversity.length && !twgUniversity.includes(user.university)) ||
+                    (twgModule && twgModule.length && !twgModule.includes(user.name)) ||
+                    (startDate && !(user.startDate >= startDate)) ||
+                    (endDate && !(user.startDate <= endDate))
+                ) { return false }
                 return true;
             })
 

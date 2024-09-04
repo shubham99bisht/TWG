@@ -65,7 +65,7 @@
                 <div id="topbarPlaceholder"></div>
                 <!-- TopBar -->
 
-                <div class="card z-index-1" id="twgperformanceReport"
+                <div class="card z-index-1" id="academicReport"
                     data-list='{"valueNames":["student","studentEmail","program_type","university","startDate","name","result","grade"],"page":50,"pagination":true}'>
                     <div class="card-header">
                         <div class="row flex-between-center mb-3">
@@ -73,27 +73,35 @@
                                 <h5 class="fs-0 mb-0 text-nowrap py-2 py-xl-0">Academic Report</h5>
                             </div>
                             <div class="col-6 col-md-auto order-md-last ms-auto text-end ps-0">
-                                <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('twgperformanceReport')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
-                                <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSVData('twgperformanceReport')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
+                                <button class="btn btn-outline-danger btn-sm" type="button" onclick="downloadPDF('academicReport')"><span class="fas fa-file-pdf fs--2 me-1"></span>PDF</button>
+                                <button class="btn btn-outline-success btn-sm" type="button" onclick="downloadCSVData('academicReport')"><span class="fas fa-file-excel fs--2 me-1"></span>CSV</button>
                             </div>
                         </div>
 
                         <!-- Filter -->
                         <div class="row">
                             <!-- Status Dropdown Column -->
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
+                                <label for="enrollStatusDropdown">Enrollment Status</label>
+                                <select class="form-select form-select-sm js-choice" id="enrollStatusDropdown" multiple="multiple" size="1" name="enrollStatusDropdown" data-options='{"removeItemButton":true}'>
+                                  <option value="Admitted">Admitted</option>
+                                  <option value="Enrolled">Enrolled</option>
+                                  <option value="Withdrawn">Withdrawn</option>
+                                </select>
+                            </div>                            
+                            <div class="col-md-3 mb-3">
                               <label for="twgModuleDropdown">Module</label>
                               <select class="form-select form-select-sm js-choice" id="twgModuleDropdown" multiple="multiple" size="1" name="twgModuleDropdown" data-options='{"removeItemButton":true}'>
                                 
                               </select>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                               <label for="twgProgramDropdown">TWG Program</label>
                               <select class="form-select form-select-sm js-choice" id="twgProgramDropdown" multiple="multiple" size="1" name="twgProgramDropdown" data-options='{"removeItemButton":true}'>
                                 
                               </select>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                               <label for="twgUniversityDropdown">University</label>
                               <select class="form-select form-select-sm js-choice" id="twgUniversityDropdown" multiple="multiple" size="1" name="twgUniversityDropdown" data-options='{"removeItemButton":true}'>
                                 
@@ -213,7 +221,7 @@
 
     <!-- Firebase -->
     <script src="./firebase/index.js" type="module"></script>
-    <script src="./firebase/twgperformance.js" type="module"></script>
+    <script src="./firebase/academic.js" type="module"></script>
 </body>
 
 </html>
