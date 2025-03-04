@@ -15,8 +15,8 @@ function listAll() {
   const isAgent = userRole == 'Agent' ? true : false
   tableBody.innerHTML = ''
 
-  let csvContent = 'University,Pending Payables, Pending Receivables\r\n';
-  const csvRow = '{},{},{}\r\n';
+  let csvContent = 'University,Pending Payables, Pending Receivables,Termination Date\r\n';
+  const csvRow = '{},{},{},{}\r\n';
   
   readData("universities")
     .then((university) => {
@@ -30,12 +30,13 @@ function listAll() {
           const newRow = tableBody.insertRow();
           newRow.innerHTML = `<td class="name white-space-nowrap">${data.name}</td>
             <td class="payable">${payable}</td>
-            <td class="receivable">${receivable}</td>`;
+            <td class="receivable">${receivable}</td>
+            <td class="contractDate">${data?.contractDate || ''}</td>`;
           newRow.innerHTML += isAgent ? `` :
             `<td class="text-end white-space-nowrap"><a class="btn btn-primary btn-sm" href="university_details.html?id=${uid}">More Details</a></td>`
 
           const name =  data.name.includes(',') ? `"${data.name}"` : data.name
-          csvContent += csvRow.format(name, payable, receivable)
+          csvContent += csvRow.format(name, payable, receivable, data?.contractDate || '')
         } catch (e) {
           console.log(e)
         }
@@ -47,7 +48,7 @@ function listAll() {
     .catch((error) => {
       console.error("Error reading Universities:", error);
       if (tableBody) 
-        tableBody.innerHTML = `<tr class="text-center"><td colspan="4">Error reading Universities</td></tr>`
+        tableBody.innerHTML = `<tr class="text-center"><td colspan="5">Error reading Universities</td></tr>`
     });
 }
 window.listAll = listAll
