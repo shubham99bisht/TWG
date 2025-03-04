@@ -12,6 +12,8 @@
   <script src="./assets/js/config.js"></script>
   <script src="./vendors/simplebar/simplebar.min.js"></script>
   <!-- Stylesheets-->
+  <link href="./vendors/choices/choices.min.css" rel="stylesheet">
+  <link href="./vendors/flatpickr/flatpickr.min.css" rel="stylesheet">   
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700%7cPoppins:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet">
   <link href="./vendors/simplebar/simplebar.min.css" rel="stylesheet">
@@ -82,6 +84,14 @@
                 <div class="row">
                   <div class="col"><p class="fw-semi-bold mb-1">Email</p></div>
                   <div class="col" id="email">-</div>
+                </div>
+                <div class="row">
+                  <div class="col"><p class="fw-semi-bold mb-1">Termination Date</p></div>
+                  <div class="col" id="contractDate">-</div>
+                </div>
+                <div class="row">
+                  <div class="col"><p class="fw-semi-bold mb-1">University Contract</p></div>
+                  <div class="col"><a class="btn btn-sm btn-primary" id="contract" target="_blank">Contract Link</a></div>
                 </div>
               </div>
               <div class="col-lg col-xxl-5 mt-4 mt-lg-0 offset-xxl-1 mb-3">
@@ -317,6 +327,17 @@
                 <label class="form-label" for="email">Email</label>
                 <input class="form-control" id="email" name="email" type="email"/>
               </div>   
+              <div class="col-12 mb-3">
+                <label class="form-label" for="contract">University Contract</label>
+                <input class="form-control" id="contract" name="contract" type="text"/>
+              </div>
+              <div class="col-12 mb-3">
+                <label class="form-label" for="contractDate">Contract Termination Date</label>                  
+                <div class="position-relative">
+                  <input class="form-control form-control-sm datetimepicker ps-4" id="contractDate" name="contractDate" type="text" />
+                  <span class="fas fa-calendar-alt text-primary position-absolute top-50 translate-middle-y ms-2"> </span>
+                </div>
+              </div>
               
               <div class="col-lg-6 col-12 mb-3">
                 <label class="form-label" for="email1">Account Email 1</label>
@@ -523,6 +544,7 @@
   <script src="./vendors/countup/countUp.umd.js"></script>
   <script src="./vendors/echarts/echarts.min.js"></script>
   <script src="./vendors/dayjs/dayjs.min.js"></script>
+  <script src="./assets/js/flatpickr.js"></script> 
   <script src="./vendors/fontawesome/all.min.js"></script>
   <script src="./vendors/lodash/lodash.min.js"></script>
   <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>

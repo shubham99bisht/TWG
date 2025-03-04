@@ -59,7 +59,7 @@
         <div id="topbarPlaceholder"></div>
         <!-- TopBar -->
 
-        <div class="card mb-3" id="universityTable" data-list='{"valueNames":["name","payable","receivable"],"page":15,"pagination":true}'>
+        <div class="card mb-3" id="universityTable" data-list='{"valueNames":["name","payable","receivable","contractDate"],"page":15,"pagination":true}'>
           <div class="card-header">
             <div class="row flex-between-center mb-2">
               <div class="col-4 col-sm-auto d-flex align-items-center pe-0">
@@ -97,11 +97,12 @@
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="name">Name</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="payable">Pending Payable</th>
                     <th class="sort pe-1 align-middle white-space-nowrap" data-sort="receivable">Pending Receivable</th>
+                    <th class="sort pe-1 align-middle white-space-nowrap" data-sort="contractDate">Termination Date</th>
                     <th class="white-space-nowrap"></th>
                   </tr>
                 </thead>
                 <tbody class="list" id="table-body">
-                  <tr class="text-center"><td colspan="4">Loading Universities...</td></tr>
+                  <tr class="text-center"><td colspan="5">Loading Universities...</td></tr>
                 </tbody>
               </table>
             </div>

@@ -46,6 +46,8 @@ if (basicInfoModal) {
     basicInfoForm.querySelector('#name').value = university.name
     basicInfoForm.querySelector('#poc').value = university.poc
     basicInfoForm.querySelector('#email').value = university.email
+    basicInfoForm.querySelector('#contract').value = university?.contract || ''
+    basicInfoForm.querySelector('#contractDate').value = university?.contractDate || ''
 
     for (let i=1; i <= 5; i++) {
       basicInfoForm.querySelector(`#email${i}`).value = university.accounts?.[`email${i}`] || ''
@@ -59,15 +61,18 @@ function updateBasicInfo() {
   try {
     const formProps = new FormData(basicInfoForm);
     const formData = Object.fromEntries(formProps);
-    const { universityId: id, name, poc, email,
+    const { universityId: id, name, poc, email, contract, contractDate,
       email1, usage1, email2, usage2, email3, usage3, email4, usage4, email5, usage5
     } = formData
     if (!name || !poc || !email) {
       failMessage("Enter all details"); return
     }
-    if (updateData(`universities/${id}`, { name, poc, email, accounts: {
-      email1, usage1, email2, usage2, email3, usage3, email4, usage4, email5, usage5
-    }})) {
+    if (updateData(`universities/${id}`, { 
+      name, poc, email, contract, contractDate,
+      accounts: {
+        email1, usage1, email2, usage2, email3, usage3, email4, usage4, email5, usage5
+      }
+    })) {
       successMessage("Updated University details").then(() => location.reload())
     } else {
       failMessage("Failed updating University details")
@@ -311,6 +316,8 @@ function listOne(id) {
       document.getElementById("poc").innerHTML = data?.poc || '-'
       document.getElementById("email").innerHTML = data?.email || '-'
       document.getElementById("name").innerHTML = data?.name
+      document.getElementById("contract").href = data?.contract || '-'
+      document.getElementById("contractDate").innerHTML = data?.contractDate || '-'
 
       for (let i=1; i <= 5; i++) {
         const row = document.getElementById(`account${i}`)
