@@ -71,7 +71,7 @@ function addUserProfile(user) {
       } else {
         const name = user.displayName;
         const email = user.email;
-        const role = "None";
+        const role = "New User";
 
         set(userRef, { name, email, role })
           .then(() => {

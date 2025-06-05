@@ -59,7 +59,7 @@ updateUserModal.addEventListener('show.bs.modal', event => {
   updateUserModal.querySelector('#userId').value = row.id
   updateUserModal.querySelector('#userName').value = row?.querySelector('.name').textContent
   updateUserModal.querySelector('#userEmail').value = row?.querySelector('.email').textContent
-  updateUserModal.querySelector('#role').value = row?.querySelector('.role').textContent
+  updateUserModal.querySelector('#role').value = row?.querySelector('.team').textContent
 })
 
 async function updateUser() {
