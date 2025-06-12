@@ -4,6 +4,7 @@ import { readData, updateData } from "./helpers.js";
  * Display Users List
  */
 
+let showDeleted = false
 const usersList = document.getElementById("table-users-body")
 
 const tableRowSchema = `<tr class="btn-reveal-trigger" id="{}">
@@ -19,7 +20,7 @@ const tableRowSchema = `<tr class="btn-reveal-trigger" id="{}">
 </tr>`
 
 
-async function loadUsers() {
+async function loadUsers(showDeletedOnly = false) {
   const users = await readData('users')
   usersList.innerHTML = ''
 
@@ -28,8 +29,16 @@ async function loadUsers() {
 
   let count = 0
   for (let userId in users) {
-    count += 1
     const u = users[userId]
+    const isDeleted = u?.role === 'Deleted'
+
+    // Filter logic based on toggle
+    if ((showDeletedOnly && !isDeleted) || (!showDeletedOnly && isDeleted)) {
+      console.log(u?.role, showDeletedOnly, isDeleted)
+      continue
+    }
+
+    count += 1
     const row = tableRowSchema.format(
       userId, count,
       u?.name || 'Anonymous',
@@ -43,7 +52,15 @@ async function loadUsers() {
   listInit()
 }
 
-window.onload = loadUsers
+window.onload = () => loadUsers(false)
+
+document.getElementById('toggleUsersBtn').addEventListener('click', () => {
+  console.log("Running this!")
+  showDeleted = !showDeleted
+  const btn = document.getElementById('toggleUsersBtn')
+  btn.textContent = showDeleted ? 'Live Users' : 'Deleted Users'
+  loadUsers(showDeleted)
+})
 
 /**
  * --------------------------------------------------
